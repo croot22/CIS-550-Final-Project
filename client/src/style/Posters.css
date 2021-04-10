@@ -1,0 +1,118 @@
+.body {
+  width: 100vw;
+}
+
+.posters-container {
+  margin-top: 2rem;
+  max-width: 80%;
+}
+
+.posters-container .jumbotron {
+  background-color: #f3f4f705;
+}
+
+.posters-container .movies-container {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.posters-container .movies-container .movie {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  height: 300px;
+  padding: 0 10px;
+  flex: 0 0 25%;
+  width: 260px;
+  margin-bottom: 20px;
+  font-family: Helvetica Neue, sans-serif;
+  color: #ddd;
+}
+
+.posters-container .movie .title {
+  flex: 1;
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+  font-weight: bold;
+}
+
+.posters-container .movie .link {
+  overflow: hidden;
+  height: 350px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transition: transform 0.15s ease-in;
+  transform: scale(1);
+  position: relative;
+}
+
+.posters-container .movie .link .poster {
+  height: 100%;
+  width: 82%;
+}
+
+.posters-container .movie a.link:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.posters-container .movie .link .overlay {
+  position: absolute;
+  height: 100%;
+  width: 82%;
+  background-color: #222222c7;
+  color: #ddd;
+  padding: 20px 10px;
+  display: flex;
+  flex-flow: column;
+  animation: zoomin 0.2s ease-in both;
+  font-size: 10px;
+}
+
+@keyframes zoomin {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  100% {
+    display: flex;
+    opacity: 1;
+  }
+}
+
+.posters-container .overlay .plot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  text-align: justify;
+}
+
+.posters-container .overlay .extras {
+  display: flex;
+  flex-flow: column nowrap;
+  margin-top: auto;
+}
+
+.posters-container .overlay .extras .extra {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+}
+
+.posters-container .extra .field {
+  flex: 1 0 30%;
+}
+
+.posters-container .extra .separater {}
+
+.posters-container .extra .value {
+  flex: 1 0 60%;
+  text-align: right;
+}
