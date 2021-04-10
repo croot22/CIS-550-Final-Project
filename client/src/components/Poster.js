@@ -15,7 +15,7 @@ export default class Posters extends React.Component {
   componentDidMount() {
     console.log(this.props);
   }
-
+//test
   showDetails() {
     var plot = this.props.movie.Plot.length>120 ? 
       this.props.movie.Plot.substring(0,120)+'...' : this.props.movie.Plot;
