@@ -11,7 +11,7 @@ export default class Posters extends React.Component {
     this.showDetails = this.showDetails.bind(this);
     this.hideDetails = this.hideDetails.bind(this);
   }
-
+//test
   componentDidMount() {
     console.log(this.props);
   }
