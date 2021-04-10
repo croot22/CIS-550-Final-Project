@@ -6,8 +6,8 @@ var connection = mysql.createPool(config);
 
 function getAllGenres(req, res) {
   var query = `
-    SELECT DISTINCT genre
-    FROM Genres;
+    SELECT *
+    FROM covid;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
