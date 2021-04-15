@@ -9,6 +9,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.get('/crime', routes.getAllCrime);
 app.get('/genres', routes.getAllGenres);
 app.get('/genres/:genre', routes.getTopInGenre);
 app.get('/recs/:movie', routes.getRecs);

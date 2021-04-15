@@ -4,10 +4,111 @@ var mysql = require('mysql');
 config.connectionLimit = 10;
 var connection = mysql.createPool(config);
 
+//Query to get overall crime stats per all zipcodes
+function getAllCrime(req, res) {
+  var query = `
+  WITH crime_total AS(
+    select distinct dc_dist, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist
+    ),
+ crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+covid_per_zip AS(
+    select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
+    from covid
+    join population on covid.zipcode=population.zipcode
+    where result ='POS'
+    ),
+safety AS(
+    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    from crime_total
+    join districts on crime_total.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+	join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
+    group by zipcode
+    order by zipcode
+    )
+select *
+from safety;
+
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+//get crime breakdown per zipcode
+function bestGenresPerDecade(req, res) {
+  if(!req.query.decade) {
+    res.status(400).json({
+      'message': 'Incorrect query parameters passed.'
+    })
+  }
+  var decade = parseInt(req.query.decade);
+  var query = `
+  WITH AvgGenreRatings AS (
+    SELECT Genre, AVG(rating) AS AvgRating 
+    FROM Movies m JOIN Genres g ON m.id=g.movie_id 
+    WHERE release_year>=${decade} and release_year<${decade+10}
+    GROUP BY genre)
+  SELECT * FROM 
+  (   
+    (SELECT * FROM AvgGenreRatings) 
+    UNION 
+    (SELECT genre, 0 FROM Genres where genre NOT IN (SELECT DISTINCT genre FROM AvgGenreRatings))
+  ) allGenres
+  ORDER BY AvgRating DESC, Genre;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+
+//OLD BELOW:
+
 function getAllGenres(req, res) {
   var query = `
-    SELECT *
-    FROM covid;
+  WITH crime_total AS(
+    select distinct dc_dist, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist
+    ),
+ crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+covid_per_zip AS(
+    select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
+    from covid
+    join population on covid.zipcode=population.zipcode
+    where result ='POS'
+    ),
+safety AS(
+    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    from crime_total
+    join districts on crime_total.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+	join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
+    group by zipcode
+    order by zipcode
+    )
+select *
+from safety;
+
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -124,6 +225,9 @@ function getRandomMovies(req, res) {
 };
 
 module.exports = {
+  getAllCrime: getAllCrime,
+
+  //old exports
 	getAllGenres: getAllGenres,
 	getTopInGenre: getTopInGenre,
 	getRecs: getRecs,
