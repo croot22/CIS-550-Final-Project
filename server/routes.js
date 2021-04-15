@@ -334,9 +334,9 @@ function getBestPlace(req, res) {
 };
 
 
-// [Real Estate Transfers 1/1] - list out category
+// [Real Estate Transfers 1/1] - get avg purchase amount in zipcode
 // http://localhost:8081/realEstateTransfers
-function getCategory(req, res) {
+function getAvgPurchasePrice(req, res) {
   var category = req.params.category;    
   var query = `
   SELECT zip_code, AVG(cash_consideration) AS purchase_amount
