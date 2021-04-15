@@ -486,6 +486,9 @@ module.exports = {
   getBestPlace: getBestPlace,
   getCategory: getCategory,  
 
+  // RET
+  getAvgPurchasePrice: getAvgPurchasePrice,
+
   //old exports
 	getAllGenres: getAllGenres,
 	getTopInGenre: getTopInGenre,
