@@ -29,8 +29,8 @@ app.get('/bestgenre', routes.bestGenresPerDecade);
 app.get('/movies/random', routes.getRandomMovies);
 
 // yelp parameters
-app.get('/yelp/category/:category', routes.getCategory); //running 
-app.get('/yelp/restaurant', routes.getBestRestaurant);
+app.get('/yelp/category/:category', routes.getCategory); // test with http://localhost:8081/yelp/category/bars
+app.get('/yelp/restaurant', routes.getBestRestaurant); 
 //app.get('/yelp/zipcode/:zipcode/restaurant/:restaurant/weekday/:weekday/hour/:hour', routes.getBestRestaurant);
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
