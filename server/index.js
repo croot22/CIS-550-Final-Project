@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: 'http://localhost:8081/genres'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -17,6 +17,12 @@ app.get('/decades', routes.getDecades);
 app.get('/bestdecade/:decade', routes.getDecades);
 app.get('/bestgenre', routes.bestGenresPerDecade);
 app.get('/movies/random', routes.getRandomMovies);
+
+// yelp parameters
+app.get('/yelp/category/:category', routes.getCategory); //running 
+app.get('/yelp/restaurant', routes.getBestRestaurant);
+//app.get('/yelp/zipcode/:zipcode/restaurant/:restaurant/weekday/:weekday/hour/:hour', routes.getBestRestaurant);
+app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

@@ -75,47 +75,49 @@ function bestGenresPerDecade(req, res) {
   });
 };
 
+// [Yelp] 1 of 2] - recommend restaurant based on category and check in 
+//http://localhost:8081/yelp/zipcode/15222/restaurant/Japanese/weekday/3/hour/18
+// app.get('/yelp/zipcode/:zipcode/restaurant/:restaurant/weekday/:weekday/hour/:hour', routes.getBestRestaurant);
 
-// Yelp 1 of 2 - recommend restaurant based on category and check in 
-
-function bestRestaurant(req, res) {
-  if(!req.query.Type) {                         //look for #decade# in other file 
+function getBestRestaurant(req, res) {
+  if(!req.query.Type) {                         
     res.status(400).json({
       'message': 'Incorrect query parameters passed.'
     })
   }
-  var restaurant = parseInt(req.query.restaurant);  //look for #decade# in other file 
-  var weekday = parseInt(req.query.weekday);    //look for #decade# in other file 
-  var hour = parseInt(req.query.hour);          //look for #decade# in other file 
-  var zipcode = parseInt(req.query.zipcode);    //look for #decade# in other file 
+  //var zipcode = req.params.zipcode; 
+  //var restaurant = req.params.restaurant;  
+  //var weekday = req.params.weekday;    
+  //var hour = req.params.hour;             
 
   var query = 
   `WITH BUS AS (
-    SELECT business_name, address, business_id, review_count, stars, hours
-    FROM yelp_business 
-    WHERE zipcode = ${zipcode} AND review_count > 30 AND business_id IN
-      (SELECT business_id
-      FROM yelp_categories
-      WHERE category = ${restaurant}) 
-    ORDER BY stars DESC
-    LIMIT 100
-  ), op AS (
-    SELECT business_id, weekday, hour, count(*)
+  SELECT business_name, address, business_id, review_count, stars, hours
+  FROM yelp_business 
+  WHERE zipcode = '15222' AND review_count > 30 AND business_id IN
+    (SELECT business_id
+    FROM yelp_categories
+    WHERE category = 'American (Traditional)') 
+  ORDER BY stars DESC
+  LIMIT 100
+), op AS (
+  SELECT business_id, weekday, hour, count(*)
     FROM yelp_checkin
-    WHERE weekday = ${weekday} AND hour = ${hour}
+    WHERE weekday = '3' AND hour = '18'
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
-  )
-  SELECT business_name, address, stars, hours, review_content as top_review
-  FROM 
-    (SELECT business_name, address, review_content, BUS.stars, hours,
-             ROW_NUMBER() OVER (PARTITION BY business_name
+)
+SELECT business_name, address, stars, hours, review_content as top_review
+FROM 
+  (SELECT business_name, address, review_content, BUS.stars, hours,
+           ROW_NUMBER() OVER (PARTITION BY business_name
                               ORDER BY (useful+funny+cool) DESC
                              ) AS rn
     FROM yelp_review YR JOIN BUS ON YR.business_id = BUS.business_id JOIN op ON YR.business_id = op.business_id
-    ) temp
-  WHERE rn <= 1
-  ORDER BY stars DESC LIMIT 3`; 
+  ) temp
+WHERE rn <= 1
+ORDER BY stars DESC LIMIT 3
+  `; 
 
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -125,28 +127,32 @@ function bestRestaurant(req, res) {
   });
 };
 
-// Yelp 2 of 2 - recommend based on category and check in 
 
-function bestPlace(req, res) {
-  if(!req.query.Type) {                         //look for #decade# in other file 
+// [Yelp 2 of 2] - recommend based on category and check in 
+// http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
+// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
+
+function getBestPlace(req, res) {
+  if(!req.query.Type) {                        
     res.status(400).json({
       'message': 'Incorrect query parameters passed.'
     })
   }
   
-  var weekday = parseInt(req.query.weekday);    //look for #decade# in other file 
-  var hour = parseInt(req.query.hour);          //look for #decade# in other file 
-  var zipcode = parseInt(req.query.zipcode);    //look for #decade# in other file 
+  var weekday = req.params.weekday;   
+  var hour = req.params.hour;         
+  var zipcode = req.params.zipcode;   
 
   var query = 
-  `WITH BUS AS (
+    `
+    WITH BUS AS (
       SELECT business_name, address, business_id, review_count, stars, hours
       FROM yelp_business 
-      WHERE zipcode = ${zipcode} 
+      WHERE zipcode = '${zipcode}'
     ), op AS (
       SELECT business_id, weekday, hour, count(*) as volume1
       FROM yelp_checkin
-      WHERE weekday = ${weekday} AND hour = ${hour}
+      WHERE weekday = '${weekday}' AND hour = '${hour}'
       GROUP by business_id, weekday, hour
     )
 
@@ -154,8 +160,8 @@ function bestPlace(req, res) {
   FROM yelp_categories cat JOIN BUS ON cat.business_id = BUS.business_id JOIN op ON cat.business_id = op.business_id
   GROUP by category
   ORDER BY volume DESC 
-  LIMIT 3
-  `;
+  LIMIT 3`
+  ;
 
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -164,6 +170,26 @@ function bestPlace(req, res) {
     }
   });
 };
+
+
+// [Yelp test 1] - list out category
+// http://localhost:8081/yelp/category/bars
+function getCategory(req, res) {
+  var category = req.params.category;    
+  var query = `
+   SELECT DISTINCT category 
+   FROM yelp_categories 
+   WHERE category = '${category}'
+   LIMIT 10
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 
 //OLD BELOW:
 
@@ -179,7 +205,7 @@ function getAllGenres(req, res) {
     from incidents
     GROUP BY dc_dist, text_general_code
     order by dc_dist
-    ),
+    ), 
 covid_per_zip AS(
     select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
     from covid
@@ -205,7 +231,7 @@ from safety;
       res.json(rows);
     }
   });
-};
+}; // yelp to add something like this 
 
 function getTopInGenre(req, res) {
   var genre = req.params.genre;
@@ -225,7 +251,7 @@ function getTopInGenre(req, res) {
       res.json(rows);
     }
   });
-};
+}; // yelp to add something like this 
 
 function getRecs(req, res) {
   var movie_name = req.params.movie;
@@ -281,6 +307,7 @@ function bestGenresPerDecade(req, res) {
   }
   var decade = parseInt(req.query.decade);
   var query = `
+
   WITH AvgGenreRatings AS (
     SELECT Genre, AVG(rating) AS AvgRating 
     FROM Movies m JOIN Genres g ON m.id=g.movie_id 
@@ -316,6 +343,11 @@ function getRandomMovies(req, res) {
 module.exports = {
   getAllCrime: getAllCrime,
 
+  // Yelp
+  getBestRestaurant: getBestRestaurant, 
+  getBestPlace: getBestPlace,
+  getCategory: getCategory,  
+
   //old exports
 	getAllGenres: getAllGenres,
 	getTopInGenre: getTopInGenre,
@@ -324,3 +356,4 @@ module.exports = {
   bestGenresPerDecade: bestGenresPerDecade,
   getRandomMovies: getRandomMovies
 }
+
