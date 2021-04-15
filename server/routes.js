@@ -290,6 +290,66 @@ function getCategory(req, res) {
   });
 }
 
+// [Yelp 2 of 2] - recommend based on category and check in 
+// http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
+// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
+
+function getBestPlace(req, res) {
+  if(!req.query.Type) {                        
+    res.status(400).json({
+      'message': 'Incorrect query parameters passed.'
+    })
+  }
+  
+  var weekday = req.params.weekday;   
+  var hour = req.params.hour;         
+  var zipcode = req.params.zipcode;   
+
+  var query = 
+    `
+    WITH BUS AS (
+      SELECT business_name, address, business_id, review_count, stars, hours
+      FROM yelp_business 
+      WHERE zipcode = '${zipcode}'
+    ), op AS (
+      SELECT business_id, weekday, hour, count(*) as volume1
+      FROM yelp_checkin
+      WHERE weekday = '${weekday}' AND hour = '${hour}'
+      GROUP by business_id, weekday, hour
+    )
+
+  SELECT category, SUM(volume1) as volume
+  FROM yelp_categories cat JOIN BUS ON cat.business_id = BUS.business_id JOIN op ON cat.business_id = op.business_id
+  GROUP by category
+  ORDER BY volume DESC 
+  LIMIT 3`
+  ;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+
+// [Real Estate Transfers 1/1] - list out category
+// http://localhost:8081/realEstateTransfers
+function getCategory(req, res) {
+  var category = req.params.category;    
+  var query = `
+  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
+  FROM RealEstateTransfers
+  GROUP BY zip_code;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
 
 //OLD BELOW:
 
