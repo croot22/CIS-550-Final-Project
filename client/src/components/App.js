@@ -31,21 +31,21 @@ export default class App extends React.Component {
 							)}
 						/>
 						<Route
-							path="/recommendations"
+							path="/yelpRecommendations"
 							render={() => (
-								<Recommendations />
+								<yelpRecommendations />
 							)}
 						/>
 						<Route
-							path="/bestgenres"
+							path="/safety"
 							render={() => (
-								<BestGenres />
+								<safety />
 							)}
 						/>
 						<Route
-							path="/posters"
+							path="/crime"
 							render={() => (
-								<Posters />
+								<crime />
 							)}
 						/>
 					</Switch>
