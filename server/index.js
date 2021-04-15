@@ -9,7 +9,14 @@ app.use(cors({credentials: true, origin: 'http://localhost:8081/genres'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+//safety
+app.get('/safety', routes.getAllSafety);
 app.get('/crime', routes.getAllCrime);
+app.get('/covid', routes.getAllCovid);
+app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
+app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
+
+//old code
 app.get('/genres', routes.getAllGenres);
 app.get('/genres/:genre', routes.getTopInGenre);
 app.get('/recs/:movie', routes.getRecs);
