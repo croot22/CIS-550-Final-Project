@@ -483,7 +483,7 @@ module.exports = {
 
   // RET
   getAvgPurchasePrice: getAvgPurchasePrice,
-  //getTopZips: getTopsZips,
+  getTopZips: getTopsZips,
 
   //schools
   getAvgScores:getAvgScores,
