@@ -16,9 +16,9 @@ app.get('/covid', routes.getAllCovid);
 app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 
-//RET
-app.get('/ret/:zipcode', routes.getAvgPurchasePrice);
-//app.get('/ret/topZips', routes.getTopZips);
+//Home Page
+app.get('/home/:zipcode', routes.getAvgPurchasePrice);
+app.get('/home', routes.getTopZips);
 
 //old code
 app.get('/genres', routes.getAllGenres);
