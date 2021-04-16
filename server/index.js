@@ -18,6 +18,7 @@ app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 
 //RET
 app.get('/ret/:zipcode', routes.getAvgPurchasePrice);
+//app.get('/ret/topZips', routes.getTopZips);
 
 //old code
 app.get('/genres', routes.getAllGenres);
