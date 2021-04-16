@@ -201,7 +201,7 @@ function getBestCusine(req, res) {
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
-SELECT business_name, address, stars, hours, review_content as top_review
+SELECT business_name AS Name, address AS Address, stars AS Rating, review_content as Review
 FROM 
   (SELECT business_name, address, review_content, BUS.stars, hours,
            ROW_NUMBER() OVER (PARTITION BY business_name
@@ -225,7 +225,6 @@ ORDER BY stars DESC LIMIT 3
 
 // [Yelp 2 of 2] - recommend based on category and check in 
 // http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
-// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
 function getBestPlace(req, res) {
   

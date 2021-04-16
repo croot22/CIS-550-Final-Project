@@ -20,15 +20,6 @@ app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 app.get('/ret/:zipcode', routes.getAvgPurchasePrice);
 //app.get('/ret/topZips', routes.getTopZips);
 
-//old code
-app.get('/genres', routes.getAllGenres);
-app.get('/genres/:genre', routes.getTopInGenre);
-app.get('/recs/:movie', routes.getRecs);
-app.get('/decades', routes.getDecades);
-app.get('/bestdecade/:decade', routes.getDecades);
-app.get('/bestgenre', routes.bestGenresPerDecade);
-app.get('/movies/random', routes.getRandomMovies);
-
 // yelp parameters
 app.get('/yelp/category/:category', routes.getCategory); 
 // the above is tested successfully with 
@@ -39,6 +30,15 @@ app.get('/yelp/cusine/:cusine/zipcode/:zipcode/weekday/:weekday/hour/:hour', rou
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 // the above is tested successfully with 
 // http://localhost:8081/yelp/zipcode/15222/weekday/5/hour/23
+
+//old code
+app.get('/genres', routes.getAllGenres);
+app.get('/genres/:genre', routes.getTopInGenre);
+app.get('/recs/:movie', routes.getRecs);
+app.get('/decades', routes.getDecades);
+app.get('/bestdecade/:decade', routes.getDecades);
+app.get('/bestgenre', routes.bestGenresPerDecade);
+app.get('/movies/random', routes.getRandomMovies);
 
 
 app.listen(8081, () => {

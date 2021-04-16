@@ -6,8 +6,11 @@ import {
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Recommendations from './Recommendations';
+import YelpRecommendations from './YelpRecommendations'; //yelp
 import BestGenres from './BestGenres';
 import Posters from './Posters';
+
+
 
 export default class App extends React.Component {
 
@@ -31,9 +34,9 @@ export default class App extends React.Component {
 							)}
 						/>
 						<Route
-							path="/yelpRecommendations"
+							path="/yelp" // from PageNavbar.js
 							render={() => (
-								<yelpRecommendations />
+								<YelpRecommendations /> // this links to ./YelpRecommendations.js as in the import 
 							)}
 						/>
 						<Route
@@ -54,3 +57,4 @@ export default class App extends React.Component {
 		); 
 	}
 }
+
