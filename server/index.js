@@ -19,7 +19,7 @@ app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 //Home Page
 app.get('/home', routes.getAllTransfers);
 app.get('/home/:zipcode', routes.getAvgPurchasePrice);
-
+app.get('/home/top', routes.getTopZips);
 //old code
 app.get('/genres', routes.getAllGenres);
 app.get('/genres/:genre', routes.getTopInGenre);

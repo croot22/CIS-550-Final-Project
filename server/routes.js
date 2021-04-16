@@ -314,6 +314,70 @@ function getAvgPurchasePrice(req, res) {
   });
 }
 
+// [Real Estate Transfers 3/3] - get top rated zipcodes
+// http://localhost:8081/home/top
+function getTopZips(req, res) {   
+  var query = `
+WITH YELP AS (
+    SELECT zipcode, AVG(stars)
+    FROM yelp_business 
+    GROUP BY zipcode
+    ORDER BY stars DESC
+    ),
+crime_total AS(
+    select distinct dc_dist, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist
+    ),
+crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+covid_per_zip AS(
+    select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
+    from covid
+    join population on covid.zipcode=population.zipcode
+    where result ='POS'
+    ),
+safety AS(
+    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    from crime_total
+    join districts on crime_total.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+	  join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
+    group by zipcode
+    order by zipcode
+    ),
+overall_score as(
+    select s.*,
+    case when overall_score = 'Less than 10' 
+      then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+    end as int_overall_score
+    FROM new_schema.schools s
+    ),
+School_score_byZip as(select zip_code, avg(int_overall_score) as average_school_score
+    from overall_score
+    where school_name not like ('%CLOSED%') and int_overall_score < 990
+    group by zip_code
+    order by 2 desc
+    )
+  SELECT zip_code, AVG(cash_consideration) AS purchase_price
+  FROM RealEstateTransfers r
+  JOIN safety s ON 
+  GROUP BY zip_code r.zip_code = s.zipcode
+  ORDER BY purchase_price
+  LIMIT 3;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
 
 // [Schools ] - list overall scores by zip codes
 function getAvgScores(req, res) {
@@ -481,7 +545,7 @@ module.exports = {
   // Home Page
   getAllTransfers: getAllTransfers,
   getAvgPurchasePrice: getAvgPurchasePrice,
-  //getTopZips: getTopsZips,
+  getTopZips: getTopZips,
 
   //schools
   getAvgScores:getAvgScores,
