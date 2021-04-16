@@ -101,7 +101,7 @@ function getAllCovid(req, res) {
 // http://localhost:8081/crime/19104
 // app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 function getCrimePerZip(req, res) {
-  // var zipcodeCrime = req.params.zipcodeCrime
+  var zipcodeCrime = req.params.zipcodeCrime
 
   var query = `
   WITH crime_breakdown AS(
@@ -120,7 +120,7 @@ crime_breakdown_per_zip AS(
     )
 select *
 from crime_breakdown_per_zip
-where zipcode='19104';
+where zipcode='${zipcodeCrime}';
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -134,7 +134,7 @@ where zipcode='19104';
 // http://localhost:8081/safety/19104
 // app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 function getSafetyPerZip(req, res) {
-  // var zipcodeSafety = req.params.zipcodeSafety
+  var zipcodeSafety = req.params.zipcodeSafety
 
   var query = `
   WITH crime_total AS(
@@ -165,7 +165,7 @@ safety AS(
     )
 select *
 from safety
-where zipcode='19104';
+where zipcode='${zipcodeSafety}';
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
