@@ -280,17 +280,13 @@ function getCategory(req, res) {
   });
 }
 
-
-
-
-// [Real Estate Transfers 1/3] - get avg purchase amount in zipcode
-// http://localhost:8081/home/zipcode
-function getAvgPurchasePrice(req, res) {
-  var zipcode = req.params.zipcode;    
+// [Real Estate Transfers 1/3] - get top 3 zipcodes by price, safety, yelp,etc.
+// http://localhost:8081/home
+function getAllTransfers(req, res) {   
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
+  SELECT zip_code, street_address, cash_consideration
   FROM RealEstateTransfers
-  WHERE zip_code = '${zipcode}';
+  ORDER BY cash_consideration;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -300,13 +296,15 @@ function getAvgPurchasePrice(req, res) {
   });
 }
 
-// [Real Estate Transfers 2/3] - get top 3 zipcodes by price, safety, yelp,etc.
-// http://localhost:8081/ret/zipcode
-function getAllTransfers(req, res) {   
+
+// [Real Estate Transfers 2/3] - get avg purchase amount in zipcode
+// http://localhost:8081/home/zipcode
+function getAvgPurchasePrice(req, res) {
+  var zipcode = req.params.zipcode;    
   var query = `
-  SELECT zip_code, street_address, cash_consideration
+  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
   FROM RealEstateTransfers
-  ORDER BY purchase_amount;
+  WHERE zip_code = '${zipcode}';
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
