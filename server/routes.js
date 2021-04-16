@@ -304,7 +304,7 @@ function getAllTransfers(req, res) {
 function getAvgPurchasePrice(req, res) {
   var zipcode = req.params.zipcode;    
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
+  SELECT zip_code, ROUND(AVG(cash_consideration), 2) AS purchase_amount
   FROM RealEstateTransfers
   WHERE zip_code = '${zipcode}';
   `;
@@ -366,13 +366,17 @@ school_score_byZip as(select zip_code, avg(int_overall_score) as average_school_
     where school_name not like ('%CLOSED%') and int_overall_score < 990
     group by zip_code
     order by 2 desc
+    ),
+  avg_purchase_price as(
+    SELECT zip_code, AVG(cash_consideration) AS purchase_price
+    FROM RealEstateTransfers r
+    GROUP BY zip_code
     )
-  SELECT r.zip_code, AVG(cash_consideration) AS purchase_price, y.stars AS food_ratings, crimes_per_1000_pop AS safety_score, average_school_score
-  FROM RealEstateTransfers r
-  JOIN yelp y ON r.zip_code = y.zipcode
-  JOIN safety sa ON r.zip_code = ss.zipcode
-  JOIN school_score ss ON r.zip_code = ss.zip_code
-  GROUP BY zip_code 
+  SELECT a.zip_code AS zipcode, a.purchase_price, y.stars AS food_ratings, crimes_per_1000_pop AS safety_score, average_school_score
+  FROM avg_purchase_price a
+  JOIN yelp y ON a.zip_code = y.zipcode
+  JOIN safety sa ON a.zip_code = ss.zipcode
+  JOIN school_score ss ON a.zip_code = ss.zip_code 
   ORDER BY safety_score, average_school_score, purchase_price, food_ratings
   LIMIT 3;
   `;
