@@ -46,8 +46,8 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlac
 //works using http://localhost:8081/schools/19104/
 app.get('/schools/:zipcode', routes.getAvgScores);
 
-//In progrss
-app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
+//In progress
+//app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
 
 
 

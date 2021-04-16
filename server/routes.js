@@ -418,8 +418,8 @@ function getAvgScores(req, res) {
     }
   });
 }
-//in progress
-// [Schools query  2] - list average school scores by selected zip code based on grades served
+/*in progress
+[Schools query  2] - list average school scores by selected zip code based on grades served
 function getAvgOnGradesServed(req, res) {
   zipcode = req.params.zipcode;    
   var query = `
@@ -448,7 +448,7 @@ function getAvgOnGradesServed(req, res) {
       res.json(rows);
     }
   });
-}
+}*/
 
 //OLD BELOW:
 
