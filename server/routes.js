@@ -302,12 +302,12 @@ function getAvgPurchasePrice(req, res) {
 
 // [Real Estate Transfers 2/3] - get top 3 zipcodes by price, safety, yelp,etc.
 // http://localhost:8081/ret/zipcode
-function getTopZips(req, res) {   
+function getAllTransfers(req, res) {   
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount, 
+  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
   FROM RealEstateTransfers
-  ORDER BY purchase_amount
-  LIMIT 3;
+  GROUP BY zip_code
+  ORDER BY purchase_amount;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -481,9 +481,10 @@ module.exports = {
   getCategory: getCategory,  
   getBestCusine: getBestCusine,  
 
-  // RET
+  // Home Page
+  getAllTransfers: getAllTransfers
   getAvgPurchasePrice: getAvgPurchasePrice,
-  getTopZips: getTopsZips,
+  //getTopZips: getTopsZips,
 
   //schools
   getAvgScores:getAvgScores,
