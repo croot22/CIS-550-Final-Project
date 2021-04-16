@@ -53,7 +53,7 @@ export default class YelpRecommendations extends React.Component {
 
 			    <div className="container recommendations-container">
 			    	<div className="jumbotron">
-			    		<div className="h5">Recommendations</div>
+			    		<div className="h5"><img src="yelp-512.jpg" alt="yelp"width="100" height="50"></img> Recommendations</div>					
 			    		<br></br>
 			    		<div className="input-container">
 			    			<input type='text' placeholder="Enter Movie Name" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/>
