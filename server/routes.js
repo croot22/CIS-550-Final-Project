@@ -316,6 +316,35 @@ function getAvgPurchasePrice(req, res) {
   });
 }*/
 
+
+// [Schools ] - list overall scores by zip codes
+function getAvgScores(req, res) {
+  var zip_codeScore = req.params.zip_codeScore;    
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s)
+  select 
+  zip_code
+  , avg(int_overall_score) as average_school_score
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  group by zip_code
+  order by 2 desc
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+
 //OLD BELOW:
 
 function getAllGenres(req, res) {
@@ -454,6 +483,9 @@ module.exports = {
   // RET
   getAvgPurchasePrice: getAvgPurchasePrice,
   //getTopZips: getTopsZips,
+
+  //schools
+  getAvgScores:getAvgScores,
 
   //old exports
 	getAllGenres: getAllGenres,

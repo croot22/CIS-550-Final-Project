@@ -48,6 +48,12 @@ export default class App extends React.Component {
 								<crime />
 							)}
 						/>
+						<Route
+							path="/schools"
+							render={() => (
+								<schools />
+							)}
+						/>
 					</Switch>
 				</Router>
 			</div>
