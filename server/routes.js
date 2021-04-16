@@ -319,7 +319,7 @@ function getAvgPurchasePrice(req, res) {
 
 // [Schools ] - list overall scores by zip codes
 function getAvgScores(req, res) {
-  var zip_codeScore = req.params.zip_codeScore;    
+  var averageScore = req.params.zip_code;    
   var query = `
   with overall_score as(
     select s.*
@@ -328,13 +328,17 @@ function getAvgScores(req, res) {
       else convert(overall_score, UNSIGNED INTEGER)
       end as int_overall_score
   FROM new_schema.schools s)
-  select 
+  averageScore AS(
+    select 
   zip_code
   , avg(int_overall_score) as average_school_score
   from overall_score
   where school_name not like ('%CLOSED%') and int_overall_score < 990
   group by zip_code
-  order by 2 desc
+  order by 2 desc)
+  select *
+  from averageScore
+  where zipcode = '$(zip_code)'
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
