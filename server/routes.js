@@ -388,9 +388,9 @@ school_score_byZip as(select zip_code, avg(int_overall_score) as average_school_
   });
 }
 
-// [Schools ] - list overall scores by zip codes
+// [Schools query  1] - list average school scores by selected zip code
 function getAvgScores(req, res) {
-  var averageScore = req.params.zip_code;    
+  zipcode = req.params.zipcode;    
   var query = `
   with overall_score as(
     select s.*
@@ -398,7 +398,7 @@ function getAvgScores(req, res) {
     then 9
       else convert(overall_score, UNSIGNED INTEGER)
       end as int_overall_score
-  FROM new_schema.schools s)
+  FROM new_schema.schools s),
   averageScore AS(
     select 
   zip_code
@@ -409,7 +409,7 @@ function getAvgScores(req, res) {
   order by 2 desc)
   select *
   from averageScore
-  where zipcode = '$(zip_code)'
+  where zip_code = '${zipcode}'
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -418,7 +418,37 @@ function getAvgScores(req, res) {
     }
   });
 }
-
+//in progress
+// [Schools query  2] - list average school scores by selected zip code based on grades served
+function getAvgOnGradesServed(req, res) {
+  zipcode = req.params.zipcode;    
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s),
+  averageScore AS(
+    select 
+  zip_code
+  , avg(int_overall_score) as average_school_score
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  group by zip_code
+  order by 2 desc)
+  select *
+  from averageScore
+  where zip_code = '${zipcode}'
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
 
 //OLD BELOW:
 
@@ -561,7 +591,7 @@ module.exports = {
   getTopZips: getTopZips,
 
   //schools
-  getAvgScores:getAvgScores,
+  getAvgScores: getAvgScores,
 
   //old exports
 	getAllGenres: getAllGenres,

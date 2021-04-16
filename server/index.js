@@ -43,8 +43,15 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlac
 
 
 //school parameters
-app.get('school/:zip_codeScore', routes.getAvgScores);
+//works using http://localhost:8081/schools/19104/
+app.get('/schools/:zipcode', routes.getAvgScores);
 
+//In progrss
+app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
+
+
+
+//Port parameter
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
 });
