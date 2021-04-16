@@ -282,6 +282,7 @@ function getCategory(req, res) {
 
 // [Real Estate Transfers 1/3] - get top 3 zipcodes by price, safety, yelp,etc.
 // http://localhost:8081/home
+//works
 function getAllTransfers(req, res) {   
   var query = `
   SELECT zip_code, street_address, cash_consideration
@@ -299,6 +300,7 @@ function getAllTransfers(req, res) {
 
 // [Real Estate Transfers 2/3] - get avg purchase amount in zipcode
 // http://localhost:8081/home/zipcode
+//works
 function getAvgPurchasePrice(req, res) {
   var zipcode = req.params.zipcode;    
   var query = `
@@ -316,10 +318,11 @@ function getAvgPurchasePrice(req, res) {
 
 // [Real Estate Transfers 3/3] - get top rated zipcodes
 // http://localhost:8081/home/top
+//doesn't work yet
 function getTopZips(req, res) {   
   var query = `
-WITH YELP AS (
-    SELECT zipcode, AVG(stars)
+WITH yelp AS (
+    SELECT zipcode, AVG(stars) as avg_stars
     FROM yelp_business 
     GROUP BY zipcode
     ORDER BY stars DESC
@@ -358,17 +361,19 @@ overall_score as(
     end as int_overall_score
     FROM new_schema.schools s
     ),
-School_score_byZip as(select zip_code, avg(int_overall_score) as average_school_score
+school_score_byZip as(select zip_code, avg(int_overall_score) as average_school_score
     from overall_score
     where school_name not like ('%CLOSED%') and int_overall_score < 990
     group by zip_code
     order by 2 desc
     )
-  SELECT zip_code, AVG(cash_consideration) AS purchase_price
+  SELECT r.zip_code, AVG(cash_consideration) AS purchase_price, y.stars AS food_ratings, crimes_per_1000_pop AS safety_score, average_school_score
   FROM RealEstateTransfers r
-  JOIN safety s ON 
-  GROUP BY zip_code r.zip_code = s.zipcode
-  ORDER BY purchase_price
+  JOIN yelp y ON r.zip_code = y.zipcode
+  JOIN safety sa ON r.zip_code = ss.zipcode
+  JOIN school_score ss ON r.zip_code = ss.zip_code
+  GROUP BY zip_code 
+  ORDER BY safety_score, average_school_score, purchase_price, food_ratings
   LIMIT 3;
   `;
   connection.query(query, function(err, rows, fields) {
