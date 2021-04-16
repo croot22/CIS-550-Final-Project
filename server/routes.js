@@ -176,34 +176,28 @@ where zipcode='19104';
 };
 
 // [Yelp] 1 of 2] - recommend restaurant based on category and check in 
-//http://localhost:8081/yelp/zipcode/15222/restaurant/Japanese/weekday/3/hour/18
-// app.get('/yelp/zipcode/:zipcode/restaurant/:restaurant/weekday/:weekday/hour/:hour', routes.getBestRestaurant);
+// http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
 
-function getBestRestaurant(req, res) {
-  if(!req.query.Type) {                         
-    res.status(400).json({
-      'message': 'Incorrect query parameters passed.'
-    })
-  }
-  //var zipcode = req.params.zipcode; 
-  //var restaurant = req.params.restaurant;  
-  //var weekday = req.params.weekday;    
-  //var hour = req.params.hour;             
+function getBestCusine(req, res) {
+  var zipcode = req.params.zipcode;    
+  var cusine = req.params.cusine; 
+  var weekday = req.params.weekday; 
+  var hour = req.params.hour; 
+  var query = `
 
-  var query = 
-  `WITH BUS AS (
+  WITH BUS AS (
   SELECT business_name, address, business_id, review_count, stars, hours
   FROM yelp_business 
-  WHERE zipcode = '15222' AND review_count > 30 AND business_id IN
+  WHERE zipcode = '${zipcode}' AND review_count > 30 AND business_id IN
     (SELECT business_id
     FROM yelp_categories
-    WHERE category = 'American (Traditional)') 
+    WHERE category = '${cusine}') 
   ORDER BY stars DESC
   LIMIT 100
 ), op AS (
   SELECT business_id, weekday, hour, count(*)
     FROM yelp_checkin
-    WHERE weekday = '3' AND hour = '18'
+    WHERE weekday = '${weekday}' AND hour = '${hour}'
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
@@ -217,15 +211,16 @@ FROM
   ) temp
 WHERE rn <= 1
 ORDER BY stars DESC LIMIT 3
-  `; 
 
+
+  `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
       res.json(rows);
     }
   });
-};
+}
 
 
 // [Yelp 2 of 2] - recommend based on category and check in 
@@ -239,10 +234,10 @@ function getBestPlace(req, res) {
     })
   }
   
+  var zipcode = req.params.zipcode; 
   var weekday = req.params.weekday;   
   var hour = req.params.hour;         
-  var zipcode = req.params.zipcode;   
-
+    
   var query = 
     `
     WITH BUS AS (
@@ -290,48 +285,7 @@ function getCategory(req, res) {
   });
 }
 
-// [Yelp 2 of 2] - recommend based on category and check in 
-// http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
-// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
-function getBestPlace(req, res) {
-  if(!req.query.Type) {                        
-    res.status(400).json({
-      'message': 'Incorrect query parameters passed.'
-    })
-  }
-  
-  var weekday = req.params.weekday;   
-  var hour = req.params.hour;         
-  var zipcode = req.params.zipcode;   
-
-  var query = 
-    `
-    WITH BUS AS (
-      SELECT business_name, address, business_id, review_count, stars, hours
-      FROM yelp_business 
-      WHERE zipcode = '${zipcode}'
-    ), op AS (
-      SELECT business_id, weekday, hour, count(*) as volume1
-      FROM yelp_checkin
-      WHERE weekday = '${weekday}' AND hour = '${hour}'
-      GROUP by business_id, weekday, hour
-    )
-
-  SELECT category, SUM(volume1) as volume
-  FROM yelp_categories cat JOIN BUS ON cat.business_id = BUS.business_id JOIN op ON cat.business_id = op.business_id
-  GROUP by category
-  ORDER BY volume DESC 
-  LIMIT 3`
-  ;
-
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
 
 
 // [Real Estate Transfers 1/1] - get avg purchase amount in zipcode
@@ -482,9 +436,9 @@ module.exports = {
   getSafetyPerZip: getSafetyPerZip,
 
   // Yelp
-  getBestRestaurant: getBestRestaurant, 
   getBestPlace: getBestPlace,
   getCategory: getCategory,  
+  getBestCusine: getBestCusine,  
 
   //old exports
 	getAllGenres: getAllGenres,

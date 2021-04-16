@@ -29,10 +29,15 @@ app.get('/bestgenre', routes.bestGenresPerDecade);
 app.get('/movies/random', routes.getRandomMovies);
 
 // yelp parameters
-app.get('/yelp/category/:category', routes.getCategory); // test with http://localhost:8081/yelp/category/bars
-app.get('/yelp/restaurant', routes.getBestRestaurant); 
-//app.get('/yelp/zipcode/:zipcode/restaurant/:restaurant/weekday/:weekday/hour/:hour', routes.getBestRestaurant);
+app.get('/yelp/category/:category', routes.getCategory); 
+// the above is tested successfully with 
+// http://localhost:8081/yelp/category/bars
+app.get('/yelp/cusine/:cusine/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestCusine); 
+// the above is tested successfully with 
+// http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
+// the above not running yet 
+
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
