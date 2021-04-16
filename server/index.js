@@ -17,7 +17,7 @@ app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 
 //RET
-//app.get('/ret', routes.getAvgPurchasePrice);
+// app.get('/ret', routes.getAvgPurchasePrice);
 
 //old code
 app.get('/genres', routes.getAllGenres);
@@ -36,7 +36,8 @@ app.get('/yelp/cusine/:cusine/zipcode/:zipcode/weekday/:weekday/hour/:hour', rou
 // the above is tested successfully with 
 // http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
-// the above not running yet 
+// the above is tested successfully with 
+// http://localhost:8081/yelp/zipcode/15222/weekday/5/hour/23
 
 
 app.listen(8081, () => {

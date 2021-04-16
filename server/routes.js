@@ -228,11 +228,6 @@ ORDER BY stars DESC LIMIT 3
 // app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
 function getBestPlace(req, res) {
-  if(!req.query.Type) {                        
-    res.status(400).json({
-      'message': 'Incorrect query parameters passed.'
-    })
-  }
   
   var zipcode = req.params.zipcode; 
   var weekday = req.params.weekday;   
