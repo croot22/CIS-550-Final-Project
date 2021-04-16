@@ -16,9 +16,10 @@ app.get('/covid', routes.getAllCovid);
 app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 
-//RET
-app.get('/ret/:zipcode', routes.getAvgPurchasePrice);
-//app.get('/ret/topZips', routes.getTopZips);
+//Home Page
+app.get('/home', routes.getAllTransfers); //works
+app.get('/home/:zipcode', routes.getAvgPurchasePrice); //works
+app.get('/home/top', routes.getTopZips); //not yet
 
 //old code
 app.get('/genres', routes.getAllGenres);
@@ -42,7 +43,7 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlac
 
 
 //school parameters
-app.get('school/:zip_codeScore', routes.getOverallScores);
+app.get('school/:zip_codeScore', routes.getAvgScores);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

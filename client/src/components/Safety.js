@@ -4,7 +4,7 @@ import BestGenreRow from './BestGenreRow';
 import '../style/BestGenres.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class BestGenre extends React.Component {
+export default class Safety extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -19,7 +19,7 @@ export default class BestGenre extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch('http://localhost:8081/decades', {
+		fetch('http://localhost:8081/Safety', {
 			method: 'GET'
 		}).then(res => {
 			return res.json();
@@ -51,7 +51,7 @@ export default class BestGenre extends React.Component {
 
 	submitDecade() {
 		let decade = this.state.selectedDecade;
-		let url = new URL('http://localhost:8081/bestgenre/');
+		let url = new URL('http://localhost:8081/Safety/');
 		let queryParams = {decade: decade};
 		//If there are more than one query parameters, this is useful.
 		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
