@@ -33,19 +33,19 @@ export default class App extends React.Component {
 						<Route
 							path="/YelpRecommendations"
 							render={() => (
-								<yelpRecommendations />
+								<YelpRecommendations />
 							)}
 						/>
 						<Route
 							path="/Safety"
 							render={() => (
-								<safety />
+								<Safety />
 							)}
 						/>
 						<Route
 							path="/Schools"
 							render={() => (
-								<schools />
+								<Schools />
 							)}
 						/>
 					</Switch>

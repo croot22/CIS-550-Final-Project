@@ -3,7 +3,7 @@ import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import GenreButton from './GenreButton';
-import HomeRET from './HomeRow';
+import HomeRow from './HomeRow';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ export default class Home extends React.Component {
     }).then(movieList => {
 
       let movieDivs = movieList.map((movie, i) =>
-	<HomeRET movie={movie} />);
+	<HomeRow movie={movie} />);
 
       this.setState({
         movies: movieDivs

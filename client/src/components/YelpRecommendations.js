@@ -4,7 +4,7 @@ import RecommendationsRow from './YelpRecommendationsRow';
 import '../style/Recommendations.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class Recommendations extends React.Component {
+export default class YelpRecommendations extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -26,7 +26,7 @@ export default class Recommendations extends React.Component {
 	}
 
 	submitIds() {
-		fetch("http://localhost:8081/recs/" + this.state.movieName,
+		fetch("http://localhost:8081/yelp/" + this.state.movieName,
 		{
 			method: "GET"
 		}).then(res => {
@@ -48,12 +48,12 @@ export default class Recommendations extends React.Component {
 	render() {
 
 		return (
-			<div className="Recommendations">
-				<PageNavbar active="recommendations" />
+			<div className="YelpRecommendations">
+				<PageNavbar active="yelprecommendations" />
 
 			    <div className="container recommendations-container">
 			    	<div className="jumbotron">
-			    		<div className="h5">Recommendations</div>
+			    		<div className="h5"><img src="yelp-512.jpg" alt="yelp"width="100" height="50"></img> Recommendations</div>					
 			    		<br></br>
 			    		<div className="input-container">
 			    			<input type='text' placeholder="Enter Movie Name" value={this.state.movieName} onChange={this.handleMovieNameChange} id="movieName" className="movie-input"/>
