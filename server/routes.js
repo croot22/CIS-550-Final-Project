@@ -304,9 +304,8 @@ function getAvgPurchasePrice(req, res) {
 // http://localhost:8081/ret/zipcode
 function getAllTransfers(req, res) {   
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
+  SELECT zip_code, street_address, cash_consideration
   FROM RealEstateTransfers
-  GROUP BY zip_code
   ORDER BY purchase_amount;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -482,7 +481,7 @@ module.exports = {
   getBestCusine: getBestCusine,  
 
   // Home Page
-  getAllTransfers: getAllTransfers
+  getAllTransfers: getAllTransfers,
   getAvgPurchasePrice: getAvgPurchasePrice,
   //getTopZips: getTopsZips,
 
