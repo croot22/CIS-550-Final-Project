@@ -42,7 +42,7 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlac
 
 
 //school parameters
-app.get('school/:zip_codeScore', routes.getOverallScores);
+app.get('school/:zip_codeScore', routes.getAvgScores);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
