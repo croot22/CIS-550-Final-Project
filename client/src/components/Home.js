@@ -3,9 +3,9 @@ import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import GenreButton from './GenreButton';
-import DashboardMovieRow from './DashboardMovieRow';
+import HomeRET from './HomeRET';
 
-export default class Dashboard extends React.Component {
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,7 +22,7 @@ export default class Dashboard extends React.Component {
   // React function that is called when the page load.
   componentDidMount() {
     // Send an HTTP request to the server.
-    fetch("http://localhost:8081/genres",
+    fetch("http://localhost:8081/ret",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -48,15 +48,15 @@ export default class Dashboard extends React.Component {
     });
   }
 
-  showMovies(genre) {
-    fetch("http://localhost:8081/genres/" + genre, {
+  showMovies(zipCode) {
+    fetch("http://localhost:8081/ret/" + zipCode, {
       method: "GET"
     }).then(res => {
       return res.json();
     }).then(movieList => {
 
       let movieDivs = movieList.map((movie, i) =>
-	<DashboardMovieRow movie={movie} />);
+	<HomeRET movie={movie} />);
 
       this.setState({
         movies: movieDivs

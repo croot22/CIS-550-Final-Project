@@ -4,10 +4,10 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import Recommendations from './Recommendations';
-import BestGenres from './BestGenres';
-import Posters from './Posters';
+import Home from './Home';
+import YelpRecommendations from './YelpRecommendations';
+import Safety from './Safety';
+import Schools from './Schools';
 
 export default class App extends React.Component {
 
@@ -20,36 +20,30 @@ export default class App extends React.Component {
 							exact
 							path="/"
 							render={() => (
-								<Dashboard />
+								<Home />
 							)}
 						/>
 						<Route
 							exact
-							path="/dashboard"
+							path="/Home"
 							render={() => (
-								<Dashboard />
+								<Home />
 							)}
 						/>
 						<Route
-							path="/yelpRecommendations"
+							path="/YelpRecommendations"
 							render={() => (
 								<yelpRecommendations />
 							)}
 						/>
 						<Route
-							path="/safety"
+							path="/Safety"
 							render={() => (
 								<safety />
 							)}
 						/>
 						<Route
-							path="/crime"
-							render={() => (
-								<crime />
-							)}
-						/>
-						<Route
-							path="/schools"
+							path="/Schools"
 							render={() => (
 								<schools />
 							)}
