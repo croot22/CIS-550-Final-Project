@@ -1,109 +1,99 @@
 import React from 'react';
-import PageNavbar from './PageNavbar';
-import BestGenreRow from './BestGenreRow';
-import '../style/BestGenres.css';
+import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PageNavbar from './PageNavbar';
+import GenreButton from './GenreButton';
+import SafetyRow from './SafetyRow';
 
 export default class Safety extends React.Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		this.state = {
-			selectedDecade: "",
-			decades: [],
-			genres: []
-		};
+    // The state maintained by this React Component. This component maintains the list of safety,
+    // and a list of safety for a specified genre.
+    this.state = {
+      safety: []
+    }
 
-		this.submitDecade = this.submitDecade.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-	}
+    this.showSafety = this.showSafety.bind(this);
+  }
 
-	componentDidMount() {
-		fetch('http://localhost:8081/Safety', {
-			method: 'GET'
-		}).then(res => {
-			return res.json();
-		}).then(decadeListObj => {
+  // React function that is called when the page load.
+  componentDidMount() {
+    // Send an HTTP request to the server.
+    fetch("http://localhost:8081/safety",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(safetyList => {
+      if (!safetyList) return;
+      // Map each genre in this.state.safety to an HTML element:
+      // A button which triggers the showSafety function for each genre.
+      let safetyDivs = safetyList.map((safetyObj, i) =>
+	<GenreButton id={"button-" + safetyObj.safety} onClick={() => this.showSafety(safetyObj.safety)} safety={safetyObj.safety} /> );
 
-			let decadeList = decadeListObj.map((decadeObj, i) =>
-				<option key={i} value={decadeObj.decade}>
-				{decadeObj.decade}
-				</option>
-			);
+      // Set the state of the safety list to the value returned by the HTTP response from the server.
+      this.setState({
+        safety: safetyDivs
+      });
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    });
+  }
 
-			this.setState({
-				decades: decadeList,
-			});
+  showSafety(zipCode) {
+    fetch("http://localhost:8081/safety/" + zipCode, {
+      method: "GET"
+    }).then(res => {
+      return res.json();
+    }).then(safetyList => {
 
-			if(decadeList.length > 0) {
-				this.setState({
-					selectedDecade: decadeListObj[0].decade
-				})
-			}
-		})
-	}
+      let safetyDivs = safetyList.map((safety, i) =>
+	<SafetyRow safety={safety} />);
 
-	handleChange(e) {
-		this.setState({
-			selectedDecade: e.target.value
-		});
-	}
+      this.setState({
+        safety: safetyDivs
+      })
+    })
+  }
 
-	submitDecade() {
-		let decade = this.state.selectedDecade;
-		let url = new URL('http://localhost:8081/Safety/');
-		let queryParams = {decade: decade};
-		//If there are more than one query parameters, this is useful.
-		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
-		fetch(url, {
-			method: 'GET'
-		}).then(res => {
-			return res.json();
-		}, err => {
-			return console.log(err);
-		}).then(genreList => {
-			let bestGenreDivs = genreList.map((genre, i) => 
-				<BestGenreRow genre={genre} />
-			); 
+  render() {    
+    return (
+      <div className="Home">
+        <PageNavbar active="home" />
+        <br></br>
+        <div className="container safety-container">
+          <div className="jumbotron">
+            <div className="h5">Safety Metrics for Philadelphia</div>
+            <div className="safety-container">
+              {this.state.safety}
+            </div>
+          </div>
 
-			this.setState({
-				genres: bestGenreDivs
-			});
-		});
-	}
-
-	render() {
-
-		return (
-			<div className="BestGenres">
-				<PageNavbar active="bestgenres" />
-
-				<div className="container bestgenres-container">
-			      <div className="jumbotron">
-			        <div className="h5">Best Genres</div>
-
-			        <div className="years-container">
-			          <div className="dropdown-container">
-			            <select value={this.state.selectedDecade} onChange={this.handleChange} className="dropdown" id="decadesDropdown">
-			            	{this.state.decades}
-			            </select>
-			            <button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitDecade}>Submit</button>
-			          </div>
-			        </div>
-			      </div>
-			      <div className="jumbotron">
-			        <div className="movies-container">
-			          <div className="movie">
-			            <div className="header"><strong>Genre</strong></div>
-			            <div className="header"><strong>Average Rating</strong></div>
-			          </div>
-			          <div className="movies-container" id="results">
-			            {this.state.genres}
-			          </div>
-			        </div>
-			      </div>
-			    </div>
-			</div>
-		);
-	}
+          <br></br>
+          <div className="jumbotron">
+            <div className="safety-container">
+              <div className="safety-header">
+                <div className="header-lg"><strong>zipcode</strong></div>
+                <div className="header"><strong>population</strong></div>
+                <div className="header"><strong>crime_count</strong></div>
+				<div className="header"><strong>crimes_per_1000_pop</strong></div>
+				<div className="header"><strong>positive_count</strong></div>
+				<div className="header"><strong>covid_positive_rate</strong></div>
+              </div>
+              <div className="results-container" id="results">
+                {this.state.safety}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
