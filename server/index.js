@@ -12,10 +12,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //safety
 app.get('/safety', routes.getAllSafety);
-app.get('/crime', routes.getAllCrime);
-app.get('/covid', routes.getAllCovid);
-app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
-app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 app.get('/zipcodeCrime', routes.getZipcodeCrime);
 app.get('/bestcrime', routes.getBestCrime);
 
@@ -51,8 +47,6 @@ app.get('/schools/:zipcode', routes.getAvgScores);
 
 //In progress
 //app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
-
-
 
 //Port parameter
 app.listen(8081, () => {

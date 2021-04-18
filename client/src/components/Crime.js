@@ -80,7 +80,7 @@ export default class Crime extends React.Component {
 
 				<div className="container crime-container">
 			      <div className="jumbotron">
-			        <div className="h5">Select a Zipcode for Crime Analysis</div>
+			        <div className="h5">Select a Zipcode for Detailed Crime Analysis</div>
 
 			        <div className="years-container">
 			          <div className="dropdown-container">
