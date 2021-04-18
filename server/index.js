@@ -22,10 +22,12 @@ app.get('/home', routes.getAllTransfers); //works
 app.get('/home/:zipcode', routes.getAvgPurchasePrice); //works
 app.get('/home/top', routes.getTopZips); //not yet
 
-// yelp parameters
-app.get('/yelp/category/:category', routes.getCategory); 
-// the above is tested successfully with 
-// http://localhost:8081/yelp/category/bars
+// yelp drop down menu
+app.get('/yelp/category', routes.getCategory); //http://localhost:8081/yelp/category
+app.get('/yelp/zipcode', routes.getZipcode); //http://localhost:8081/yelp/zipcode
+app.get('/yelp/weekday', routes.getWeekday); //http://localhost:8081/yelp/weekday
+app.get('/yelp/hour', routes.getHour); //http://localhost:8081/yelp/hour
+// yelp request 
 app.get('/yelp/cusine/:cusine/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestCusine); 
 // the above is tested successfully with 
 // http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5

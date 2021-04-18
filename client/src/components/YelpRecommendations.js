@@ -8,26 +8,26 @@ export default class YelpRecommendations extends React.Component {
 	constructor(props) {
 		super(props);
 
-		// State maintained by this React component is the selected cusine type,
+		// State maintained by this React component is the selected cuisine type,
 		// and the list of attributes, address, customer review and etc. // yelp to come back
 		this.state = {
-			cusineName: "",
-			recCusines: []
+			cuisineName: "",
+			reccuisines: []
 		}
 
-		this.handleCusineNameChange = this.handleCusineNameChange.bind(this);
+		this.handlecuisineNameChange = this.handlecuisineNameChange.bind(this);
 		this.submitIds = this.submitIds.bind(this); //tbd : what is this?
 	}
 
-	handleCusineNameChange(e) {
+	handlecuisineNameChange(e) {
 		this.setState({
-			cusineName: e.target.value
+			cuisineName: e.target.value
 		});
 	}
 
 	submitIds() {
-		// http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
-		fetch("http://localhost:8081/yelp/cusine/" + this.state.cusineName + "/zipcode/15222/weekday/3/hour/5", // tbd : to variablize the rest 
+		// http://localhost:8081/yelp/cuisine/bars/zipcode/15222/weekday/3/hour/5
+		fetch("http://localhost:8081/yelp/cuisine/" + this.state.cuisineName + "/zipcode/15222/weekday/3/hour/5", // tbd : to variablize the rest 
 		{
 			method: "GET"
 		}).then(res => {
@@ -59,8 +59,8 @@ export default class YelpRecommendations extends React.Component {
 			    		<div className="h5">Yelp Recommendations</div>			    		
 			    		<br></br>
 			    		<div className="input-container">
-			    			<input type='text' placeholder="Enter Cusine" value={this.state.cusineName} onChange={this.handleCusineNameChange} id="cusineName" className="cusine-input"/>
-			    			<button id="submitCusineBtn" className="submit-btn" onClick={this.submitIds}>Submit</button> 
+			    			<input type='text' placeholder="Enter cuisine" value={this.state.cuisineName} onChange={this.handlecuisineNameChange} id="cuisineName" className="cuisine-input"/>
+			    			<button id="submitcuisineBtn" className="submit-btn" onClick={this.submitIds}>Submit</button> 
 			    		</div>
 			    		<div className="header-container">
 			    			<div className="h6">You may like ...</div>

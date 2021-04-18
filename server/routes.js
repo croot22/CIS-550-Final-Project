@@ -261,15 +261,61 @@ function getBestPlace(req, res) {
 };
 
 
-// [Yelp test 1] - list out category
-// http://localhost:8081/yelp/category/bars
+// [Yelp Menu 1 of 4] - list out category
+// http://localhost:8081/yelp/category
 function getCategory(req, res) {
-  var category = req.params.category;    
   var query = `
    SELECT DISTINCT category 
    FROM yelp_categories 
-   WHERE category = '${category}'
-   LIMIT 10
+   LIMIT 100
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+// [Yelp Menu 2 of 4] - list out zipcode
+// http://localhost:8081/yelp/zipcode
+function getZipcode(req, res) {
+  var query = `
+   SELECT DISTINCT zipcode 
+   FROM yelp_business  
+   LIMIT 100
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+// [Yelp Menu 3 of 4] - list out weekday
+// http://localhost:8081/yelp/weekday
+function getWeekday(req, res) {
+  var query = `
+   SELECT DISTINCT weekday 
+   FROM yelp_checkin  
+   LIMIT 100
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+// [Yelp Menu 4 of 4] - list out hour
+// http://localhost:8081/yelp/hour
+function getHour(req, res) {    
+  var query = `
+   SELECT DISTINCT hour 
+   FROM yelp_checkin  
+   LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -580,9 +626,13 @@ module.exports = {
   getSafetyPerZip: getSafetyPerZip,
 
   // Yelp
-  getBestPlace: getBestPlace,
+  
   getCategory: getCategory,  
+  getZipcode: getZipcode,  
+  getWeekday: getWeekday,  
+  getHour: getHour,  
   getBestCusine: getBestCusine,  
+  getBestPlace: getBestPlace,
 
   // Home Page
   getAllTransfers: getAllTransfers,

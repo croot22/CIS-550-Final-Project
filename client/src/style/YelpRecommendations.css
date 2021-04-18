@@ -4,13 +4,34 @@
   /* margin-top: 10px; */
 }
 
-.header-container .headers, .results-container .restaurantResults {
+.results-container .restaurantResults {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 400px;
+  height: 300px;
 }
 
-.restaurantResults .Name, .restaurantResults .Address, .restaurantResults .Rating, .restaurantResults .Review, .headers .header {
-  flex: 1 0 25%;
+
+.header-container .headers {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 150px;
 }
+
+.headers .header{
+	width: 100px, 200px, 300px, 400px;
+}
+
+.restaurantResults .Name, .restaurantResults .Address, .headers .h1, .headers .h2 {
+	 width: 120px;
+}
+
+.restaurantResults .Rating, .headers .h3 {
+	 width: 100px;
+}
+
+.restaurantResults .Review, .headers .h4 {
+	 width: 550px;
+}
+
