@@ -2,6 +2,7 @@ import React from 'react';
 import '../style/Safety.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
+import SafetyRow from './SafetyRow';
 
 export default class Safety extends React.Component {
   constructor(props) {
@@ -25,14 +26,8 @@ export default class Safety extends React.Component {
     }).then(safetyList => {
 
       let safetyDivs = safetyList.map((entry, i) =>
-      <div key={i} className="safety">
-        <div className="zipcode">{entry.zipcode}</div>
-        <div className="population">{entry.population}</div>
-        <div className="crime_count">{entry.crime_count}</div>
-		<div className="crimes_per_1000_pop">{entry.crimes_per_1000_pop}</div>
-        <div className="positive_count">{entry.positive_count}</div>
-        <div className="covid_positive_rate">{entry.covid_positive_rate}</div>
-      </div>);
+	  <SafetyRow key={i} safety={entry}/>	 
+	  );
 
       this.setState({
         safety: safetyDivs
@@ -47,17 +42,17 @@ export default class Safety extends React.Component {
     return (
       <div className="Dashboard">
         <PageNavbar active="Safety" />
-        <div className="container safety-container">
+        <div className="container header-container">
           <br></br>
           <div className="jumbotron less-headspace">
-            <div className="safety-container">
-              <div className="safety-header">
-                <div className="header-lg"><strong>zipcode</strong></div>
-                <div className="header"><strong>population</strong></div>
-                <div className="header"><strong>crime_count</strong></div>
-				<div className="header"><strong>crimes_per_1000_pop</strong></div>
-                <div className="header"><strong>positive_count</strong></div>
-                <div className="header"><strong>covid_positive_rate</strong></div>
+            <div className="header-container">
+              <div className="headers">
+                <div className="header"><strong>Zipcode</strong></div>
+                <div className="header"><strong>Population</strong></div>
+                <div className="header"><strong>Crime Count</strong></div>
+				<div className="header"><strong>Crimes Per 1000 Pop.</strong></div>
+                <div className="header"><strong>Positive COVID Cases</strong></div>
+                <div className="header"><strong>COVID Positivity Rate</strong></div>
               </div>
               <div className="results-container" id="results">
                 {this.state.safety}
