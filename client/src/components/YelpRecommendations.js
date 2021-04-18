@@ -31,8 +31,9 @@ export default class YelpRecommendations extends React.Component {
 		{
 			method: "GET"
 		}).then(res => {
-			console.log(res);
+			console.log(res);			
 			return res.json();
+
 		}, err => {
 			console.log(err);
 		}).then(restaurantList => {
@@ -71,7 +72,7 @@ export default class YelpRecommendations extends React.Component {
 			    			</div>
 			    		</div>
 			    		<div className="results-container" id="results">
-			    			{this.state.recRestaurant}
+			    			{this.state.recRestaurants}
 			    		</div>
 			    	</div>
 			    </div>

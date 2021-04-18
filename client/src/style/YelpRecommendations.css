@@ -8,7 +8,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 40px;
+  height: 400px;
 }
 
 .restaurantResults .Name, .restaurantResults .Address, .restaurantResults .Rating, .restaurantResults .Review, .headers .header {
