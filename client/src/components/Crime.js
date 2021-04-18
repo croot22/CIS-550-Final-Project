@@ -9,12 +9,11 @@ export default class Crime extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedDecade: "",
-			decades: [],
-			genres: []
+			selectedZipcode: "",
+			crimeZipcodes: [],
+			crimeCategories: []
 		};
-
-		this.submitDecade = this.submitDecade.bind(this);
+		this.submitZipcode = this.submitZipcode.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
@@ -23,21 +22,20 @@ export default class Crime extends React.Component {
 			method: 'GET'
 		}).then(res => {
 			return res.json();
-		}).then(decadeListObj => {
-
-			let decadeList = decadeListObj.map((decadeObj, i) =>
-				<option key={i} value={decadeObj.decade}>
-				{decadeObj.decade}
+		}).then(zipcodeListObj => {
+			let zipcodeList = zipcodeListObj.map((zipcodeObj, i) =>
+				<option key={i} value={zipcodeObj.crimeZipcode}>
+				{zipcodeObj.crimeZipcode}
 				</option>
 			);
 
 			this.setState({
-				decades: decadeList,
+				crimeZipcodes: zipcodeList,
 			});
 
-			if(decadeList.length > 0) {
+			if(zipcodeList.length > 0) {
 				this.setState({
-					selectedDecade: decadeListObj[0].decade
+					selectedZipcode: zipcodeListObj[0].crimeZipcode
 				})
 			}
 		})
@@ -45,14 +43,14 @@ export default class Crime extends React.Component {
 
 	handleChange(e) {
 		this.setState({
-			selectedDecade: e.target.value
+			selectedZipcode: e.target.value
 		});
 	}
 
-	submitDecade() {
-		let decade = this.state.selectedDecade;
-		let url = new URL('http://localhost:8081/bestcrime/');
-		let queryParams = {decade: decade};
+	submitZipcode() {
+		let crimeZipcode = this.state.selectedZipcode;
+		let url = new URL('http://localhost:8081/totalcrime/');
+		let queryParams = {crimeZipcode: crimeZipcode};
 		//If there are more than one query parameters, this is useful.
 		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 		fetch(url, {
@@ -61,13 +59,13 @@ export default class Crime extends React.Component {
 			return res.json();
 		}, err => {
 			return console.log(err);
-		}).then(genreList => {
-			let bestGenreDivs = genreList.map((genre, i) => 
-				<CrimeRow genre={genre} />
+		}).then(crimeList => {
+			let totalCrimeDivs = crimeList.map((crime, i) => 
+				<CrimeRow crime={crime} />
 			); 
 
 			this.setState({
-				genres: bestGenreDivs
+				crimeCategories: totalCrimeDivs
 			});
 		});
 	}
@@ -77,17 +75,15 @@ export default class Crime extends React.Component {
 		return (
 			<div className="Crime">
 				<PageNavbar active="crime" />
-
 				<div className="container crime-container">
 			      <div className="jumbotron">
 			        <div className="h5">Select a Zipcode for Detailed Crime Analysis</div>
-
 			        <div className="years-container">
 			          <div className="dropdown-container">
-			            <select value={this.state.selectedDecade} onChange={this.handleChange} className="dropdown" id="decadesDropdown">
-			            	{this.state.decades}
+			            <select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="crimeZipcodesDropdown">
+			            	{this.state.crimeZipcodes}
 			            </select>
-			            <button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitDecade}>Submit</button>
+			            <button className="submit-btn" id="crimeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
 			          </div>
 			        </div>
 			      </div>
@@ -99,7 +95,7 @@ export default class Crime extends React.Component {
 			            <div className="header"><strong>Crimes / 1000 Pop</strong></div>
 			          </div>
 			          <div className="crime-container" id="results">
-			            {this.state.genres}
+			            {this.state.crimeCategories}
 			          </div>
 			        </div>
 			      </div>

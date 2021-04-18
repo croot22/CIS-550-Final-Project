@@ -7,6 +7,7 @@ var connection = mysql.createPool(config);
 // [Safety 1 of 3] - get safety aggregate statistics for all zipcodes 
 // http://localhost:8081/safety
 // app.get('/safety', routes.getAllSafety);
+
 function getAllSafety(req, res) {
   var query = `
   WITH crime_total AS(
@@ -48,11 +49,11 @@ from safety;
 };
 
 // [Safety 2 of 3] - get crime aggregate statistics for a specific zipcode
-// http://localhost:8081/bestcrime
-// app.get('/bestcrime', routes.getBestCrime);
+// http://localhost:8081/totalcrime
+// app.get('/totalcrime', routes.getTotalCrime);
 
-function getBestCrime(req, res) {
-  var decade = parseInt(req.query.decade);
+function getTotalCrime(req, res) {
+  var crimeZipcode = parseInt(req.query.crimeZipcode);
 
   var query = `
   WITH crime_breakdown AS(
@@ -71,7 +72,7 @@ crime_breakdown_per_zip AS(
     )
 select *
 from crime_breakdown_per_zip
-where zipcode='${decade}'
+where zipcode='${crimeZipcode}'
 order by crime_count desc;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -85,6 +86,7 @@ order by crime_count desc;
 // [Safety 3 of 3] - get crime zipcodes 
 // http://localhost:8081/zipcodeCrime
 // app.get('/zipcodeCrime', routes.getZipcodeCrime);
+
 function getZipcodeCrime(req, res) {
   var query = `
   WITH crime_breakdown AS(
@@ -101,7 +103,7 @@ crime_breakdown_per_zip AS(
     group by districts.zipcode, text_general_code
     order by districts.zipcode
     )
-select distinct zipcode as decade
+select distinct zipcode as crimeZipcode
 from crime_breakdown_per_zip;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -514,7 +516,7 @@ module.exports = {
   //safety
   getAllSafety: getAllSafety,
   getZipcodeCrime: getZipcodeCrime,
-  getBestCrime: getBestCrime,
+  getTotalCrime: getTotalCrime,
 
   // Yelp
   getBestPlace: getBestPlace,
