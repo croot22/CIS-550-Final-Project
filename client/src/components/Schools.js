@@ -1,74 +1,66 @@
 import React from 'react';
-import '../style/Posters.css';
+import '../style/Safety.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PageNavbar from './PageNavbar';
+import SafetyRow from './SafetyRow';
 
 export default class Schools extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      details: null
+      safety: []
     }
-    this.showDetails = this.showDetails.bind(this);
-    this.hideDetails = this.hideDetails.bind(this);
-  }
-//test
-  componentDidMount() {
-    console.log(this.props);
-  }
-//test
-  showDetails() {
-    var plot = this.props.movie.Plot.length>120 ? 
-      this.props.movie.Plot.substring(0,120)+'...' : this.props.movie.Plot;
-    this.setState({
-      details: <div className="overlay">
-      <div className="plot">{plot}</div>
-      <div className="extras">
-        <div className="extra rated">
-          <div className="field">Rated </div>
-          <div className="separater">:</div>
-          <div className="value">{this.props.movie.imdbRating}</div>
-        </div>
-        <div className="extra boxOffice">
-          <div className="field">Box Office </div>
-          <div className="separater">:</div>
-          <div className="value">{this.props.movie.BoxOffice}</div>
-        </div>
-          <div className="extra runtime">
-          <div className="field">Runtime </div>
-          <div className="separater">:</div>
-          <div className="value">{this.props.movie.Runtime}</div>
-        </div>
-      </div>
-    </div>
-    }) 
   }
 
-  hideDetails() {
-    this.setState({
-      details: null
-    }) 
+  componentDidMount() {
+    fetch("http://localhost:8081/safety",
+    {
+      method: 'GET' 
+    }).then(res => {
+
+      return res.json();
+    }, err => {
+
+      console.log(err);
+    }).then(safetyList => {
+
+      let safetyDivs = safetyList.map((entry, i) =>
+	  <SafetyRow key={i} safety={entry}/>	 
+	  );
+
+      this.setState({
+        safety: safetyDivs
+      });
+    }, err => {
+      console.log(err);
+    });
   }
-  render() {
-    var poster = <img src={this.props.movie.Poster} alt="" className="poster" />
-    if(this.props.movie.Website && this.props.movie.Website!=='N/A') {
-      poster = 
-      <a href={this.props.movie.Website} target="_blank" className="link" onMouseOver={this.showDetails} onMouseLeave={this.hideDetails}>
-        {poster}
-        {this.state.details}
-      </a>
-    }  else {
-      poster = 
-      <div className='link' onMouseOver={this.showDetails} onMouseLeave={this.hideDetails}>
-        {poster}
-        {this.state.details}
-      </div>
-    }
+
+
+  render() {    
     return (
-      <div className='movie'>
-        {poster}
-        <div className="title">{this.props.movie.Title}</div>
+      <div className="Dashboard">
+        <PageNavbar active="Safety" />
+        <div className="container header-container">
+          <br></br>
+          <div className="jumbotron less-headspace">
+            <div className="header-container">
+              <div className="headers">
+                <div className="header"><strong>Zipcode</strong></div>
+                <div className="header"><strong>Population</strong></div>
+                <div className="header"><strong>Crimes</strong></div>
+				<div className="header"><strong>Crimes / 1000 Pop</strong></div>
+                <div className="header"><strong>Pos COVID Cases</strong></div>
+                <div className="header"><strong>COVID Pos %</strong></div>
+              </div>
+              <div className="results-container" id="results">
+                {this.state.safety}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
-

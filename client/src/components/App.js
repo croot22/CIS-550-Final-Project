@@ -5,11 +5,9 @@ import {
 	Switch
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import Recommendations from './Recommendations';
 import YelpRecommendations from './YelpRecommendations'; //yelp
-import Safety from './Safety'; //yelp
-import BestGenres from './BestGenres';
-import Posters from './Posters';
+import Safety from './Safety'; 
+import Schools from './Schools'; 
 
 
 
@@ -47,9 +45,9 @@ export default class App extends React.Component {
 							)}
 						/>
 						<Route
-							path="/crime"
+							path="/schools"
 							render={() => (
-								<crime />
+								<Schools />
 							)}
 						/>
 					</Switch>
