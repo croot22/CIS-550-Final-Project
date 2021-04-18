@@ -279,15 +279,31 @@ function getCategory(req, res) {
   });
 }
 
+// [Real Estate Transfers 1/3] - get top 3 zipcodes by price, safety, yelp,etc.
+// http://localhost:8081/home
+//works
+function getAllTransfers(req, res) {   
+  var query = `
+  SELECT zip_code, street_address, cash_consideration
+  FROM RealEstateTransfers
+  ORDER BY cash_consideration;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
 
 
-
-// [Real Estate Transfers 1/3] - get avg purchase amount in zipcode
-// http://localhost:8081/ret/zipcode
+// [Real Estate Transfers 2/3] - get avg purchase amount in zipcode
+// http://localhost:8081/home/zipcode
+//works
 function getAvgPurchasePrice(req, res) {
   var zipcode = req.params.zipcode;    
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount
+  SELECT zip_code, ROUND(AVG(cash_consideration), 2) AS purchase_amount
   FROM RealEstateTransfers
   WHERE zip_code = '${zipcode}';
   `;
@@ -299,13 +315,131 @@ function getAvgPurchasePrice(req, res) {
   });
 }
 
-// [Real Estate Transfers 2/3] - get top 3 zipcodes by price, safety, yelp,etc.
-// http://localhost:8081/ret/zipcode
-/*function getTopZips(req, res) {   
+// [Real Estate Transfers 3/3] - get top rated zipcodes
+// http://localhost:8081/home/top
+//doesn't work yet
+function getTopZips(req, res) {   
   var query = `
-  SELECT zip_code, AVG(cash_consideration) AS purchase_amount, 
-  FROM RealEstateTransfers
-  WHERE zip_code = '${zipcode}';
+WITH yelp AS (
+    SELECT zipcode, AVG(stars) as avg_stars
+    FROM yelp_business 
+    GROUP BY zipcode
+    ORDER BY stars DESC
+    ),
+crime_total AS(
+    select distinct dc_dist, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist
+    ),
+crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+covid_per_zip AS(
+    select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
+    from covid
+    join population on covid.zipcode=population.zipcode
+    where result ='POS'
+    ),
+safety AS(
+    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    from crime_total
+    join districts on crime_total.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+	  join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
+    group by zipcode
+    order by zipcode
+    ),
+overall_score as(
+    select s.*,
+    case when overall_score = 'Less than 10' 
+      then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+    end as int_overall_score
+    FROM new_schema.schools s
+    ),
+school_score_byZip as(select zip_code, avg(int_overall_score) as average_school_score
+    from overall_score
+    where school_name not like ('%CLOSED%') and int_overall_score < 990
+    group by zip_code
+    order by 2 desc
+    ),
+  avg_purchase_price as(
+    SELECT zip_code, AVG(cash_consideration) AS purchase_price
+    FROM RealEstateTransfers r
+    GROUP BY zip_code
+    )
+  SELECT a.zip_code AS zipcode, a.purchase_price, y.stars AS food_ratings, crimes_per_1000_pop AS safety_score, average_school_score
+  FROM avg_purchase_price a
+  JOIN yelp y ON a.zip_code = y.zipcode
+  JOIN safety sa ON a.zip_code = ss.zipcode
+  JOIN school_score ss ON a.zip_code = ss.zip_code 
+  ORDER BY safety_score, average_school_score, purchase_price, food_ratings
+  LIMIT 3;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+// [Schools query  1] - list average school scores by selected zip code
+function getAvgScores(req, res) {
+  zipcode = req.params.zipcode;    
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s),
+  averageScore AS(
+    select 
+  zip_code
+  , avg(int_overall_score) as average_school_score
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  group by zip_code
+  order by 2 desc)
+  select *
+  from averageScore
+  where zip_code = '${zipcode}'
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+/*in progress
+[Schools query  2] - list average school scores by selected zip code based on grades served
+function getAvgOnGradesServed(req, res) {
+  zipcode = req.params.zipcode;    
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s),
+  averageScore AS(
+    select 
+  zip_code
+  , avg(int_overall_score) as average_school_score
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  group by zip_code
+  order by 2 desc)
+  select *
+  from averageScore
+  where zip_code = '${zipcode}'
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -450,9 +584,13 @@ module.exports = {
   getCategory: getCategory,  
   getBestCusine: getBestCusine,  
 
-  // RET
+  // Home Page
+  getAllTransfers: getAllTransfers,
   getAvgPurchasePrice: getAvgPurchasePrice,
-  //getTopZips: getTopsZips,
+  getTopZips: getTopZips,
+
+  //schools
+  getAvgScores: getAvgScores,
 
   //old exports
 	getAllGenres: getAllGenres,
