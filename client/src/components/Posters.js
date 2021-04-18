@@ -2,7 +2,7 @@ import React from 'react';
 import '../style/Posters.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
-import Schools from './Schools';
+import Poster from './Poster';
 export default class Posters extends React.Component {
   constructor(props) {
     super(props);

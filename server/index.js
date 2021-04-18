@@ -16,10 +16,9 @@ app.get('/covid', routes.getAllCovid);
 app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 
-//Home Page
-app.get('/home', routes.getAllTransfers); //works
-app.get('/home/:zipcode', routes.getAvgPurchasePrice); //works
-app.get('/home/top', routes.getTopZips); //not yet
+//RET
+app.get('/ret/:zipcode', routes.getAvgPurchasePrice);
+//app.get('/ret/topZips', routes.getTopZips);
 
 // yelp parameters
 app.get('/yelp/category/:category', routes.getCategory); 
@@ -42,16 +41,6 @@ app.get('/bestgenre', routes.bestGenresPerDecade);
 app.get('/movies/random', routes.getRandomMovies);
 
 
-//school parameters
-//works using http://localhost:8081/schools/19104/
-app.get('/schools/:zipcode', routes.getAvgScores);
-
-//In progress
-//app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
-
-
-
-//Port parameter
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import '../style/Posters.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class Schools extends React.Component {
+export default class Posters extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

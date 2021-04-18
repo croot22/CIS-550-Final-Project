@@ -3,9 +3,9 @@ import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import GenreButton from './GenreButton';
-import HomeRow from './HomeRow';
+import DashboardMovieRow from './DashboardMovieRow';
 
-export default class Home extends React.Component {
+export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,7 +22,7 @@ export default class Home extends React.Component {
   // React function that is called when the page load.
   componentDidMount() {
     // Send an HTTP request to the server.
-    fetch("http://localhost:8081/Home",
+    fetch("http://localhost:8081/genres",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -48,15 +48,15 @@ export default class Home extends React.Component {
     });
   }
 
-  showMovies(zipCode) {
-    fetch("http://localhost:8081/home/" + zipCode, {
+  showMovies(genre) {
+    fetch("http://localhost:8081/genres/" + genre, {
       method: "GET"
     }).then(res => {
       return res.json();
     }).then(movieList => {
 
       let movieDivs = movieList.map((movie, i) =>
-	<HomeRow movie={movie} />);
+	<DashboardMovieRow movie={movie} />);
 
       this.setState({
         movies: movieDivs
@@ -66,14 +66,14 @@ export default class Home extends React.Component {
 
   render() {    
     return (
-      <div className="Home">
+      <div className="Dashboard">
 
-        <PageNavbar active="home" />
+        <PageNavbar active="dashboard" />
 
         <br></br>
         <div className="container movies-container">
           <div className="jumbotron">
-            <div className="h5">Best Areas to Live in Philadelphia</div>
+            <div className="h5">Top Movies</div>
             <div className="genres-container">
               {this.state.genres}
             </div>
@@ -83,9 +83,9 @@ export default class Home extends React.Component {
           <div className="jumbotron">
             <div className="movies-container">
               <div className="movies-header">
-                <div className="header-lg"><strong>Zipcode</strong></div>
-                <div className="header"><strong>Average Home Price</strong></div>
-                <div className="header"><strong>Overall Score</strong></div>
+                <div className="header-lg"><strong>Title</strong></div>
+                <div className="header"><strong>Rating</strong></div>
+                <div className="header"><strong>Vote Count</strong></div>
               </div>
               <div className="results-container" id="results">
                 {this.state.movies}
