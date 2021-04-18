@@ -1,7 +1,7 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import CrimeRow from './CrimeRow';
-import '../style/BestGenres.css';
+import '../style/Crime.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Crime extends React.Component {
@@ -75,10 +75,10 @@ export default class Crime extends React.Component {
 	render() {
 
 		return (
-			<div className="BestGenres">
-				<PageNavbar active="bestgenres" />
+			<div className="Crime">
+				<PageNavbar active="crime" />
 
-				<div className="container bestgenres-container">
+				<div className="container crime-container">
 			      <div className="jumbotron">
 			        <div className="h5">Select a Zipcode for Crime Analysis</div>
 
@@ -92,12 +92,13 @@ export default class Crime extends React.Component {
 			        </div>
 			      </div>
 			      <div className="jumbotron">
-			        <div className="movies-container">
-			          <div className="movie">
-			            <div className="header"><strong>Genre</strong></div>
-			            <div className="header"><strong>Average Rating</strong></div>
+			        <div className="crime-container">
+			          <div className="crime">
+			            <div className="header-lg"><strong>Description</strong></div>
+                        <div className="header"><strong>Count</strong></div>
+			            <div className="header"><strong>Crimes / 1000 Pop</strong></div>
 			          </div>
-			          <div className="movies-container" id="results">
+			          <div className="crime-container" id="results">
 			            {this.state.genres}
 			          </div>
 			        </div>

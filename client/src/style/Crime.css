@@ -1,9 +1,10 @@
-.header-container, .results-container {
+.crime-container {
     display: flex;
     flex-flow: column wrap;
+    margin-top: 10px;
   }
   
-  .header-container .headers, .results-container .safetyResults {
+  .crime-container .crime, .crime-container .crimeResults {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -16,10 +17,12 @@
     line-height:0; 
   }
   
+  .crimeResults .text_general_code, .crime-header, .header-lg {
+    flex: 1 0 50%;
+  }
 
-
-  .safetyResults .zipcode, .safetyResults .population, .safetyResults .crime_count, .safetyResults .crimes_per_1000_pop,  .safetyResults .positive_count, .safetyResults .covid_positive_rate, .headers .header {
-    flex: 1 0 16.66666%;
+  .crime .header, .crimeResults .crime_count, .crimeResults .crimes_per_1000_pop {
+    flex: 1 0 25%;
   }
 
   .jumbotron {
