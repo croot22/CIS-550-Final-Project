@@ -49,10 +49,10 @@ export default class Safety extends React.Component {
               <div className="headers">
                 <div className="header"><strong>Zipcode</strong></div>
                 <div className="header"><strong>Population</strong></div>
-                <div className="header"><strong>Crime Count</strong></div>
-				<div className="header"><strong>Crimes Per 1000 Pop.</strong></div>
-                <div className="header"><strong>Positive COVID Cases</strong></div>
-                <div className="header"><strong>COVID Positivity Rate</strong></div>
+                <div className="header"><strong>Crimes</strong></div>
+				<div className="header"><strong>Crimes / 1000 Pop</strong></div>
+                <div className="header"><strong>Pos COVID Cases</strong></div>
+                <div className="header"><strong>COVID Pos %</strong></div>
               </div>
               <div className="results-container" id="results">
                 {this.state.safety}

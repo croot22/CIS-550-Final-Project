@@ -27,7 +27,7 @@ covid_per_zip AS(
     where result ='POS'
     ),
 safety AS(
-    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    select distinct districts.zipcode, FORMAT(population, '#,###') as population, FORMAT(sum(crime_count), '#,###') as crime_count, FORMAT(crime_count/population*1000,'#,###') as crimes_per_1000_pop, FORMAT(positive_count, '#,###') as positive_count,  concat(round(( covid_positive_rate * 100 ),2),'%') as covid_positive_rate
     from crime_total
     join districts on crime_total.dc_dist=districts.dc_dist
     join population on districts.zipcode=population.zipcode
@@ -155,7 +155,7 @@ covid_per_zip AS(
     where result ='POS'
     ),
 safety AS(
-    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+  select distinct districts.zipcode, FORMAT(population, '#,###') as population, FORMAT(sum(crime_count), '#,###') as crime_count, FORMAT(crime_count/population*1000,'#,###') as crimes_per_1000_pop, FORMAT(positive_count, '#,###') as positive_count,  concat(round(( covid_positive_rate * 100 ),2),'%') as covid_positive_rate
     from crime_total
     join districts on crime_total.dc_dist=districts.dc_dist
     join population on districts.zipcode=population.zipcode
@@ -201,7 +201,7 @@ function getBestCusine(req, res) {
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
-SELECT business_name AS Name, address AS Address, stars AS Rating, review_content as Review
+SELECT business_name, address, stars, hours, review_content as top_review
 FROM 
   (SELECT business_name, address, review_content, BUS.stars, hours,
            ROW_NUMBER() OVER (PARTITION BY business_name
@@ -225,6 +225,7 @@ ORDER BY stars DESC LIMIT 3
 
 // [Yelp 2 of 2] - recommend based on category and check in 
 // http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
+// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
 function getBestPlace(req, res) {
   
@@ -417,8 +418,8 @@ function getAvgScores(req, res) {
     }
   });
 }
-/*in progress
-[Schools query  2] - list average school scores by selected zip code based on grades served
+//in progress
+// [Schools query  2] - list average school scores by selected zip code based on grades served
 function getAvgOnGradesServed(req, res) {
   zipcode = req.params.zipcode;    
   var query = `
@@ -447,7 +448,7 @@ function getAvgOnGradesServed(req, res) {
       res.json(rows);
     }
   });
-}*/
+}
 
 //OLD BELOW:
 
