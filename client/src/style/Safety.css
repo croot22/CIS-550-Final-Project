@@ -1,0 +1,20 @@
+
+  .safety-container .safety-header, .results-container .safety {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 40px;
+  }
+  
+  .entry .zipcode, .safety-header .header-lg {
+    flex: 1 0 16.6%;
+  }
+  
+  .safety-header .header, .entry .population , .entry .crime_count, .entry .crime_per_1000_pop, .entry .positive_count, .entry .covid_positive_rate{
+    flex: 1 0 16.6%;
+  }
+  
+  .less-headspace {
+    padding-top: 1rem !important;
+  }
+  
