@@ -7,7 +7,9 @@ import {
 import Dashboard from './Dashboard';
 import YelpRecommendations from './YelpRecommendations'; //yelp
 import Safety from './Safety'; 
+import Crime from './Crime'; 
 import Schools from './Schools'; 
+
 
 
 
@@ -42,6 +44,12 @@ export default class App extends React.Component {
 							path="/safety"
 							render={() => (
 								<Safety />
+							)}
+						/>
+						<Route
+							path="/crime"
+							render={() => (
+								<Crime />
 							)}
 						/>
 						<Route

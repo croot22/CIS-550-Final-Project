@@ -16,6 +16,8 @@ app.get('/crime', routes.getAllCrime);
 app.get('/covid', routes.getAllCovid);
 app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
+app.get('/zipcodeCrime', routes.getZipcodeCrime);
+app.get('/bestcrime', routes.getBestCrime);
 
 //Home Page
 app.get('/home', routes.getAllTransfers); //works

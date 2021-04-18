@@ -4,7 +4,7 @@ var mysql = require('mysql');
 config.connectionLimit = 10;
 var connection = mysql.createPool(config);
 
-// [Safety 1 of 5] - get safety aggregate statistics for all zipcodes 
+// [Safety 1 of 6] - get safety aggregate statistics for all zipcodes 
 // http://localhost:8081/safety
 // app.get('/safety', routes.getAllSafety);
 function getAllSafety(req, res) {
@@ -47,7 +47,7 @@ from safety;
   });
 };
 
-// [Safety 2 of 5] - get crime breakdown for all zipcodes 
+// [Safety 2 of 6] - get crime breakdown for all zipcodes 
 // http://localhost:8081/crime
 // app.get('/crime', routes.getAllCrime);
 function getAllCrime(req, res) {
@@ -78,7 +78,7 @@ from crime_breakdown_per_zip;
 };
 
 
-// [Safety 3 of 5] - get covid breakdown for all zipcodes 
+// [Safety 3 of 6] - get covid breakdown for all zipcodes 
 // http://localhost:8081/covid
 // app.get('/covid', routes.getAllCovid);
 function getAllCovid(req, res) {
@@ -97,11 +97,11 @@ function getAllCovid(req, res) {
 };
 
 
-// [Safety 4 of 5] - crime statistics for a specific zipcode
+// [Safety 4 of 6] - crime statistics for a specific zipcode
 // http://localhost:8081/crime/19104
 // app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
 function getCrimePerZip(req, res) {
-  var zipcodeCrime = req.params.zipcodeCrime
+  var decade = parseInt(req.query.decade);
 
   var query = `
   WITH crime_breakdown AS(
@@ -120,7 +120,7 @@ crime_breakdown_per_zip AS(
     )
 select *
 from crime_breakdown_per_zip
-where zipcode='${zipcodeCrime}';
+where zipcode='${decade}';
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -130,7 +130,37 @@ where zipcode='${zipcodeCrime}';
   });
 };
 
-// [Safety 5 of 5] - safety statistics for a specific zipcode
+function getBestCrime(req, res) {
+  var decade = parseInt(req.query.decade);
+
+  var query = `
+  WITH crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+crime_breakdown_per_zip AS(
+    select districts.zipcode, text_general_code, crime_count, (crime_count/population)*1000 as crimes_per_1000_pop
+    from crime_breakdown
+    join districts on crime_breakdown.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+    group by districts.zipcode, text_general_code
+    order by districts.zipcode
+    )
+select *
+from crime_breakdown_per_zip
+where zipcode='${decade}';
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+// [Safety 5 of 6] - safety statistics for a specific zipcode
 // http://localhost:8081/safety/19104
 // app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
 function getSafetyPerZip(req, res) {
@@ -174,6 +204,38 @@ where zipcode='${zipcodeSafety}';
     }
   });
 };
+
+
+// [Safety 6 of 6] - get crime zipcodes 
+// http://localhost:8081/zipcodeCrime
+// app.get('/zipcodeCrime', routes.getZipcodeCrime);
+function getZipcodeCrime(req, res) {
+  var query = `
+  WITH crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+crime_breakdown_per_zip AS(
+    select districts.zipcode, text_general_code, crime_count, (crime_count/population)*1000 as crimes_per_1000_pop
+    from crime_breakdown
+    join districts on crime_breakdown.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+    group by districts.zipcode, text_general_code
+    order by districts.zipcode
+    )
+select distinct zipcode as decade
+from crime_breakdown_per_zip;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
 
 // [Yelp] 1 of 2] - recommend restaurant based on category and check in 
 // http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
@@ -579,6 +641,8 @@ module.exports = {
   getAllCrime: getAllCrime,
   getCrimePerZip: getCrimePerZip,
   getSafetyPerZip: getSafetyPerZip,
+  getZipcodeCrime: getZipcodeCrime,
+  getBestCrime: getBestCrime,
 
   // Yelp
   getBestPlace: getBestPlace,
