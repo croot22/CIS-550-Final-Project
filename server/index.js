@@ -2,20 +2,15 @@ const bodyParser = require('body-parser');
 const express = require('express');
 var routes = require("./routes.js");
 const cors = require('cors');
-
 const app = express();
-
-//app.use(cors({credentials: true, origin: 'http://localhost:8081/genres'}));
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-//safety
+//Safety
 app.get('/safety', routes.getAllSafety);
-app.get('/crime', routes.getAllCrime);
-app.get('/covid', routes.getAllCovid);
-app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
-app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
+app.get('/zipcodeCrime', routes.getZipcodeCrime);
+app.get('/totalcrime', routes.getTotalCrime);
 
 //Home Page
 app.get('/home', routes.getAllTransfers); //works
@@ -44,15 +39,12 @@ app.get('/bestdecade/:decade', routes.getDecades);
 app.get('/bestgenre', routes.bestGenresPerDecade);
 app.get('/movies/random', routes.getRandomMovies);
 
-
 //school parameters
 //works using http://localhost:8081/schools/19104/
 app.get('/schools/:zipcode', routes.getAvgScores);
 
 //In progress
 //app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
-
-
 
 //Port parameter
 app.listen(8081, () => {

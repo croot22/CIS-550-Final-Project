@@ -1,0 +1,29 @@
+.header-container, .results-container {
+    display: flex;
+    flex-flow: column wrap;
+  }
+  
+  .header-container .headers, .results-container .safetyResults {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    justify-content: space-evenly;
+    line-height:0; 
+  }
+  
+
+
+  .safetyResults .zipcode, .safetyResults .population, .safetyResults .crime_count, .safetyResults .crimes_per_1000_pop,  .safetyResults .positive_count, .safetyResults .covid_positive_rate, .headers .header {
+    flex: 1 0 16.66666%;
+  }
+
+  .jumbotron {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  

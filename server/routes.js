@@ -4,9 +4,10 @@ var mysql = require('mysql');
 config.connectionLimit = 10;
 var connection = mysql.createPool(config);
 
-// [Safety 1 of 5] - get safety aggregate statistics for all zipcodes 
+// [Safety 1 of 3] - get safety aggregate statistics for all zipcodes 
 // http://localhost:8081/safety
 // app.get('/safety', routes.getAllSafety);
+
 function getAllSafety(req, res) {
   var query = `
   WITH crime_total AS(
@@ -27,7 +28,7 @@ covid_per_zip AS(
     where result ='POS'
     ),
 safety AS(
-    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    select distinct districts.zipcode, FORMAT(population, '#,###') as population, FORMAT(sum(crime_count), '#,###') as crime_count, FORMAT(crime_count/population*1000,'#,###') as crimes_per_1000_pop, FORMAT(positive_count, '#,###') as positive_count,  concat(round(( covid_positive_rate * 100 ),2),'%') as covid_positive_rate
     from crime_total
     join districts on crime_total.dc_dist=districts.dc_dist
     join population on districts.zipcode=population.zipcode
@@ -47,10 +48,46 @@ from safety;
   });
 };
 
-// [Safety 2 of 5] - get crime breakdown for all zipcodes 
-// http://localhost:8081/crime
-// app.get('/crime', routes.getAllCrime);
-function getAllCrime(req, res) {
+// [Safety 2 of 3] - get crime aggregate statistics for a specific zipcode
+// http://localhost:8081/totalcrime
+// app.get('/totalcrime', routes.getTotalCrime);
+
+function getTotalCrime(req, res) {
+  var crimeZipcode = parseInt(req.query.crimeZipcode);
+
+  var query = `
+  WITH crime_breakdown AS(
+    select distinct dc_dist, text_general_code, count(objectid) as crime_count
+    from incidents
+    GROUP BY dc_dist, text_general_code
+    order by dc_dist
+    ),
+crime_breakdown_per_zip AS(
+    select districts.zipcode, text_general_code, crime_count, FORMAT(crime_count/population*1000,'#,###.#') as crimes_per_1000_pop
+    from crime_breakdown
+    join districts on crime_breakdown.dc_dist=districts.dc_dist
+    join population on districts.zipcode=population.zipcode
+    group by districts.zipcode, text_general_code
+    order by districts.zipcode
+    )
+select *
+from crime_breakdown_per_zip
+where zipcode='${crimeZipcode}'
+order by crime_count desc;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+// [Safety 3 of 3] - get crime zipcodes 
+// http://localhost:8081/zipcodeCrime
+// app.get('/zipcodeCrime', routes.getZipcodeCrime);
+
+function getZipcodeCrime(req, res) {
   var query = `
   WITH crime_breakdown AS(
     select distinct dc_dist, text_general_code, count(objectid) as crime_count
@@ -66,7 +103,7 @@ crime_breakdown_per_zip AS(
     group by districts.zipcode, text_general_code
     order by districts.zipcode
     )
-select *
+select distinct zipcode as crimeZipcode
 from crime_breakdown_per_zip;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -77,103 +114,6 @@ from crime_breakdown_per_zip;
   });
 };
 
-
-// [Safety 3 of 5] - get covid breakdown for all zipcodes 
-// http://localhost:8081/covid
-// app.get('/covid', routes.getAllCovid);
-function getAllCovid(req, res) {
-  var query = `
-  select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
-  from covid
-  join population on covid.zipcode=population.zipcode
-  where result ='POS'
-  `;
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
-
-
-// [Safety 4 of 5] - crime statistics for a specific zipcode
-// http://localhost:8081/crime/19104
-// app.get('/crime/:zipcodeCrime', routes.getCrimePerZip);
-function getCrimePerZip(req, res) {
-  var zipcodeCrime = req.params.zipcodeCrime
-
-  var query = `
-  WITH crime_breakdown AS(
-    select distinct dc_dist, text_general_code, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist, text_general_code
-    order by dc_dist
-    ),
-crime_breakdown_per_zip AS(
-    select districts.zipcode, text_general_code, crime_count, (crime_count/population)*1000 as crimes_per_1000_pop
-    from crime_breakdown
-    join districts on crime_breakdown.dc_dist=districts.dc_dist
-    join population on districts.zipcode=population.zipcode
-    group by districts.zipcode, text_general_code
-    order by districts.zipcode
-    )
-select *
-from crime_breakdown_per_zip
-where zipcode='${zipcodeCrime}';
-  `;
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
-
-// [Safety 5 of 5] - safety statistics for a specific zipcode
-// http://localhost:8081/safety/19104
-// app.get('/safety/:zipcodeSafety', routes.getSafetyPerZip);
-function getSafetyPerZip(req, res) {
-  var zipcodeSafety = req.params.zipcodeSafety
-
-  var query = `
-  WITH crime_total AS(
-    select distinct dc_dist, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist
-    ),
- crime_breakdown AS(
-    select distinct dc_dist, text_general_code, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist, text_general_code
-    order by dc_dist
-    ),
-covid_per_zip AS(
-    select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
-    from covid
-    join population on covid.zipcode=population.zipcode
-    where result ='POS'
-    ),
-safety AS(
-    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
-    from crime_total
-    join districts on crime_total.dc_dist=districts.dc_dist
-    join population on districts.zipcode=population.zipcode
-	join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
-    group by zipcode
-    order by zipcode
-    )
-select *
-from safety
-where zipcode='${zipcodeSafety}';
-  `;
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
 
 // [Yelp] 1 of 2] - recommend restaurant based on category and check in 
 // http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
@@ -201,7 +141,7 @@ function getBestCusine(req, res) {
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
-SELECT business_name AS Name, address AS Address, stars AS Rating, review_content as Review
+SELECT business_name, address, stars, hours, review_content as top_review
 FROM 
   (SELECT business_name, address, review_content, BUS.stars, hours,
            ROW_NUMBER() OVER (PARTITION BY business_name
@@ -225,6 +165,7 @@ ORDER BY stars DESC LIMIT 3
 
 // [Yelp 2 of 2] - recommend based on category and check in 
 // http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
+// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 
 function getBestPlace(req, res) {
   
@@ -463,8 +404,8 @@ function getAvgScores(req, res) {
     }
   });
 }
-/*in progress
-[Schools query  2] - list average school scores by selected zip code based on grades served
+//in progress
+// [Schools query  2] - list average school scores by selected zip code based on grades served
 function getAvgOnGradesServed(req, res) {
   zipcode = req.params.zipcode;    
   var query = `
@@ -493,7 +434,7 @@ function getAvgOnGradesServed(req, res) {
       res.json(rows);
     }
   });
-}*/
+}
 
 //OLD BELOW:
 
@@ -620,10 +561,8 @@ function getRandomMovies(req, res) {
 module.exports = {
   //safety
   getAllSafety: getAllSafety,
-  getAllCovid: getAllCovid,
-  getAllCrime: getAllCrime,
-  getCrimePerZip: getCrimePerZip,
-  getSafetyPerZip: getSafetyPerZip,
+  getZipcodeCrime: getZipcodeCrime,
+  getTotalCrime: getTotalCrime,
 
   // Yelp
   
