@@ -28,9 +28,9 @@ app.get('/yelp/zipcode', routes.getZipcode); //http://localhost:8081/yelp/zipcod
 app.get('/yelp/weekday', routes.getWeekday); //http://localhost:8081/yelp/weekday
 app.get('/yelp/hour', routes.getHour); //http://localhost:8081/yelp/hour
 // yelp request 
-app.get('/yelp/cusine/:cusine/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestCusine); 
+app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour/cusine/:cusine', routes.getBestCusine); 
 // the above is tested successfully with 
-// http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
+// http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/cusine/bars
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
 // the above is tested successfully with 
 // http://localhost:8081/yelp/zipcode/15222/weekday/5/hour/23
