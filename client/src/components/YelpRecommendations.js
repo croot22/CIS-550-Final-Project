@@ -8,36 +8,36 @@ export default class YelpRecommendations extends React.Component {
 //	constructor(props) {
 //		super(props);
 
-		// State maintained by this React component is the selected cuisine type,
+		// State maintained by this React component is the selected category type,
 		// and the list of attributes, address, customer review and etc. // yelp to come back
 //		this.state = {
-//			cuisineName: "",
-//			reccuisines: []
+//			categoryName: "",
+//			reccategories: []
 //		}
 
-//		this.handlecuisineNameChange = this.handlecuisineNameChange.bind(this);
+//		this.handlecategoryNameChange = this.handlecategoryNameChange.bind(this);
 //		this.submitIds = this.submitIds.bind(this); //tbd : what is this?
 //	}
 
-//	handlecuisineNameChange(e) {
+//	handlecategoryNameChange(e) {
 //		this.setState({
-//			cuisineName: e.target.value
+//			categoryName: e.target.value
 //		});
 //	}
 
-// Make cuisine a dropdown
+// Make category a dropdown
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			selectedCuisine: "",
-			cuisines: []//,
-//			genres: []
+			selectedCategory: "",
+			categories: [],
+			recRestaurants: []			
 		};
 
-		this.submitCuisine = this.submitCuisine.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		this.submitCategory = this.submitCategory.bind(this);
+		this.handleChange = this.handleChange.bind(this); 
 	}
 
 	componentDidMount() {
@@ -45,21 +45,21 @@ export default class YelpRecommendations extends React.Component {
 			method: 'GET'
 		}).then(res => {
 			return res.json();
-		}).then(cuisineListObj => {
+		}).then(categoryListObj => {
 
-			let cuisineList = cuisineListObj.map((cuisineObj, i) =>
-				<option key={i} value={cuisineObj.cuisine}>
-				{cuisineObj.cuisine}
+			let categoryList = categoryListObj.map((categoryObj, i) =>
+				<option key={i} value={categoryObj.category}>
+				{categoryObj.category}
 				</option>
-			);
+			);//...
 
 			this.setState({
-				cuisines: cuisineList,
+				categories: categoryList,
 			});
 
-			if(cuisineList.length > 0) {
+			if(categoryList.length > 0) {
 				this.setState({
-					selectedCuisine: cuisineListObj[0].cuisine
+					selectedCategory: categoryListObj[0].category
 				})
 			}
 		})
@@ -67,14 +67,13 @@ export default class YelpRecommendations extends React.Component {
 
 	handleChange(e) {
 		this.setState({
-			selectedCuisine: e.target.value
+			selectedCategory: e.target.value
 		});
 	}
-
-	submitCuisine() {
-		let cuisine = this.state.selectedCuisine;
-		// http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/cuisine/bars
-		fetch("http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/cuisine/" + this.state.cuisineName, // tbd : to variablize the rest 
+//gg
+	submitCategory() {
+		let category = this.state.selectedcategory;
+		fetch("http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/category/" + this.state.categoryName, // tbd : to variablize the rest 
 		{
 			method: "GET"
 		}).then(res => {
@@ -85,20 +84,20 @@ export default class YelpRecommendations extends React.Component {
 			console.log(err);
 		}).then(restaurantList => {
 			let restaurantDivs = restaurantList.map((restaurant, i) => 
-				<YelpRecommendationsRow key={i} restaurant={restaurant}/>
+				<restaurantRow key={i} restaurant={restaurant}/>
 			);
 
 			this.setState({
-				recRestaurants: restaurantDivs
+				recRestaurants : restaurantDivs
 			});
 		});
 	}
 
 
-	submitDecade() {
-		let cuisine = this.state.selectedCuisine;
+	submitcategory() {
+		let category = this.state.selectedCategory;
 		let url = new URL('http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/cusine/');
-		let queryParams = {cuisine: cuisine};
+		let queryParams = {category: category};
 		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 		fetch(url, {
 			method: 'GET'
@@ -106,13 +105,13 @@ export default class YelpRecommendations extends React.Component {
 			return res.json();
 		}, err => {
 			return console.log(err);
-		}).then(genreList => {
-			let bestGenreDivs = genreList.map((genre, i) => 
-				<BestGenreRow genre={genre} />
+		}).then(restaurantList => {
+			let restaurantDivs = restaurantList.map((restaurant, i) => 
+				<restaurantRow restaurant={restaurant} />
 			); 
 
 			this.setState({
-				genres: bestGenreDivs
+				recRestaurants: restaurantDivs
 			});
 		});
 	}
@@ -127,16 +126,18 @@ export default class YelpRecommendations extends React.Component {
 			    	<div className="jumbotron">
 			    		<div className="h5">Yelp Recommendations</div>			    		
 
-			        <div className="cuisines-container">
+			        <div className="categories-container">
 			          <div className="dropdown-container">
-			            <select value={this.state.selectedCuisine} onChange={this.handleChange} className="dropdown" id="cuisinesDropdown">
-			            	{this.state.cuisines}
+			            <select value={this.state.selectedCategory} onChange={this.handleChange} className="dropdown" id="categoriesDropdown">
+			            	{this.state.categories}
 			            </select>
-			            <button className="submit-btn" id="cuisinesSubmitBtn" onClick={this.submitCuisine}>Submit</button>
+			            <button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
 
 			          </div>
 			        </div>
 
+			      </div>
+			      <div className="jumbotron">
 			    		<div className="header-container">
 			    			<div className="h6">You may like ...</div>
 			    			<div className="headers">
