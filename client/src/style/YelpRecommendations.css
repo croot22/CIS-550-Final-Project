@@ -7,31 +7,45 @@
 .results-container .restaurantResults {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
-  height: 300px;
+  align-items: left;
+  text-align: left;
+  height: auto;
 }
 
 
 .header-container .headers {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
-  height: 150px;
+  align-items: left;
+  text-align: left;
+  height: auto;
 }
 
-.headers .header{
-	width: 100px, 200px, 300px, 400px;
+.headers .header1 { height: auto; width: 150px; margin-bottom:30px; font-size: small; text-align: left;}
+.headers .header2 { height: auto; width: 130px; margin-bottom:30px; font-size: small; text-align: left;}
+.headers .header3 { height: auto; width: 110px; margin-bottom:30px; font-size: small; text-align: left;}
+.headers .header4 { height: auto; width: 500px; margin-bottom:30px; font-size: small; text-align: left;}
+
+.restaurantResults .Name, .restaurantResults .Address {
+	 width: 150px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:30px;
 }
 
-.restaurantResults .Name, .restaurantResults .Address, .headers .h1, .headers .h2 {
-	 width: 120px;
+.restaurantResults .Rating {
+   width: 100px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:30px;
 }
 
-.restaurantResults .Rating, .headers .h3 {
-	 width: 100px;
-}
-
-.restaurantResults .Review, .headers .h4 {
-	 width: 550px;
+.restaurantResults .Review{
+	 width: 450px;
+   height: auto;
+   font-size: small;
+   margin-bottom:30px;
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class RecommendationsRow extends React.Component {
+export default class RestaurantRow extends React.Component {
 	constructor(props) {
 		super(props);
 	}

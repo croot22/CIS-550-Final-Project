@@ -116,11 +116,11 @@ from crime_breakdown_per_zip;
 
 
 // [Yelp] 1 of 2] - recommend restaurant based on category and check in 
-// http://localhost:8081/yelp/cusine/bars/zipcode/15222/weekday/3/hour/5
+// http://localhost:8081/yelp/category/bars/zipcode/15222/weekday/3/hour/5
 
-function getBestCusine(req, res) {
+function getBestcategory(req, res) {
   var zipcode = req.params.zipcode;    
-  var cusine = req.params.cusine; 
+  var category = req.params.category; 
   var weekday = req.params.weekday; 
   var hour = req.params.hour; 
   var query = `
@@ -131,7 +131,7 @@ function getBestCusine(req, res) {
   WHERE zipcode = '${zipcode}' AND review_count > 30 AND business_id IN
     (SELECT business_id
     FROM yelp_categories
-    WHERE category = '${cusine}') 
+    WHERE category = '${category}') 
   ORDER BY stars DESC
   LIMIT 100
 ), op AS (
@@ -141,7 +141,7 @@ function getBestCusine(req, res) {
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
-SELECT business_name, address, stars, hours, review_content as top_review
+SELECT business_name AS Name, address AS Address, stars AS Rating, review_content AS Review
 FROM 
   (SELECT business_name, address, review_content, BUS.stars, hours,
            ROW_NUMBER() OVER (PARTITION BY business_name
@@ -570,7 +570,7 @@ module.exports = {
   getZipcode: getZipcode,  
   getWeekday: getWeekday,  
   getHour: getHour,  
-  getBestCusine: getBestCusine,  
+  getBestcategory: getBestcategory,  
   getBestPlace: getBestPlace,
 
   // Home Page
