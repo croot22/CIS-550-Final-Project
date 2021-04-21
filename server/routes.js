@@ -137,7 +137,7 @@ function getBestcategory(req, res) {
 ), op AS (
   SELECT business_id, weekday, hour, count(*)
     FROM yelp_checkin
-    WHERE weekday = '${weekday}' AND hour = '${hour}'
+    WHERE weekday = ('${weekday}'-1) AND hour = '${hour}'
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
 )
@@ -206,16 +206,21 @@ function getBestPlace(req, res) {
 // http://localhost:8081/yelp/category
 function getCategory(req, res) {
   var query = `
-  SELECT DISTINCT category 
-   FROM yelp_categories  
-   WHERE business_id IN (
+   WITH checkinByID AS (
+    SELECT business_id, COUNT(*) AS freq
+    FROM yelp_checkin
+    GROUP BY business_id
+   )
+   SELECT DISTINCT category 
+   FROM yelp_categories JOIN checkinByID ON yelp_categories.business_id = checkinByID.business_id
+   WHERE yelp_categories.business_id IN (
     SELECT business_id
         FROM yelp_categories  
         WHERE category = 'Restaurants'
-   ) AND category <> 'Restaurants' AND category <> 'Food'
+   ) AND category <> 'Restaurants' AND category <> 'Food' AND category <> 'Nightlife' AND category <> 'Bars'
    GROUP BY category
-   ORDER BY count(business_id) DESC
-   LIMIT 50
+   ORDER BY sum(checkinByID.freq) DESC
+   LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -230,11 +235,16 @@ function getCategory(req, res) {
 function getZipcode(req, res) {
   var query = `
    SELECT DISTINCT zipcode 
-   FROM yelp_business  
-   GROUP BY zipcode
-   ORDER BY count(business_id) DESC
+   FROM yelp_business JOIN yelp_checkin ON yelp_business.business_id = yelp_checkin.business_id 
+   WHERE yelp_business.business_id IN (
+    SELECT business_id
+        FROM yelp_categories  
+        WHERE category = 'Restaurants'
+   ) 
+   GROUP BY zipcode 
+   ORDER BY count(*) DESC
    LIMIT 100
-  `;
+    `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -247,9 +257,15 @@ function getZipcode(req, res) {
 // http://localhost:8081/yelp/weekday
 function getWeekday(req, res) {
   var query = `
-   SELECT DISTINCT weekday 
+   SELECT DISTINCT (weekday +1) AS weekday
    FROM yelp_checkin  
-   ORDER BY weekday
+   WHERE business_id IN (
+    SELECT business_id
+        FROM yelp_categories  
+        WHERE category = 'Restaurants'
+   ) 
+   GROUP BY weekday
+   ORDER BY count(*) DESC
    LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
@@ -266,7 +282,13 @@ function getHour(req, res) {
   var query = `
    SELECT DISTINCT hour 
    FROM yelp_checkin  
-   ORDER BY hour
+   WHERE business_id IN (
+    SELECT business_id
+        FROM yelp_categories  
+        WHERE category = 'Restaurants'
+   ) 
+   GROUP BY hour
+   ORDER BY count(*) DESC
    LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
@@ -460,7 +482,7 @@ from covid;
       res.json(rows);
     }
   });
-}; // yelp to add something like this 
+}; 
 
 function getTopInGenre(req, res) {
   var genre = req.params.genre;
@@ -480,7 +502,7 @@ function getTopInGenre(req, res) {
       res.json(rows);
     }
   });
-}; // yelp to add something like this 
+}; 
 
 function getRecs(req, res) {
   var movie_name = req.params.movie;

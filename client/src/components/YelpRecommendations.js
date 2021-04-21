@@ -16,15 +16,18 @@ export default class YelpRecommendations extends React.Component {
 			selectedCategory: "",
 			categories: [],
 			selectedZipcode: "",
-//			Zipcodes: [],
-//			recRestaurants: []			
+			zipcodes: [],
+			selectedWeekday: "",
+			weekdays: [],
+			selectedHour: "",
+			hours: []	
 		};
 
 		this.submitCategory = this.submitCategory.bind(this);
 		this.handleChangeCategory= this.handleChangeCategory.bind(this); 
-
-//		this.submitZipcode = this.submitZipcode.bind(this);
-//		this.handleChangeZipcode= this.handleChangeZipcode.bind(this); 
+		this.handleChangeZipcode= this.handleChangeZipcode.bind(this); 
+		this.handleChangeWeekday= this.handleChangeWeekday.bind(this); 
+		this.handleChangeHour= this.handleChangeHour.bind(this); 
 	}
 
 	componentDidMount() {
@@ -50,6 +53,72 @@ export default class YelpRecommendations extends React.Component {
 				})
 			}
 		})
+		fetch('http://localhost:8081/yelp/zipcode', {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(zipcodeListObj => {
+
+			let zipcodeList = zipcodeListObj.map((zipcodeObj, i) =>
+				<option key={i} value={zipcodeObj.zipcode}>
+				{zipcodeObj.zipcode}
+				</option>
+			);//...
+
+			this.setState({
+				zipcodes: zipcodeList,
+			});
+
+			if(zipcodeList.length > 0) {
+				this.setState({
+					selectedZipcode: zipcodeListObj[0].zipcode
+				})
+			}
+		})		
+		fetch('http://localhost:8081/yelp/weekday', {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(weekdayListObj => {
+
+			let weekdayList = weekdayListObj.map((weekdayObj, i) =>
+				<option key={i} value={weekdayObj.weekday}>
+				{weekdayObj.weekday}
+				</option>
+			);//...
+
+			this.setState({
+				weekdays: weekdayList,
+			});
+
+			if(weekdayList.length > 0) {
+				this.setState({
+					selectedWeekday: weekdayListObj[0].weekday
+				})
+			}
+		})			
+		fetch('http://localhost:8081/yelp/hour', {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(hourListObj => {
+
+			let hourList = hourListObj.map((hourObj, i) =>
+				<option key={i} value={hourObj.hour}>
+				{hourObj.hour}
+				</option>
+			);//...
+
+			this.setState({
+				hours: hourList,
+			});
+
+			if(hourList.length > 0) {
+				this.setState({
+					selectedHour: hourListObj[0].hour
+				})
+			}
+		})			
 	}
 
 	handleChangeCategory(e) {
@@ -58,9 +127,30 @@ export default class YelpRecommendations extends React.Component {
 		});
 	}
 
-submitCategory() {
+	handleChangeZipcode(e) {
+		this.setState({
+			selectedZipcode: e.target.value
+		});
+	}
+
+	handleChangeWeekday(e) {
+		this.setState({
+			selectedWeekday: e.target.value
+		});
+	}
+
+	handleChangeHour(e) {
+		this.setState({
+			selectedHour: e.target.value
+		});
+	}
+
+	submitCategory() {
 		let category = this.state.selectedCategory;
-		fetch("http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/18/category/" + this.state.selectedCategory, // tbd : to variablize the rest 
+		let zipcode = this.state.selectedZipcode;
+		let weekday = this.state.selectedWeekday;
+		let hour = this.state.selectedHour;
+		fetch("http://localhost:8081/yelp/zipcode/"+this.state.selectedZipcode+"/weekday/"+this.state.selectedWeekday+"/hour/"+this.state.selectedHour+"/category/" + this.state.selectedCategory, // tbd : to variablize the rest 
 		{
 			method: "GET"
 		}).then(res => {
@@ -92,11 +182,24 @@ submitCategory() {
 
 			        <div className="categories-container">
 			          <div className="dropdown-container">
+
 			            <select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">
 			            	{this.state.categories}
-			            </select>
-			            <button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
+			            </select>			
 
+			            <select value={this.state.selectedZipcode} onChange={this.handleChangeZipcode} className="dropdown" id="zipcodesDropdown">
+			            	{this.state.zipcodes}
+			            </select>
+
+			            <select value={this.state.selectedWeekday} onChange={this.handleChangeWeekday} className="dropdown" id="weekdaysDropdown">
+			            	{this.state.weekdays}
+			            </select>
+
+			            <select value={this.state.selectedHour} onChange={this.handleChangeHour} className="dropdown" id="hoursDropdown">
+			            	{this.state.hours}
+			            </select>			
+
+			            <button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
 			          </div>
 			        </div>
 
