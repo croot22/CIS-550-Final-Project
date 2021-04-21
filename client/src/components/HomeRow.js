@@ -8,10 +8,10 @@ export default class HomeRow extends React.Component {
 
 	render() {
 		return (
-			<div className="movie">
-				<div className="Zipcode">{this.props.movie.title}</div>
-				<div className="Average Home Price">{this.props.movie.rating}</div>
-				<div className="Overall Score">{this.props.movie.vote_count}</div>
+			<div className="home">
+				<div className="Zipcode">{this.props.home.zipcode}</div>
+				<div className="Average Home Price">{this.props.home.avg_price}</div>
+				<div className="Overall Score">{this.props.home.score}</div>
 			</div>
 		);
 	}

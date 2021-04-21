@@ -1,99 +1,105 @@
 import React from 'react';
-import '../style/Dashboard.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
-import GenreButton from './GenreButton';
-import HomeRow from './HomeRow';
+import CrimeRow from './HomeRow';
+import '../style/Home.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    // The state maintained by this React Component. This component maintains the list of genres,
-    // and a list of movies for a specified genre.
-    this.state = {
-      genres: [],
-      movies: []
-    }
+		this.state = {
+			selectedZipcode: "",
+			homeZipcodes: [],
+			zipScores: []
+		};
+		this.submitZipcode = this.submitZipcode.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+	}
 
-    this.showMovies = this.showMovies.bind(this);
-  }
+	componentDidMount() {
+		fetch('http://localhost:8081/home/zipcodes', {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(zipcodeListObj => {
+			let zipcodeList = zipcodeListObj.map((zipcodeObj, i) =>
+				<option key={i} value={zipcodeObj.homeZipcode}>
+				{zipcodeObj.homeZipcode}
+				</option>
+			);
 
-  // React function that is called when the page load.
-  componentDidMount() {
-    // Send an HTTP request to the server.
-    fetch("http://localhost:8081/Home",
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(genreList => {
-      if (!genreList) return;
-      // Map each genre in this.state.genres to an HTML element:
-      // A button which triggers the showMovies function for each genre.
-      let genreDivs = genreList.map((genreObj, i) =>
-	<GenreButton id={"button-" + genreObj.genre} onClick={() => this.showMovies(genreObj.genre)} genre={genreObj.genre} /> );
+			this.setState({
+				homeZipcodes: zipcodeList,
+			});
 
-      // Set the state of the genres list to the value returned by the HTTP response from the server.
-      this.setState({
-        genres: genreDivs
-      });
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    });
-  }
+			if(zipcodeList.length > 0) {
+				this.setState({
+					selectedZipcode: zipcodeListObj[0].homeZipcode
+				})
+			}
+		})
+	}
 
-  showMovies(zipCode) {
-    fetch("http://localhost:8081/home/" + zipCode, {
-      method: "GET"
-    }).then(res => {
-      return res.json();
-    }).then(movieList => {
+	handleChange(e) {
+		this.setState({
+			selectedZipcode: e.target.value
+		});
+	}
 
-      let movieDivs = movieList.map((movie, i) =>
-	<HomeRow movie={movie} />);
+	submitZipcode() {
+		let homeZipcode = this.state.selectedZipcode;
+		let url = new URL('http://localhost:8081/home/');
+		let queryParams = {homeZipcode: homeZipcode};
+		//If there are more than one query parameters, this is useful.
+		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
+		fetch(url, {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}, err => {
+			return console.log(err);
+		}).then(crimeList => {
+			let totalCrimeDivs = crimeList.map((crime, i) => 
+				<CrimeRow crime={crime} />
+			); 
 
-      this.setState({
-        movies: movieDivs
-      })
-    })
-  }
+			this.setState({
+				crimeCategories: totalCrimeDivs
+			});
+		});
+	}
 
-  render() {    
-    return (
-      <div className="Home">
+	render() {
 
-        <PageNavbar active="home" />
-
-        <br></br>
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Best Areas to Live in Philadelphia</div>
-            <div className="genres-container">
-              {this.state.genres}
-            </div>
-          </div>
-
-          <br></br>
-          <div className="jumbotron">
-            <div className="movies-container">
-              <div className="movies-header">
-                <div className="header-lg"><strong>Zipcode</strong></div>
-                <div className="header"><strong>Average Home Price</strong></div>
-                <div className="header"><strong>Overall Score</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.movies}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+		return (
+			<div className="Crime">
+				<PageNavbar active="crime" />
+				<div className="container crime-container">
+			      <div className="jumbotron">
+			        <div className="h5">Select a Zipcode to See Average Home Prices in the Area</div>
+			        <div className="years-container">
+			          <div className="dropdown-container">
+			            <select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="homeZipcodesDropdown">
+			            	{this.state.homeZipcodes}
+			            </select>
+			            <button className="submit-btn" id="crimeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
+			          </div>
+			        </div>
+			      </div>
+			      <div className="jumbotron">
+			        <div className="crime-container">
+			          <div className="crime">
+			            <div className="header-lg"><strong>Zipcode</strong></div>
+                  <div className="header"><strong>Average Price</strong></div>
+			          </div>
+			          <div className="crime-container" id="results">
+			            {this.state.crimeCategories}
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			</div>
+		);
+	}
 }

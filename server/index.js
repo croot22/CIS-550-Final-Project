@@ -13,9 +13,10 @@ app.get('/zipcodeCrime', routes.getZipcodeCrime);
 app.get('/totalcrime', routes.getTotalCrime);
 
 //Home Page
-app.get('/home', routes.getAllTransfers); //works
-app.get('/home/:zipcode', routes.getAvgPurchasePrice); //works
-app.get('/home/top', routes.getTopZips); //not yet
+app.get('/home', routes.getAllTransfers); 
+app.get('/home/zipcodes', routes.getZipcodes);
+app.get('/home/:zipcode', routes.getAvgPurchasePrice); 
+app.get('/home/top', routes.getTopZips); 
 
 // yelp drop down menu
 app.get('/yelp/category', routes.getCategory); //http://localhost:8081/yelp/category

@@ -299,14 +299,14 @@ function getHour(req, res) {
   });
 }
 
-// [Real Estate Transfers 1/3] - get top 3 zipcodes by price, safety, yelp,etc.
+// [Real Estate Transfers 1/4] - get top 3 zipcodes by price, safety, yelp,etc.
 // http://localhost:8081/home
-//works
 function getAllTransfers(req, res) {   
   var query = `
   SELECT zip_code, street_address, cash_consideration
   FROM RealEstateTransfers
-  ORDER BY cash_consideration;
+  ORDER BY cash_consideration
+  Limit 3;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -316,12 +316,26 @@ function getAllTransfers(req, res) {
   });
 }
 
+// [Real Estate Transfers 2/4] - get zipcodes for dropdown.
+// http://localhost:8081/home/zipcodes
+function getZipcodes(req, res) {   
+  var query = `
+  SELECT DISTINCT zip_code
+  FROM RealEstateTransfers
+  ORDER BY zip_code;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
 
-// [Real Estate Transfers 2/3] - get avg purchase amount in zipcode
+// [Real Estate Transfers 3/4] - get avg purchase amount in zipcode
 // http://localhost:8081/home/zipcode
-//works
 function getAvgPurchasePrice(req, res) {
-  var zipcode = req.params.zipcode;    
+  var zipcode = parseInt(req.query.zipcode);    
   var query = `
   SELECT zip_code, ROUND(AVG(cash_consideration), 2) AS purchase_amount
   FROM RealEstateTransfers
@@ -335,7 +349,7 @@ function getAvgPurchasePrice(req, res) {
   });
 }
 
-// [Real Estate Transfers 3/3] - get top rated zipcodes
+// [Real Estate Transfers 4/4] - get top rated zipcodes
 // http://localhost:8081/home/top
 //doesn't work yet
 function getTopZips(req, res) {   
@@ -608,6 +622,7 @@ module.exports = {
 
   // Home Page
   getAllTransfers: getAllTransfers,
+  getZipcodes: getZipcodes,
   getAvgPurchasePrice: getAvgPurchasePrice,
   getTopZips: getTopZips,
 
