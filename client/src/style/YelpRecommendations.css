@@ -21,17 +21,17 @@
   height: auto;
 }
 
-.headers .header1 { height: auto; width: 150px; margin-bottom:30px; font-size: small; text-align: left;}
-.headers .header2 { height: auto; width: 130px; margin-bottom:30px; font-size: small; text-align: left;}
-.headers .header3 { height: auto; width: 110px; margin-bottom:30px; font-size: small; text-align: left;}
-.headers .header4 { height: auto; width: 500px; margin-bottom:30px; font-size: small; text-align: left;}
+.headers .header1 { height: auto; width: 150px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header2 { height: auto; width: 130px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header3 { height: auto; width: 110px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header4 { height: auto; width: 500px; margin-bottom:20px; font-size: small; text-align: left;}
 
 .restaurantResults .Name, .restaurantResults .Address {
 	 width: 150px;
    height: auto;
    font-size: small;
    text-align: left;
-   margin-bottom:30px;
+   margin-bottom:20px;
 }
 
 .restaurantResults .Rating {
@@ -39,13 +39,13 @@
    height: auto;
    font-size: small;
    text-align: left;
-   margin-bottom:30px;
+   margin-bottom:20px;
 }
 
 .restaurantResults .Review{
 	 width: 450px;
    height: auto;
    font-size: small;
-   margin-bottom:30px;
+   margin-bottom:20px;
 }
 

@@ -15,11 +15,16 @@ export default class YelpRecommendations extends React.Component {
 		this.state = {
 			selectedCategory: "",
 			categories: [],
-			recRestaurants: []			
+			selectedZipcode: "",
+//			Zipcodes: [],
+//			recRestaurants: []			
 		};
 
 		this.submitCategory = this.submitCategory.bind(this);
-		this.handleChange = this.handleChange.bind(this); 
+		this.handleChangeCategory= this.handleChangeCategory.bind(this); 
+
+//		this.submitZipcode = this.submitZipcode.bind(this);
+//		this.handleChangeZipcode= this.handleChangeZipcode.bind(this); 
 	}
 
 	componentDidMount() {
@@ -47,7 +52,7 @@ export default class YelpRecommendations extends React.Component {
 		})
 	}
 
-	handleChange(e) {
+	handleChangeCategory(e) {
 		this.setState({
 			selectedCategory: e.target.value
 		});
@@ -87,7 +92,7 @@ submitCategory() {
 
 			        <div className="categories-container">
 			          <div className="dropdown-container">
-			            <select value={this.state.selectedCategory} onChange={this.handleChange} className="dropdown" id="categoriesDropdown">
+			            <select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">
 			            	{this.state.categories}
 			            </select>
 			            <button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
