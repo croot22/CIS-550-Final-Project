@@ -22,15 +22,15 @@
 }
 
 .headers .header1 { height: auto; width: 150px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header2 { height: auto; width: 130px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header3 { height: auto; width: 110px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header2 { height: auto; width: 130px; margin-bottom:20px; font-size: small; text-align: center;}
+.headers .header3 { height: auto; width: 110px; margin-bottom:20px; font-size: small; text-align: center;}
 .headers .header4 { height: auto; width: 500px; margin-bottom:20px; font-size: small; text-align: left;}
 
 .restaurantResults .Name, .restaurantResults .Address {
 	 width: 150px;
    height: auto;
    font-size: small;
-   text-align: left;
+   text-align: center;
    margin-bottom:20px;
 }
 
@@ -38,7 +38,7 @@
    width: 100px;
    height: auto;
    font-size: small;
-   text-align: left;
+   text-align: center;
    margin-bottom:20px;
 }
 

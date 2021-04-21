@@ -206,9 +206,16 @@ function getBestPlace(req, res) {
 // http://localhost:8081/yelp/category
 function getCategory(req, res) {
   var query = `
-   SELECT DISTINCT category 
-   FROM yelp_categories 
-   LIMIT 100
+  SELECT DISTINCT category 
+   FROM yelp_categories  
+   WHERE business_id IN (
+    SELECT business_id
+        FROM yelp_categories  
+        WHERE category = 'Restaurants'
+   ) AND category <> 'Restaurants' AND category <> 'Food'
+   GROUP BY category
+   ORDER BY count(business_id) DESC
+   LIMIT 50
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -224,6 +231,8 @@ function getZipcode(req, res) {
   var query = `
    SELECT DISTINCT zipcode 
    FROM yelp_business  
+   GROUP BY zipcode
+   ORDER BY count(business_id) DESC
    LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
@@ -240,6 +249,7 @@ function getWeekday(req, res) {
   var query = `
    SELECT DISTINCT weekday 
    FROM yelp_checkin  
+   ORDER BY weekday
    LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
@@ -256,6 +266,7 @@ function getHour(req, res) {
   var query = `
    SELECT DISTINCT hour 
    FROM yelp_checkin  
+   ORDER BY hour
    LIMIT 100
   `;
   connection.query(query, function(err, rows, fields) {
