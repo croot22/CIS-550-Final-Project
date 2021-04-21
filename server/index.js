@@ -26,7 +26,7 @@ app.get('/yelp/hour', routes.getHour); //http://localhost:8081/yelp/hour
 app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour/category/:category', routes.getBestcategory); 
 // the above is tested successfully with 
 // http://localhost:8081/yelp/zipcode/15222/weekday/3/hour/5/category/bars
-app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
+app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestActivity);
 // the above is tested successfully with 
 // http://localhost:8081/yelp/zipcode/15222/weekday/5/hour/23
 

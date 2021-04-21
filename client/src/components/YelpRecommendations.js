@@ -1,6 +1,7 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import RestaurantRow from './YelpRecommendationsRow';
+import ActivityRow from './YelpActivitiesRow';
 import '../style/YelpRecommendations.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -150,7 +151,7 @@ export default class YelpRecommendations extends React.Component {
 		let zipcode = this.state.selectedZipcode;
 		let weekday = this.state.selectedWeekday;
 		let hour = this.state.selectedHour;
-		fetch("http://localhost:8081/yelp/zipcode/"+this.state.selectedZipcode+"/weekday/"+this.state.selectedWeekday+"/hour/"+this.state.selectedHour+"/category/" + this.state.selectedCategory, // tbd : to variablize the rest 
+		fetch("http://localhost:8081/yelp/zipcode/"+this.state.selectedZipcode+"/weekday/"+this.state.selectedWeekday+"/hour/"+this.state.selectedHour+"/category/" + this.state.selectedCategory, 
 		{
 			method: "GET"
 		}).then(res => {
@@ -168,57 +169,77 @@ export default class YelpRecommendations extends React.Component {
 				recRestaurants : restaurantDivs
 			});
 		});
+
+		fetch("http://localhost:8081/yelp/zipcode/"+this.state.selectedZipcode+"/weekday/"+this.state.selectedWeekday+"/hour/"+this.state.selectedHour, 
+		{
+			method: "GET"
+		}).then(res => {
+			console.log(res);			
+			return res.json();
+
+		}, err => {
+			console.log(err);
+		}).then(activityList => {
+			let activityDivs = activityList.map((activity, i) => 
+				<ActivityRow key={i} activity={activity}/>
+			);
+
+			this.setState({
+				recActivities : activityDivs
+			});
+		});
 	}
 
 	render() {
 
 		return (
 			<div className="Yelp Recommendations">
+				
 				<PageNavbar active="yelp" />
 
 			    <div className="container recommendations-container"> 
+
 			    	<div className="jumbotron">
-			    		<div className="h5">Yelp Recommendations</div>			    		
+			    		<div className="h5" style={{marginBottom: 20}}>Yelp Recommendations</div>				    			    		
+			        	<div className="categories-container">
+			          		<div className="dropdown-container" style={{marginBottom: 20}} >
+			            		<select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">{this.state.categories}</select>			
+			           			<select value={this.state.selectedZipcode} onChange={this.handleChangeZipcode} className="dropdown" id="zipcodesDropdown">{this.state.zipcodes}</select>
+			           			<select value={this.state.selectedWeekday} onChange={this.handleChangeWeekday} className="dropdown" id="weekdaysDropdown">{this.state.weekdays}</select>
+			           			<select value={this.state.selectedHour} onChange={this.handleChangeHour} className="dropdown" id="hoursDropdown">{this.state.hours}</select>			
+			           			<button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
+			       			</div>
 
-			        <div className="categories-container">
-			          <div className="dropdown-container">
+			       			<div className="h5" style={{marginBottom: 20}} >Around this time, people lives here typically likes to...</div>		
+			       			<div className="header-container">
+			    				<div className="headers">
+									<div className="header0"><strong>Activity</strong></div>  
+			    				</div>
+			   				</div>
+			 				<div className="results-container" id="results">
+			    				{this.state.recActivities}
+			    			</div>
 
-			            <select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">
-			            	{this.state.categories}
-			            </select>			
-
-			            <select value={this.state.selectedZipcode} onChange={this.handleChangeZipcode} className="dropdown" id="zipcodesDropdown">
-			            	{this.state.zipcodes}
-			            </select>
-
-			            <select value={this.state.selectedWeekday} onChange={this.handleChangeWeekday} className="dropdown" id="weekdaysDropdown">
-			            	{this.state.weekdays}
-			            </select>
-
-			            <select value={this.state.selectedHour} onChange={this.handleChangeHour} className="dropdown" id="hoursDropdown">
-			            	{this.state.hours}
-			            </select>			
-
-			            <button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
-			          </div>
-			        </div>
-
-			      </div>
-			      <div className="jumbotron">
+			       		</div>
+			      	</div>
+			      	
+			      	<div className="jumbotron">
+			      		<div className="h5" style={{marginBottom: 20}}> Based on your selection, you may want to check out these places...</div>	
 			    		<div className="header-container">
 			    			<div className="headers">
-			    				<div className="header1"><strong>Name</strong></div>  
+								<div className="header1"><strong>Name</strong></div>  
 			    				<div className="header2"><strong>Address</strong></div> 
-					            <div className="header3"><strong>Rating</strong></div> 
-					            <div className="header4"><strong>Review</strong></div> 
+					        	<div className="header3"><strong>Rating</strong></div> 
+					        	<div className="header4"><strong>Review</strong></div> 
 			    			</div>
-			    		</div>
-			    		<div className="results-container" id="results">
+			   			</div>
+			 			<div className="results-container" id="results">
 			    			{this.state.recRestaurants}
 			    		</div>
 			    	</div>
-			    </div>
-		    </div>
+
+				</div>
+			</div>
 		);
 	}
 }

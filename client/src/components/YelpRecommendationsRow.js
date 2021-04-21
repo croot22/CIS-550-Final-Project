@@ -17,3 +17,17 @@ export default class RestaurantRow extends React.Component {
 		);
 	}
 }
+
+export class ActivityRow extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return (
+			<div className="activityResults">
+				<div className="Activity">{this.props.activity.activity}</div>
+			</div>
+		);
+	}
+}

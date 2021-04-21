@@ -165,9 +165,9 @@ ORDER BY stars DESC LIMIT 3
 
 // [Yelp 2 of 2] - recommend based on category and check in 
 // http://localhost:8081/yelp/zipcode/15237/weekday/5/hour/23
-// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestPlace);
+// app.get('/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestActivity);
 
-function getBestPlace(req, res) {
+function getBestActivity(req, res) {
   
   var zipcode = req.params.zipcode; 
   var weekday = req.params.weekday;   
@@ -186,10 +186,10 @@ function getBestPlace(req, res) {
       GROUP by business_id, weekday, hour
     )
 
-  SELECT category, SUM(volume1) as volume
+  SELECT category AS activity
   FROM yelp_categories cat JOIN BUS ON cat.business_id = BUS.business_id JOIN op ON cat.business_id = op.business_id
   GROUP by category
-  ORDER BY volume DESC 
+  ORDER BY SUM(volume1) DESC 
   LIMIT 3`
   ;
 
@@ -604,7 +604,7 @@ module.exports = {
   getWeekday: getWeekday,  
   getHour: getHour,  
   getBestcategory: getBestcategory,  
-  getBestPlace: getBestPlace,
+  getBestActivity: getBestActivity,
 
   // Home Page
   getAllTransfers: getAllTransfers,
