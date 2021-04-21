@@ -4,7 +4,7 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
+import Dashboard from './Home';
 import YelpRecommendations from './YelpRecommendations'; //yelp
 import Safety from './Safety'; 
 import Crime from './Crime'; 
@@ -29,7 +29,7 @@ export default class App extends React.Component {
 						/>
 						<Route
 							exact
-							path="/dashboard"
+							path="/home"
 							render={() => (
 								<Dashboard />
 							)}
