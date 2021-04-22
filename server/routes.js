@@ -453,6 +453,30 @@ function getAvgScores(req, res) {
     }
   });
 }
+
+// get school zip codes
+function getSchoolZipcodes(req, res) {  
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s)
+  select distinct  
+  zip_code
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 //in progress
 // [Schools query  2] - list average school scores by selected zip code based on grades served
 function getAvgOnGradesServed(req, res) {
@@ -630,6 +654,7 @@ module.exports = {
 
   //schools
   getAvgScores: getAvgScores,
+  getSchoolZipcodes: getSchoolZipcodes,
 
   //old exports
 	getAllGenres: getAllGenres,

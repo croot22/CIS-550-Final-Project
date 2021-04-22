@@ -3,18 +3,22 @@ import '../style/Safety.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import SafetyRow from './SafetyRow';
+import { Button, Jumbotron } from 'react-bootstrap';
+import { Container} from 'react-bootstrap';
 
 export default class Schools extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      safety: []
-    }
+      zipCodeSelected : "",
+      zip_codes : []
+    };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    fetch("http://localhost:8081/safety",
+    fetch("http://localhost:8081/schoolsZipCodes",
     {
       method: 'GET' 
     }).then(res => {
@@ -23,44 +27,58 @@ export default class Schools extends React.Component {
     }, err => {
 
       console.log(err);
-    }).then(safetyList => {
+    }).then(schoolZipCodesObj => {
 
-      let safetyDivs = safetyList.map((entry, i) =>
-	  <SafetyRow key={i} safety={entry}/>	 
+      let schoolZipList = schoolZipCodesObj.map((zipCode, i) =>
+      <option key = {i} value = {zipCode.zip_code}>
+        {zipCode.zip_code}
+        </option>
 	  );
 
-      this.setState({
-        safety: safetyDivs
+    this.setState({
+        zip_codes: schoolZipList
       });
-    }, err => {
-      console.log(err);
-    });
+
+      if(schoolZipList.length > 0) {
+				this.setState({
+					zipCodeSelected: schoolZipCodesObj[0].zip_code
+				})
+			}
+    }
+    )
   }
+
+  handleChange(e) {
+		this.setState({
+			zipCodeSelected: e.target.value
+		});
+	}
 
 
   render() {    
     return (
-      <div className="Dashboard">
-        <PageNavbar active="Safety" />
-        <div className="container header-container">
-          <br></br>
-          <div className="jumbotron less-headspace">
-            <div className="header-container">
-              <div className="headers">
-                <div className="header"><strong>Zipcode</strong></div>
-                <div className="header"><strong>Population</strong></div>
-                <div className="header"><strong>Crimes</strong></div>
-				<div className="header"><strong>Crimes / 1000 Pop</strong></div>
-                <div className="header"><strong>Pos COVID Cases</strong></div>
-                <div className="header"><strong>COVID Pos %</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.safety}
-              </div>
-            </div>
+
+      
+      <div className="Schools">
+        <PageNavbar active="Schools" />
+        <div className = "container school-container" >
+        <Jumbotron>
+      <h3 className="header">School Information by Zip code</h3>
+      
+      <h5 className="header">Select Zipcode from Drop Down</h5>
+
+      <div className="dropdown-container">
+			            <select value={this.state.zipCodeSelected} onChange={this.handleChange} className="dropdown" id="crimeZipcodesDropdown">
+			            	{this.state.zip_codes}
+			            </select>
+			            <button className="submit-btn" id="crimeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
+			          </div>
+    </Jumbotron>
           </div>
-        </div>
       </div>
+      
+
+      
     );
   }
 }

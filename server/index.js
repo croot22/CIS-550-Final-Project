@@ -43,6 +43,7 @@ app.get('/movies/random', routes.getRandomMovies);
 //school parameters
 //works using http://localhost:8081/schools/19104/
 app.get('/schools/:zipcode', routes.getAvgScores);
+app.get('/schoolsZipCodes', routes.getSchoolZipcodes);
 
 //In progress
 //app.get('/schools/:zipcode', routes.getAvgOnGradesServed);
