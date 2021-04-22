@@ -14,7 +14,7 @@ export default class Home extends React.Component {
 			selectedCategory: "",
 			homeZipcodes: [],
       		selectedZipInfo: [],
-			categories: ["Safety", "Price", "Schools"],
+			categories: ["Price","Safety", "Schools"],
 			topZips: []
 		};
 		this.submitZipcode = this.submitZipcode.bind(this);
@@ -46,8 +46,14 @@ export default class Home extends React.Component {
 				})
 			}
 		})
+
+		//add cats to dropdown
+		this.setState({
+			selectedCategory: this.state.categories[2]
+		})
+
 		//get info for top zipcodes
-		fetch('http://localhost:8081/top/safety_score', {
+		fetch('http://localhost:8081/top/' + this.selectedCategory, {
 				method: 'GET'
 			}).then(res => {
 				return res.json();
@@ -61,10 +67,7 @@ export default class Home extends React.Component {
 				});
 			})
 
-		//add cats to dropdown
-		this.setState({
-			selectedCategory: this.state.categories[0]
-		})
+
 	}
 
 	handleChange(e) {
@@ -134,10 +137,10 @@ export default class Home extends React.Component {
 							</div>					  
 			        	<div className="header-container">
 			          		<div className="headers">
-								<div className="header">Zipcode: </div>
-								<div className="header">Average Purchase Price:</div>
-								<div className="header">Safety Score:</div>
-								<div className="header">School Rating:</div>
+								<div className="header"><b>Zipcode: </b></div>
+								<div className="header"><b>Average Home Price:</b></div>
+								<div className="header"><b>Safety Score:</b></div>
+								<div className="header"><b>School Rating:</b></div>
 			          		</div>
 						</div>	  
 							<div className="results-container" id="results">

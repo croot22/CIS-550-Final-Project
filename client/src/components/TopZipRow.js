@@ -10,9 +10,9 @@ export default class TopZipRow extends React.Component {
 		return (
 			<div className="topZipResults">
 				<div className="zipcode">{this.props.zip.zipcode}</div>
-                <div className="price">${this.props.zip.price}</div>
-                <div className="safety_score">{this.props.zip.safety_score}</div>
-                <div className="school_avg">{this.props.zip.school_avg}</div>
+                <div className="Price">${this.props.zip.Price}</div>
+                <div className="Safety">{this.props.zip.Safety}</div>
+                <div className="Schools">{this.props.zip.Schools}</div>
 			</div>
 		);
 	}
