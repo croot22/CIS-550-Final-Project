@@ -320,7 +320,7 @@ function getAllTransfers(req, res) {
 // http://localhost:8081/home/zipcodes
 function getZipcodes(req, res) {   
   var query = `
-  SELECT DISTINCT zip_code
+  SELECT DISTINCT zip_code AS zipcode
   FROM RealEstateTransfers
   ORDER BY zip_code;
   `;
@@ -335,7 +335,7 @@ function getZipcodes(req, res) {
 // [Real Estate Transfers 3/4] - get avg purchase amount in zipcode
 // http://localhost:8081/home/zipcode
 function getAvgPurchasePrice(req, res) {
-  var zipcode = parseInt(req.query.zipcode);    
+  var zipcode = req.params.zipcode;    
   var query = `
   SELECT zip_code, ROUND(AVG(cash_consideration), 2) AS purchase_amount
   FROM RealEstateTransfers
@@ -350,9 +350,10 @@ function getAvgPurchasePrice(req, res) {
 }
 
 // [Real Estate Transfers 4/4] - get top rated zipcodes
-// http://localhost:8081/home/top
+// http://localhost:8081/top
 //doesn't work yet
 function getTopZips(req, res) {   
+  var category = req.params.category;
   var query = `
 WITH yelp AS (
     SELECT zipcode, AVG(stars) as avg_stars
@@ -378,7 +379,7 @@ covid_per_zip AS(
     where result ='POS'
     ),
 safety AS(
-    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (crime_count/population)*1000 as crimes_per_1000_pop, positive_count, covid_positive_rate 
+    select distinct districts.zipcode, population, sum(crime_count) as crime_count, (1/((crime_count/population)*1000))*100 + (1/(covid_positive_rate))*10 as safety_score 
     from crime_total
     join districts on crime_total.dc_dist=districts.dc_dist
     join population on districts.zipcode=population.zipcode
@@ -386,32 +387,33 @@ safety AS(
     group by zipcode
     order by zipcode
     ),
-overall_score as(
-    select s.*,
-    case when overall_score = 'Less than 10' 
-      then 9
-      else convert(overall_score, UNSIGNED INTEGER)
-    end as int_overall_score
-    FROM new_schema.schools s
-    ),
-school_score_byZip as(select zip_code, avg(int_overall_score) as average_school_score
-    from overall_score
-    where school_name not like ('%CLOSED%') and int_overall_score < 990
-    group by zip_code
-    order by 2 desc
-    ),
   avg_purchase_price as(
     SELECT zip_code, AVG(cash_consideration) AS purchase_price
     FROM RealEstateTransfers r
     GROUP BY zip_code
-    )
-  SELECT a.zip_code AS zipcode, a.purchase_price, y.stars AS food_ratings, crimes_per_1000_pop AS safety_score, average_school_score
+    ),
+  overall_score as(
+      select s.*
+    , case when overall_score = 'Less than 10' 
+      then 9
+        else convert(overall_score, UNSIGNED INTEGER)
+        end as int_overall_score
+    FROM new_schema.schools s
+    ),
+    averageScore AS(
+      select 
+    zip_code
+    , avg(int_overall_score) as average_school_score
+    from overall_score
+    where school_name not like ('%CLOSED%') and int_overall_score < 990
+    group by zip_code
+    order by 2 desc)
+  SELECT a.zip_code AS zipcode, a.purchase_price AS price, IFNULL(safety_score, 0) AS safety_score, IFNULL(average_school_score, 0) school_avg
   FROM avg_purchase_price a
-  JOIN yelp y ON a.zip_code = y.zipcode
-  JOIN safety sa ON a.zip_code = ss.zipcode
-  JOIN school_score ss ON a.zip_code = ss.zip_code 
-  ORDER BY safety_score, average_school_score, purchase_price, food_ratings
-  LIMIT 3;
+  JOIN safety ON a.zip_code = safety.zipcode
+  JOIN averageScore ON a.zip_code = averageScore.zip_code
+  ORDER BY '${category}' DESC
+  Limit 10;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);

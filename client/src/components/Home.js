@@ -1,6 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
-import CrimeRow from './HomeRow';
+import HomeRow from './HomeRow';
 import '../style/Home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,6 +11,7 @@ export default class Home extends React.Component {
 		this.state = {
 			selectedZipcode: "",
 			homeZipcodes: [],
+      selectedZipInfo: [],
 			zipScores: []
 		};
 		this.submitZipcode = this.submitZipcode.bind(this);
@@ -24,8 +25,8 @@ export default class Home extends React.Component {
 			return res.json();
 		}).then(zipcodeListObj => {
 			let zipcodeList = zipcodeListObj.map((zipcodeObj, i) =>
-				<option key={i} value={zipcodeObj.homeZipcode}>
-				{zipcodeObj.homeZipcode}
+				<option key={i} value={zipcodeObj.zipcode}>
+				{zipcodeObj.zipcode}
 				</option>
 			);
 
@@ -35,7 +36,28 @@ export default class Home extends React.Component {
 
 			if(zipcodeList.length > 0) {
 				this.setState({
-					selectedZipcode: zipcodeListObj[0].homeZipcode
+					selectedZipcode: zipcodeListObj[0].zipcode
+				})
+			}
+		})
+    fetch('http://localhost:8081/home/zipcodes', {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(zipcodeListObj => {
+			let zipcodeList = zipcodeListObj.map((zipcodeObj, i) =>
+				<option key={i} value={zipcodeObj.zipcode}>
+				{zipcodeObj.zipcode}
+				</option>
+			);
+
+			this.setState({
+				homeZipcodes: zipcodeList,
+			});
+
+			if(zipcodeList.length > 0) {
+				this.setState({
+					selectedZipcode: zipcodeListObj[0].zipcode
 				})
 			}
 		})
@@ -49,23 +71,20 @@ export default class Home extends React.Component {
 
 	submitZipcode() {
 		let homeZipcode = this.state.selectedZipcode;
-		let url = new URL('http://localhost:8081/home/');
-		let queryParams = {homeZipcode: homeZipcode};
-		//If there are more than one query parameters, this is useful.
-		Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
-		fetch(url, {
+
+		fetch("http://localhost:8081/home/" + homeZipcode, {
 			method: 'GET'
 		}).then(res => {
 			return res.json();
 		}, err => {
 			return console.log(err);
-		}).then(crimeList => {
-			let totalCrimeDivs = crimeList.map((crime, i) => 
-				<CrimeRow crime={crime} />
+		}).then(zipInfo => {
+			let zipInfoDivs = zipInfo.map((zip, i) => 
+				<HomeRow zip={zip} />
 			); 
 
 			this.setState({
-				crimeCategories: totalCrimeDivs
+				selectedZipInfo: zipInfoDivs
 			});
 		});
 	}
@@ -73,9 +92,9 @@ export default class Home extends React.Component {
 	render() {
 
 		return (
-			<div className="Crime">
-				<PageNavbar active="crime" />
-				<div className="container crime-container">
+			<div className="Home">
+				<PageNavbar active="home" />
+				<div className="container home-container">
 			      <div className="jumbotron">
 			        <div className="h5">Select a Zipcode to See Average Home Prices in the Area</div>
 			        <div className="years-container">
@@ -83,18 +102,18 @@ export default class Home extends React.Component {
 			            <select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="homeZipcodesDropdown">
 			            	{this.state.homeZipcodes}
 			            </select>
-			            <button className="submit-btn" id="crimeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
+			            <button className="submit-btn" id="homeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
 			          </div>
 			        </div>
 			      </div>
 			      <div className="jumbotron">
-			        <div className="crime-container">
-			          <div className="crime">
+			        <div className="home-container">
+			          <div className="home">
 			            <div className="header-lg"><strong>Zipcode</strong></div>
                   <div className="header"><strong>Average Price</strong></div>
 			          </div>
-			          <div className="crime-container" id="results">
-			            {this.state.crimeCategories}
+			          <div className="home-container" id="results">
+			            {this.state.selectedZipInfo}
 			          </div>
 			        </div>
 			      </div>
