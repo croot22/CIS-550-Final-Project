@@ -1,34 +1,49 @@
-.genres-container {
-  /* margin: 10px 0; */
+.home-container {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  /* border-bottom: 1px solid #ddd; */
+  flex-flow: column wrap;
+  margin-top: 25px;
 }
 
-.genres-container .genre {
-  flex: 1 0 20%;
-  margin: 5px 0;
-  padding: 10px;
-  cursor: pointer;
-  box-sizing: border-box;
+.home-container .home {
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  height: 30px;
+
 }
 
-.genres-container .genre:hover {
-  background-color: #ddd;
+.selectedZipInfo .purchase_price, .headers .header {
+  flex: 1 0 33%;
 }
 
-.movies-container .movies-header, .results-container .movie {
+.jumbotron {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.total-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 10px;
+}
+
+.total-container .total, .total-container .crimeResults {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 40px;
+  height: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: space-evenly;
+  line-height:0; 
 }
 
-.movie .title, .movies-header .header-lg {
-  flex: 1 0 50%;
+.crimeResults .text_general_code, .total-header, .header-lg {
+  flex: 1 0 33%;
 }
 
-.movies-header .header, .movie .rating, .movie .votes {
-  flex: 1 0 25%;
+.total .header, .crimeResults .crime_count, .crimeResults .crimes_per_1000_pop {
+  flex: 1 0 33%;
 }
