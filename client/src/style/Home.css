@@ -24,10 +24,10 @@
 .total-container {
   display: flex;
   flex-flow: column wrap;
-  margin-top: 10px;
+  margin-top: 25px;
 }
 
-.total-container .total, .total-container .crimeResults {
+.total-container .total, .total-container .results {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -40,10 +40,24 @@
   line-height:0; 
 }
 
-.crimeResults .text_general_code, .total-header, .header-lg {
-  flex: 1 0 33%;
+.topZipsResults .zipcode, .topZipsResults .price, .topZipsResults .safety_score, .topZipsResults .school_avg, .headers .header {
+  flex: 1 0 25%;
 }
 
-.total .header, .crimeResults .crime_count, .crimeResults .crimes_per_1000_pop {
-  flex: 1 0 33%;
+.header-container, .results-container {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.header-container .headers, .results-container .results {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: space-evenly;
+  line-height:0; 
 }

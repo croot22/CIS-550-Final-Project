@@ -49,12 +49,12 @@ export default class Home extends React.Component {
 		}).then(res => {
 			return res.json();
 		}).then(topZipListObj => {
-			let topZipList = topZipListObj.map((zip, i) =>
+			let topZipDivs = topZipListObj.map((zip, i) =>
 				<TopZipRow key={i} zip={zip} />
 			);
 
 			this.setState({
-				topZips: topZipList,
+				topZips: topZipDivs
 			});
 		})
 	}
@@ -92,15 +92,16 @@ export default class Home extends React.Component {
 				<PageNavbar active="home" />
         <div className="container total-container">
           <div className="jumbotron">
-			        <div className="total-container">
-			          <div className="total">
+			        <div className="header-container">
+			          <div className="headers">
                   <div className="header">Zipcode: </div>
                   <div className="header">Average Purchase Price:</div>
                   <div className="header">Safety Score:</div>
+                  <div className="header">School Rating:</div>
 			          </div>
-			          <div className="total-container" id="results">
-			            {this.state.crimeCategories}
-			          </div>
+			          <div className="results-container" id="results">
+			            {this.state.topZips}
+                </div>
 			        </div>
 			    </div>
         </div>

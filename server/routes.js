@@ -337,7 +337,7 @@ function getZipcodes(req, res) {
 function getAvgPurchasePrice(req, res) {
   var zipcode = req.params.zipcode;    
   var query = `
-  SELECT zip_code, ROUND(AVG(cash_consideration), 2) AS purchase_amount
+  SELECT zip_code, FORMAT(AVG(cash_consideration), 'C2') AS purchase_amount
   FROM RealEstateTransfers
   WHERE zip_code = '${zipcode}';
   `;
@@ -408,7 +408,7 @@ safety AS(
     where school_name not like ('%CLOSED%') and int_overall_score < 990
     group by zip_code
     order by 2 desc)
-  SELECT a.zip_code AS zipcode, a.purchase_price AS price, IFNULL(safety_score, 0) AS safety_score, IFNULL(average_school_score, 0) school_avg
+  SELECT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS price, IFNULL(safety_score, 0) AS safety_score, IFNULL(average_school_score, 0) school_avg
   FROM avg_purchase_price a
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
