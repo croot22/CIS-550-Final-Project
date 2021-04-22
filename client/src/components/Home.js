@@ -11,12 +11,16 @@ export default class Home extends React.Component {
 
 		this.state = {
 			selectedZipcode: "",
+			selectedCategory: "",
 			homeZipcodes: [],
-      selectedZipInfo: [],
+      		selectedZipInfo: [],
+			categories: ["Safety", "Price", "Schools"],
 			topZips: []
 		};
 		this.submitZipcode = this.submitZipcode.bind(this);
+		this.submitCategory = this.submitCategory.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleCatChange = this.handleCatChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -42,20 +46,24 @@ export default class Home extends React.Component {
 				})
 			}
 		})
+		//get info for top zipcodes
+		fetch('http://localhost:8081/top/safety_score', {
+				method: 'GET'
+			}).then(res => {
+				return res.json();
+			}).then(topZipListObj => {
+				let topZipDivs = topZipListObj.map((zip, i) =>
+					<TopZipRow key={i} zip={zip} />
+				);
 
-    //get info for top zipcodes
-    fetch('http://localhost:8081/top/safety_score', {
-			method: 'GET'
-		}).then(res => {
-			return res.json();
-		}).then(topZipListObj => {
-			let topZipDivs = topZipListObj.map((zip, i) =>
-				<TopZipRow key={i} zip={zip} />
-			);
+				this.setState({
+					topZips: topZipDivs
+				});
+			})
 
-			this.setState({
-				topZips: topZipDivs
-			});
+		//add cats to dropdown
+		this.setState({
+			selectedCategory: this.state.categories[0]
 		})
 	}
 
@@ -65,6 +73,12 @@ export default class Home extends React.Component {
 		});
 	}
 
+	handleCatChange(e) {
+		this.setState({
+			selectedCategory: e.target.value
+		});
+	}
+	// get avg purchase price in selected zip
 	submitZipcode() {
 		let homeZipcode = this.state.selectedZipcode;
 
@@ -85,42 +99,68 @@ export default class Home extends React.Component {
 		});
 	}
 
+	submitCategory() {
+		let category = this.state.selectedCategory;
+
+    //get info for top zipcodes on change
+    fetch('http://localhost:8081/top/' + category, {
+			method: 'GET'
+		}).then(res => {
+			return res.json();
+		}).then(topZipListObj => {
+			let topZipDivs = topZipListObj.map((zip, i) =>
+				<TopZipRow key={i} zip={zip} />
+			);
+
+			this.setState({
+				topZips: topZipDivs
+			});
+		})
+	}
+
 	render() {
 
 		return (
 			<div className="Home">
 				<PageNavbar active="home" />
-        <div className="container total-container">
-          <div className="jumbotron">
-			        <div className="header-container">
-			          <div className="headers">
-                  <div className="header">Zipcode: </div>
-                  <div className="header">Average Purchase Price:</div>
-                  <div className="header">Safety Score:</div>
-                  <div className="header">School Rating:</div>
-			          </div>
-			          <div className="results-container" id="results">
-			            {this.state.topZips}
-                </div>
-			        </div>
-			    </div>
-        </div>
+        		<div className="container header-container">
+          			<div className="jumbotron">
+					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
+					  <div className="dropdown-container">
+								<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
+									{this.state.categories}
+								</select>
+								<button className="submit-btn" id="categorySubmitBtn" onClick={this.submitCategory}>Submit</button>
+							</div>					  
+			        	<div className="header-container">
+			          		<div className="headers">
+								<div className="header">Zipcode: </div>
+								<div className="header">Average Purchase Price:</div>
+								<div className="header">Safety Score:</div>
+								<div className="header">School Rating:</div>
+			          		</div>
+						</div>	  
+							<div className="results-container" id="results">
+								<div className="header">{this.state.topZips}</div>
+							</div>
+			    	</div>
+				</div>
 				<div className="container home-container">
-			      <div className="jumbotron">
-			        <div className="h5"><strong>Select a Zipcode to See Average Home Prices in the Area</strong></div>
-			        <div className="years-container">
-			          <div className="dropdown-container">
-			            <select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="zipcodesDropdown">
-			            	{this.state.homeZipcodes}
-			            </select>
-			            <button className="submit-btn" id="zipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
-			          </div>
-                <div className="headers">
-                  <div className="header"><strong>Average Price: </strong></div>
-                  <div className="selectedZipInfo">{this.state.selectedZipInfo}</div>
-                </div>
-              </div>  
-			      </div>
+					<div className="jumbotron">
+						<div className="h5"><strong>Select a Zipcode to See the Average Home Price for the Area</strong></div>
+						<div className="years-container">
+							<div className="dropdown-container">
+								<select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="zipcodesDropdown">
+									{this.state.homeZipcodes}
+								</select>
+								<button className="submit-btn" id="zipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
+							</div>
+							<div className="headers">
+								<div className="header"><strong>Average Price: </strong></div>
+								<div className="selectedZipInfo">{this.state.selectedZipInfo}</div>
+							</div>
+						</div>  
+					</div>
 			    </div>
 			</div>
       

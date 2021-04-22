@@ -413,7 +413,7 @@ safety AS(
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
   ORDER BY '${category}' DESC
-  Limit 10;
+  Limit 5;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);

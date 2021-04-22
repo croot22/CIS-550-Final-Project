@@ -8,11 +8,11 @@ export default class TopZipRow extends React.Component {
 
 	render() {
 		return (
-			<div className="home">
-				<div className="Zipcode">{this.props.zip.zipcode}</div>
-                <div className="Average Home Price">${this.props.zip.price}</div>
-                <div className="Safety Score">{this.props.zip.safety_score}</div>
-                <div className="School Score">{this.props.zip.school_avg}</div>
+			<div className="topZipResults">
+				<div className="zipcode">{this.props.zip.zipcode}</div>
+                <div className="price">${this.props.zip.price}</div>
+                <div className="safety_score">{this.props.zip.safety_score}</div>
+                <div className="school_avg">{this.props.zip.school_avg}</div>
 			</div>
 		);
 	}

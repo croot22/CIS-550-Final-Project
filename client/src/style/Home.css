@@ -1,7 +1,7 @@
 .home-container {
   display: flex;
   flex-flow: column wrap;
-  margin-top: 25px;
+  margin-top: 5x;
 }
 
 .home-container .home {
@@ -13,7 +13,7 @@
 }
 
 .selectedZipInfo .purchase_price, .headers .header {
-  flex: 1 0 33%;
+  flex: 1 0 25%;
 }
 
 .jumbotron {
@@ -27,11 +27,30 @@
   margin-top: 25px;
 }
 
-.total-container .total, .total-container .results {
+.total-container .total {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 30px;
+  height: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: space-evenly;
+  line-height:0; 
+}
+
+.header-container, .results-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 10px;
+}
+
+.header-container .headers, .results-container .topZipResults {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 25px;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-right: 10px;
@@ -42,22 +61,4 @@
 
 .topZipsResults .zipcode, .topZipsResults .price, .topZipsResults .safety_score, .topZipsResults .school_avg, .headers .header {
   flex: 1 0 25%;
-}
-
-.header-container, .results-container {
-  display: flex;
-  flex-flow: column wrap;
-}
-
-.header-container .headers, .results-container .results {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  height: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: space-evenly;
-  line-height:0; 
 }
