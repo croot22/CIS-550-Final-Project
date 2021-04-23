@@ -1,21 +1,43 @@
-.header-container, .results-container {
-  display: flex;
-  flex-flow: column wrap;
-  text-align: right;
-  /* margin-top: 10px; */
-}
+
 
 .results-container .schoolResults {
   display: flex;
   flex-flow: row nowrap;
-  align-items: right;
+  align-items: left;
   height: 25px;
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-right: 1px;
-  padding-left: 1px;
+  padding-right: 70px;
+  padding-left: 20px;
   justify-content: space-around;
+  font-size: smaller;
   line-height:0; 
+  white-space: normal;
+  text-align: center;
+  overflow-wrap: break-word;
+  
+}
+
+ .schoolResults .overall_score, .schoolResults .overall_city_rank, .schoolResults .prog_score, .schoolResults .admissions_category {
+  display: flex;
+  width: 120px;
+  text-align: left;
+  overflow-wrap:normal;
+  height: auto;
+}
+
+.schoolResults .school_name{
+  display: flex;
+  width: 200px;
+  text-align: justify;
+  height: auto;
+}
+
+.schoolResults .website{
+  display: flex;
+  width: 250px;
+  text-align: justify;
+  height: auto;
 }
 
 .school-container {
@@ -25,12 +47,16 @@
   }
 
 
+  .jumbotron{
+    color: #efeaf3;
+    background-color:#0f072c !important;
+    opacity:0.8;
+    }
 
-.headers .header { height: auto; width: 200px; margin-bottom:20px; font-size: small; text-align: left;}
 
 
-.schoolResults .school_name, .schoolResults .website, .schoolResults .overall_score, .schoolResults .city_rank, .schoolResults .program_score, .schoolResults .admission_category {
-  text-align: left;
-}
+
+
+
 
 

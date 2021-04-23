@@ -8,7 +8,7 @@ export default class SchoolRow extends React.Component {
 
 	render() {
 		return (
-			<div className="schoolResults">
+			<div  className="schoolResults">
 				<div className="school_name">{this.props.school.school_name}</div>
 				<div className="website">{this.props.school.website}</div>
                 <div className="overall_score">{this.props.school.overall_score}</div>

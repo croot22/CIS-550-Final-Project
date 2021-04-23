@@ -121,24 +121,25 @@ export default class Schools extends React.Component {
         <div className="container school-container" >
           <Jumbotron>
             <h3 className="header">School Information by Zip code</h3>
-
-            <h5 className="header">Select Zipcode from Drop Down</h5>
-
+            <hr className="mt-2 mb-3" />
+            <h6 className="header">Select Zipcode and Grade Served</h6>
+            <hr className="my-1" />
             <div className="dropdown-container">
               <select value={this.state.zipCodeSelected} onChange={this.handleChange} className="dropdown" id="zipCodesDropdown">
                 {this.state.zip_codes}
               </select>
               <select value={this.state.selectedGradespan} onChange={this.handleChangeGradespan} className="dropdown" id="zipcodesDropdown">
                 {this.state.gradespans}</select>
-              <button className="submit-btn" id="zipCodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
+              <button className="submit-btn" id="zipCodesSubmitBtn" onClick={this.submitZipcode}>Search</button>
             </div>
           </Jumbotron>
 
           <Jumbotron>
-            <div className="h4"> Here are the top schools ranked by overall score</div>
+            <div className="h6"> Top schools ranked by overall score</div>
+            <hr className="my-2" />
             <div className="header-container">
-              <div className="headers">
-                <div className="header"><strong>School Name</strong></div>
+               <div className="headers">
+                <div className="header"><strong>School Name      </strong></div>
                 <div className="header"><strong>Website</strong></div>
                 <div className="header"><strong>Overall Score</strong></div>
                 <div className="header"><strong>City Rank</strong></div>
@@ -146,10 +147,12 @@ export default class Schools extends React.Component {
                 <div className="header"><strong>Admission Category</strong></div>
 
               </div>
-            </div>
+              </div>
+            
             <div className="results-container" id="results">
               {this.state.recSchools}
-            </div>
+              </div>
+            
             </Jumbotron>
         </div>
       </div>

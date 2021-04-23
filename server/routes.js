@@ -482,16 +482,26 @@ function getSchoolZipcodes(req, res) {
 function getSchoolGrades(req, res) {  
   var query = `
   with overall_score as(
-    select s.*
-  , case when overall_score = 'Less than 10' 
-    then 9
-      else convert(overall_score, UNSIGNED INTEGER)
-      end as int_overall_score
-  FROM new_schema.schools s)
-  select distinct  
-  gradespan
-  from overall_score
-  where school_name not like ('%CLOSED%') and int_overall_score < 990
+    select school_name, website, street_address, overall_score,overall_city_rank,
+ prog_score, admissions_category, zip_code
+ , gradespan
+ , case when overall_score = 'Less than 10' 
+   then 9
+     else convert(overall_score, UNSIGNED INTEGER)
+     end as int_overall_score
+ FROM new_schema.schools s
+ union
+select school_name, website, street_address, overall_score,overall_city_rank,
+ prog_score, admissions_category, zip_code
+ , "0-All" as gradespan
+ , case when overall_score = 'Less than 10' 
+   then 9
+     else convert(overall_score, UNSIGNED INTEGER)
+     end as int_overall_score
+ FROM new_schema.schools s)
+ select distinct gradespan
+ from overall_score
+ where school_name not like ('%CLOSED%') and int_overall_score < 990
   order by gradespan
   `;
   connection.query(query, function(err, rows, fields) {
@@ -510,16 +520,27 @@ function getSchoolInformation(req, res) {
 
   var query = `
   with overall_score as(
-    select s.*
-  , case when overall_score = 'Less than 10' 
-    then 9
-      else convert(overall_score, UNSIGNED INTEGER)
-      end as int_overall_score
-  FROM new_schema.schools s)
-  select school_name, website, overall_score,overall_city_rank,
-  prog_score, admissions_category
-  from overall_score
-  where school_name not like ('%CLOSED%') and int_overall_score < 990
+    select school_name, website, street_address, overall_score,overall_city_rank,
+ prog_score, admissions_category, zip_code
+ , gradespan
+ , case when overall_score = 'Less than 10' 
+   then 9
+     else convert(overall_score, UNSIGNED INTEGER)
+     end as int_overall_score
+ FROM new_schema.schools s
+ union
+select school_name, website, street_address, overall_score,overall_city_rank,
+ prog_score, admissions_category, zip_code
+ , "0-All" as gradespan
+ , case when overall_score = 'Less than 10' 
+   then 9
+     else convert(overall_score, UNSIGNED INTEGER)
+     end as int_overall_score
+ FROM new_schema.schools s)
+ select school_name, website, street_address, overall_score,overall_city_rank,
+ prog_score, admissions_category, zip_code
+ from overall_score
+ where school_name not like ('%CLOSED%') and int_overall_score < 990
   and zip_code = "${zip_code}"
   and gradespan = "${gradespan}"
   order by int_overall_score desc;
