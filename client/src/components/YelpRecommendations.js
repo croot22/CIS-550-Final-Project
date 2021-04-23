@@ -224,7 +224,7 @@ export default class YelpRecommendations extends React.Component {
 			      	</div>
 			      	
 			      	<div className="jumbotron">
-			      		<div className="h5" style={{marginBottom: 20}}> Based on your selection, you may want to check out these places...</div>	
+			      		<div className="h5"> Based on your selection, you may want to check out these places...</div>	
 			    		<div className="header-container">
 			    			<div className="headers">
 								<div className="header1"><strong>Name</strong></div>  

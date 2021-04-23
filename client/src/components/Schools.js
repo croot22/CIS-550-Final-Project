@@ -1,5 +1,5 @@
 import React from 'react';
-import '../style/Safety.css';
+import '../style/Schools.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import SchoolRow from './SchoolRow';
@@ -12,14 +12,14 @@ export default class Schools extends React.Component {
 
     this.state = {
       zipCodeSelected: "",
-      selectedGradespan : "",
+      selectedGradespan: "",
       zip_codes: [],
-      gradespans : []
+      gradespans: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeGradespan = this.handleChangeGradespan.bind(this);
     this.submitZipcode = this.submitZipcode.bind(this);
-    
+
   }
 
   componentDidMount() {
@@ -53,27 +53,27 @@ export default class Schools extends React.Component {
       )
 
     fetch('http://localhost:8081/schoolsGrades', {
-			method: 'GET'
-		}).then(res => {
-			return res.json();
-		}).then(categoryListObj => {
+      method: 'GET'
+    }).then(res => {
+      return res.json();
+    }).then(categoryListObj => {
 
-			let categoryList = categoryListObj.map((categoryObj, i) =>
-				<option key={i} value={categoryObj.gradespan}>
-				{categoryObj.gradespan}
-				</option>
-			);//...
+      let categoryList = categoryListObj.map((categoryObj, i) =>
+        <option key={i} value={categoryObj.gradespan}>
+          {categoryObj.gradespan}
+        </option>
+      );//...
 
-			this.setState({
-				gradespans: categoryList,
-			});
+      this.setState({
+        gradespans: categoryList,
+      });
 
-			if(categoryList.length > 0) {
-				this.setState({
-					selectedGradespan: categoryListObj[0].gradespan
-				})
-			}
-		})
+      if (categoryList.length > 0) {
+        this.setState({
+          selectedGradespan: categoryListObj[0].gradespan
+        })
+      }
+    })
   }
 
   handleChange(e) {
@@ -89,27 +89,27 @@ export default class Schools extends React.Component {
   }
 
   submitZipcode() {
-		let zipcode = this.state.zipCodeSelected;
-		let gradespan = this.state.selectedGradespan;
-		fetch("http://localhost:8081/schoolInformation/zip_code/"+this.state.zipCodeSelected+"/gradespan/"+this.state.selectedGradespan,
-		{
-			method: "GET"
-		}).then(res => {
-			console.log(res);			
-			return res.json();
+    let zipcode = this.state.zipCodeSelected;
+    let gradespan = this.state.selectedGradespan;
+    fetch("http://localhost:8081/schoolInformation/zip_code/" + this.state.zipCodeSelected + "/gradespan/" + this.state.selectedGradespan,
+      {
+        method: "GET"
+      }).then(res => {
+        console.log(res);
+        return res.json();
 
-		}, err => {
-			console.log(err);
-		}).then(schoolList => {
-			let schoolDivs = schoolList.map((school, i) => 
-				<SchoolRow key={i} school={school}/>
-			);
+      }, err => {
+        console.log(err);
+      }).then(schoolList => {
+        let schoolDivs = schoolList.map((entry, i) =>
+          <SchoolRow key={i} school={entry} />
+        );
 
-			this.setState({
-				recSchools : schoolDivs
-			});
-		});
-	}
+        this.setState({
+          recSchools: schoolDivs
+        });
+      });
+  }
 
 
   render() {
@@ -134,23 +134,23 @@ export default class Schools extends React.Component {
             </div>
           </Jumbotron>
 
-          <div className="jumbotron">
-			      		<div className="h4" style={{marginBottom: 20}}> Here are the top schools ranked by overall score</div>	
-			    		<div className="header-container">
-			    			<div className="headers">
-								<div className="header"><strong>School Name</strong></div>  
-			    				<div className="header"><strong>Website</strong></div> 
-					        	<div className="header"><strong>Overall Score</strong></div> 
-                    <div className="header"><strong>City Rank</strong></div> 
-                    <div className="header"><strong>Program Score</strong></div> 
-                    <div className="header"><strong>Admission Category</strong></div> 
-                    
-			    			</div>
-			   			</div>
-			 			<div className="results-container" id="results">
-			    			{this.state.recSchools}
-			    		</div>
-			    	</div>
+          <Jumbotron>
+            <div className="h4"> Here are the top schools ranked by overall score</div>
+            <div className="header-container">
+              <div className="headers">
+                <div className="header1"><strong>School Name</strong></div>
+                <div className="header2"><strong>Website</strong></div>
+                <div className="header3"><strong>Overall Score</strong></div>
+                <div className="header4"><strong>City Rank</strong></div>
+                <div className="header5"><strong>Program Score</strong></div>
+                <div className="header6"><strong>Admission Category</strong></div>
+
+              </div>
+            </div>
+            <div className="results-container" id="results">
+              {this.state.recSchools}
+            </div>
+            </Jumbotron>
         </div>
       </div>
 
