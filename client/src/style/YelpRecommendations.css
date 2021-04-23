@@ -21,11 +21,11 @@
   height: auto;
 }
 
-.headers .header0 { height: auto; width: 1000px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header1 { height: auto; width: 120px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header2 { height: auto; width: 115px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header3 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header4 { height: auto; width: 625px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header0 { height: auto; width: 1000px; font-size: small; text-align: left;}
+.headers .header1 { height: auto; width: 120px; font-size: small; text-align: left;}
+.headers .header2 { height: auto; width: 115px; font-size: small; text-align: left;}
+.headers .header3 { height: auto; width: 100px; font-size: small; text-align: left;}
+.headers .header4 { height: auto; width: 625px; font-size: small; text-align: left;}
 
 .activityResults .Activity {
    width: 960px;

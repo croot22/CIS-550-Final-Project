@@ -200,7 +200,8 @@ export default class YelpRecommendations extends React.Component {
 			    <div className="container recommendations-container"> 
 
 			    	<div className="jumbotron">
-			    		<div className="h5" style={{marginBottom: 20}}>Yelp Recommendations</div>				    			    		
+			    		
+			    		<div className="h5" style={{marginBottom: 20}}><img src="yelp-512.jpg" alt="yelp"width="100" height="50"></img> Recommendations</div>					 			    		
 			        	<div className="categories-container">
 			          		<div className="dropdown-container" style={{marginBottom: 20}} >
 			            		<select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">{this.state.categories}</select>			
@@ -224,7 +225,7 @@ export default class YelpRecommendations extends React.Component {
 			      	</div>
 			      	
 			      	<div className="jumbotron">
-			      		<div className="h5"> Based on your selection, you may want to check out these places...</div>	
+			      		<div className="h5"style={{marginBottom: 20}}> Based on your selection, you may want to check out these places...</div>	
 			    		<div className="header-container">
 			    			<div className="headers">
 								<div className="header1"><strong>Name</strong></div>  
