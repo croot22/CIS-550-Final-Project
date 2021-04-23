@@ -1,14 +1,14 @@
 .header-container, .results-container {
   display: flex;
   flex-flow: column wrap;
-  text-align: left;
+  text-align: right;
   /* margin-top: 10px; */
 }
 
 .results-container .schoolResults {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
+  align-items: right;
   height: 25px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -30,11 +30,7 @@
 
 
 .schoolResults .school_name, .schoolResults .website, .schoolResults .overall_score, .schoolResults .city_rank, .schoolResults .program_score, .schoolResults .admission_category {
-  height: auto;
-  font-size: large;
-  flex-wrap: wrap;
   text-align: left;
-  margin-bottom:20px;
 }
 
 
