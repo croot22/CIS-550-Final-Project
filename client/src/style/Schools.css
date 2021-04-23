@@ -5,6 +5,19 @@
   /* margin-top: 10px; */
 }
 
+.results-container .schoolResults {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 1px;
+  padding-left: 1px;
+  justify-content: space-around;
+  line-height:0; 
+}
+
 .school-container {
     display: flex;
     flex-flow: column wrap;
@@ -21,7 +34,7 @@
 .headers .header6 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
 .headers .header7 { height: auto; width: 125px; margin-bottom:20px; font-size: small; text-align: left;}
 
-.schoolResults .school_name {
+.schoolResults .school_name, .schoolResults .website, .schoolResults .overall_score {
     width: 200px;
   height: auto;
   font-size: large;
@@ -29,44 +42,5 @@
   text-align: left;
   margin-bottom:20px;
 }
-.schoolResults .website {
-    width: 200px;
-  height: auto;
-  flex-wrap: wrap;
-  font-size: large;
-  text-align: left;
-  margin-bottom:20px;
-  margin-left: 23px;
-}
-.schoolResults .overall_score {
-    width: 133px;
-  height: auto;
-  font-size: small;
-  text-align: left;
-  margin-bottom:20px;
-  margin-left: 23px;
-}
-.schoolResults .overall_city_rank {
-    width: 133px;
-  height: auto;
-  font-size: small;
-  text-align: left;
-  margin-bottom:20px;
-  margin-left: 23px;
-}
-.schoolResults .prog_score {
-    width: 133px;
-  height: auto;
-  font-size: small;
-  text-align: left;
-  margin-bottom:20px;
-  margin-left: 23px;
-}
-.schoolResults .admissions_category {
-    width: 133px;
-  height: auto;
-  font-size: small;
-  text-align: left;
-  margin-bottom:20px;
-  margin-left: 23px;
-}
+
+
