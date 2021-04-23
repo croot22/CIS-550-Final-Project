@@ -138,12 +138,12 @@ export default class Schools extends React.Component {
             <div className="h4"> Here are the top schools ranked by overall score</div>
             <div className="header-container">
               <div className="headers">
-                <div className="header1"><strong>School Name</strong></div>
-                <div className="header2"><strong>Website</strong></div>
-                <div className="header3"><strong>Overall Score</strong></div>
-                <div className="header4"><strong>City Rank</strong></div>
-                <div className="header5"><strong>Program Score</strong></div>
-                <div className="header6"><strong>Admission Category</strong></div>
+                <div className="header"><strong>School Name</strong></div>
+                <div className="header"><strong>Website</strong></div>
+                <div className="header"><strong>Overall Score</strong></div>
+                <div className="header"><strong>City Rank</strong></div>
+                <div className="header"><strong>Program Score</strong></div>
+                <div className="header"><strong>Admission Category</strong></div>
 
               </div>
             </div>

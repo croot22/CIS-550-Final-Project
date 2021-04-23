@@ -1,7 +1,7 @@
 .header-container, .results-container {
   display: flex;
   flex-flow: column wrap;
-    text-align: left;
+  text-align: left;
   /* margin-top: 10px; */
 }
 
@@ -26,16 +26,10 @@
 
 
 
-.headers .header1 { height: auto; width: 200px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header2 { height: auto; width: 200px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header3 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header4 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header5 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header6 { height: auto; width: 100px; margin-bottom:20px; font-size: small; text-align: left;}
-.headers .header7 { height: auto; width: 125px; margin-bottom:20px; font-size: small; text-align: left;}
+.headers .header { height: auto; width: 200px; margin-bottom:20px; font-size: small; text-align: left;}
 
-.schoolResults .school_name, .schoolResults .website, .schoolResults .overall_score {
-    width: 200px;
+
+.schoolResults .school_name, .schoolResults .website, .schoolResults .overall_score, .schoolResults .city_rank, .schoolResults .program_score, .schoolResults .admission_category {
   height: auto;
   font-size: large;
   flex-wrap: wrap;
