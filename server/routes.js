@@ -151,8 +151,6 @@ FROM
   ) temp
 WHERE rn <= 1
 ORDER BY stars DESC LIMIT 3
-
-
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -206,21 +204,14 @@ function getBestActivity(req, res) {
 // http://localhost:8081/yelp/category
 function getCategory(req, res) {
   var query = `
-   WITH checkinByID AS (
-    SELECT business_id, COUNT(*) AS freq
-    FROM yelp_checkin
-    GROUP BY business_id
-   )
-   SELECT DISTINCT category 
-   FROM yelp_categories JOIN checkinByID ON yelp_categories.business_id = checkinByID.business_id
-   WHERE yelp_categories.business_id IN (
-    SELECT business_id
-        FROM yelp_categories  
-        WHERE category = 'Restaurants'
-   ) AND category <> 'Restaurants' AND category <> 'Food' AND category <> 'Nightlife' AND category <> 'Bars'
-   GROUP BY category
-   ORDER BY sum(checkinByID.freq) DESC
-   LIMIT 100
+
+	SELECT DISTINCT category 
+	FROM checkinByID ch LEFT JOIN yelp_categories cat ON ch.business_id = cat.business_id
+	WHERE category <> 'Restaurants' AND category <> 'Food' AND category <> 'Nightlife' AND category <> 'Bars'
+	GROUP BY category
+	ORDER BY sum(ch.freq) DESC
+	LIMIT 100
+
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -234,16 +225,11 @@ function getCategory(req, res) {
 // http://localhost:8081/yelp/zipcode
 function getZipcode(req, res) {
   var query = `
-   SELECT DISTINCT zipcode 
-   FROM yelp_business JOIN yelp_checkin ON yelp_business.business_id = yelp_checkin.business_id 
-   WHERE yelp_business.business_id IN (
-    SELECT business_id
-        FROM yelp_categories  
-        WHERE category = 'Restaurants'
-   ) 
-   GROUP BY zipcode 
-   ORDER BY count(*) DESC
-   LIMIT 100
+	SELECT DISTINCT zipcode
+	FROM restaurantID rID LEFT JOIN checkinByID ch ON rID.business_id = ch.business_id JOIN yelp_business b ON ch.business_id = b.business_id
+	GROUP BY zipcode
+	ORDER BY sum(ch.freq) DESC
+	LIMIT 100;	
     `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -257,16 +243,10 @@ function getZipcode(req, res) {
 // http://localhost:8081/yelp/weekday
 function getWeekday(req, res) {
   var query = `
-   SELECT DISTINCT (weekday +1) AS weekday
-   FROM yelp_checkin  
-   WHERE business_id IN (
-    SELECT business_id
-        FROM yelp_categories  
-        WHERE category = 'Restaurants'
-   ) 
+	SELECT DISTINCT (weekday +1) AS weekday
+   FROM restaurantID rID LEFT JOIN checkinByID ch ON rID.business_id = ch.business_id
    GROUP BY weekday
-   ORDER BY count(*) DESC
-   LIMIT 100
+   ORDER BY count(*) DESC;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -280,16 +260,10 @@ function getWeekday(req, res) {
 // http://localhost:8081/yelp/hour
 function getHour(req, res) {    
   var query = `
-   SELECT DISTINCT hour 
-   FROM yelp_checkin  
-   WHERE business_id IN (
-    SELECT business_id
-        FROM yelp_categories  
-        WHERE category = 'Restaurants'
-   ) 
+   SELECT DISTINCT hour AS hour
+   FROM restaurantID rID LEFT JOIN checkinByID ch ON rID.business_id = ch.business_id
    GROUP BY hour
-   ORDER BY count(*) DESC
-   LIMIT 100
+   ORDER BY count(*) DESC;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
