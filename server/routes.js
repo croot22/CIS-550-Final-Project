@@ -350,12 +350,12 @@ function getAvgPurchasePrice(req, res) {
 }
 
 // [Real Estate Transfers 4/4] - get top rated zipcodes
-// http://localhost:8081/top
+// http://localhost:8081/top/:category
 //doesn't work yet
 function getTopZips(req, res) {   
   var category = req.params.category;
   var query = `
-WITH yelp AS (
+  WITH yelp AS (
     SELECT zipcode, AVG(stars) as avg_stars
     FROM yelp_business 
     GROUP BY zipcode
@@ -408,12 +408,12 @@ safety AS(
     where school_name not like ('%CLOSED%') and int_overall_score < 990
     group by zip_code
     order by 2 desc)
-  SELECT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS Price, IFNULL(ROUND(safety_score,0), 0) AS Safety, IFNULL(ROUND(average_school_score,0), 0) Schools
+  SELECT DISTINCT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS Price, IFNULL(ROUND(safety_score,0), 0) AS Safety, IFNULL(ROUND(average_school_score,0), 0) Schools
   FROM avg_purchase_price a
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
-  ORDER BY '${category}' DESC
-  Limit 5;
+  ORDER BY ${category} DESC
+  LIMIT 5;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);

@@ -55,6 +55,8 @@
 
 .topZipResults .zipcode, .topZipResults .Price, .topZipResults .Safety, .topZipResults .Schools, .headers .header {
   text-align: center;
+}
 
-
+.bHeaders .bheader {
+  text-alighn: left;
 }
