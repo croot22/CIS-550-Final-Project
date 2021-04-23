@@ -453,10 +453,9 @@ function getAvgScores(req, res) {
     }
   });
 }
-//in progress
-// [Schools query  2] - list average school scores by selected zip code based on grades served
-function getAvgOnGradesServed(req, res) {
-  zipcode = req.params.zipcode;    
+
+// get school zip codes
+function getSchoolZipcodes(req, res) {  
   var query = `
   with overall_score as(
     select s.*
@@ -464,18 +463,66 @@ function getAvgOnGradesServed(req, res) {
     then 9
       else convert(overall_score, UNSIGNED INTEGER)
       end as int_overall_score
-  FROM new_schema.schools s),
-  averageScore AS(
-    select 
+  FROM new_schema.schools s)
+  select distinct  
   zip_code
-  , avg(int_overall_score) as average_school_score
   from overall_score
   where school_name not like ('%CLOSED%') and int_overall_score < 990
-  group by zip_code
-  order by 2 desc)
-  select *
-  from averageScore
-  where zip_code = '${zipcode}'
+  order by zip_code
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+// get school zip codes
+function getSchoolGrades(req, res) {  
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s)
+  select distinct  
+  gradespan
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  order by gradespan
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+
+function getSchoolInformation(req, res) {  
+  zip_code = req.params.zip_code; 
+  gradespan = req.params.gradespan; 
+
+
+  var query = `
+  with overall_score as(
+    select s.*
+  , case when overall_score = 'Less than 10' 
+    then 9
+      else convert(overall_score, UNSIGNED INTEGER)
+      end as int_overall_score
+  FROM new_schema.schools s)
+  select school_name, website, overall_score,overall_city_rank,
+  prog_score, admissions_category
+  from overall_score
+  where school_name not like ('%CLOSED%') and int_overall_score < 990
+  and zip_code = "${zip_code}"
+  and gradespan = "${gradespan}"
+  order by int_overall_score desc;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -630,7 +677,9 @@ module.exports = {
 
   //schools
   getAvgScores: getAvgScores,
-
+  getSchoolZipcodes: getSchoolZipcodes,
+  getSchoolGrades: getSchoolGrades,
+  getSchoolInformation: getSchoolInformation,
   //old exports
 	getAllGenres: getAllGenres,
 	getTopInGenre: getTopInGenre,
