@@ -11,7 +11,7 @@ export default class Home extends React.Component {
 
 		this.state = {
 			selectedZipcode: "",
-			selectedCategory: "Safety",
+			selectedCategory: "Category",
 			homeZipcodes: [],
       		selectedZipInfo: [],
 			topZips: []
@@ -48,7 +48,7 @@ export default class Home extends React.Component {
 		}) 
 
 		//get info for top zipcodes
-		fetch('http://localhost:8081/top/' + this.selectedCategory, {
+		fetch('http://localhost:8081/top/Safety', {
 				method: 'GET'
 			}).then(res => {
 				return res.json();
@@ -125,7 +125,8 @@ export default class Home extends React.Component {
           			<div className="jumbotron">
 					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
 						<div className="dropdown-container">
-									<select value="Category" onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
+									<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
+										<option value="" selected disabled hidden>Choose Category</option>
 										<option value="Safety">Safety</option>
 										<option value="Price">Price</option>
 										<option value="Schools">Schools</option>										
