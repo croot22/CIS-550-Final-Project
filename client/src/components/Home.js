@@ -11,7 +11,7 @@ export default class Home extends React.Component {
 
 		this.state = {
 			selectedZipcode: "",
-			selectedCategory: "Category",
+			selectedCategory: "",
 			homeZipcodes: [],
       		selectedZipInfo: [],
 			topZips: []
@@ -46,23 +46,6 @@ export default class Home extends React.Component {
 				})
 			}
 		}) 
-
-		//get info for top zipcodes
-		fetch('http://localhost:8081/top/Safety', {
-				method: 'GET'
-			}).then(res => {
-				return res.json();
-			}).then(topZipListObj => {
-				let topZipDivs = topZipListObj.map((zip, i) =>
-					<TopZipRow key={i} zip={zip} />
-				);
-
-				this.setState({
-					topZips: topZipDivs
-				});
-			})
-
-
 	}
 
 	handleChange(e) {
@@ -126,7 +109,7 @@ export default class Home extends React.Component {
 					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
 						<div className="dropdown-container">
 									<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
-										<option value="" selected disabled hidden>Choose Category</option>
+										<option value="">-- select a category --</option>
 										<option value="Safety">Safety</option>
 										<option value="Price">Price</option>
 										<option value="Schools">Schools</option>										
@@ -146,12 +129,12 @@ export default class Home extends React.Component {
 							</div>
 			    	</div>
 				</div>
-				<div className="container home-container">
+				<div className="container header-container">
 					<div className="jumbotron">
 						<div className="h5"><strong>Select a Zipcode to See the Average Home Price for the Area</strong></div>
-						<div className="years-container">
 							<div className="dropdown-container">
 								<select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="zipcodesDropdown">
+								<option select value> -- select an option -- </option>
 									{this.state.homeZipcodes}
 								</select>
 								<button className="submit-btn" id="zipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
@@ -160,7 +143,6 @@ export default class Home extends React.Component {
 								<div className="bHeader"><strong>Average Price: </strong></div>
 								<div className="selectedZipInfo">{this.state.selectedZipInfo}</div>
 							</div>
-						</div>  
 					</div>
 			    </div>
 			</div>
