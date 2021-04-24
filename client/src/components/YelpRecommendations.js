@@ -202,16 +202,38 @@ export default class YelpRecommendations extends React.Component {
 			    	<div className="jumbotron">
 			    		
 			    		<div className="h5" style={{marginBottom: 20}}><img src="yelp-512.jpg" alt="yelp"width="100" height="50"></img> Recommendations</div>					 			    		
+			    		<div className="h5" style={{marginBottom: 20}}>Select the cuisine type, zipcode, day of week and hour in the dropdown menu below</div>		
 			        	<div className="categories-container">
 			          		<div className="dropdown-container" style={{marginBottom: 20}} >
-			            		<select value={this.state.selectedCategory} onChange={this.handleChangeCategory} className="dropdown" id="categoriesDropdown">{this.state.categories}</select>			
-			           			<select value={this.state.selectedZipcode} onChange={this.handleChangeZipcode} className="dropdown" id="zipcodesDropdown">{this.state.zipcodes}</select>
-			           			<select value={this.state.selectedWeekday} onChange={this.handleChangeWeekday} className="dropdown" id="weekdaysDropdown">{this.state.weekdays}</select>
-			           			<select value={this.state.selectedHour} onChange={this.handleChangeHour} className="dropdown" id="hoursDropdown">{this.state.hours}</select>			
+			            		<select> 
+			            			<option value={this.state.selectedCategory}> -Select Cuisine Type- </option>
+			            			onChange = {this.handleChangeCategory} 
+			            			className="dropdown" 
+			            			id="categoriesDropdown">{this.state.categories}
+			            		</select>			
+			           			<select> 
+			           				<option value={this.state.selectedZipcode}> -Select Zipcode- </option>
+			           				onChange={this.handleChangeZipcode}
+			           				className="dropdown"
+			           				id="zipcodesDropdown">{this.state.zipcodes}
+			           			</select>
+			           			<select> 
+			           				<option value={this.state.selectedWeekday}> -Select Week Day- </option>
+			           				onChange={this.handleChangeWeekday} 
+			           				className="dropdown" 
+			           				id="weekdaysDropdown">{this.state.weekdays}
+			           			</select>
+			           			<select> 
+			           				<option value={this.state.selectedHour}> -Select Time- </option>
+			           				value={this.state.selectedHour} 
+			           				onChange={this.handleChangeHour} 
+			           				className="dropdown" 
+			           				id="hoursDropdown">{this.state.hours}
+			           			</select>			
 			           			<button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
 			       			</div>
 
-			       			<div className="h5" style={{marginBottom: 20}} >Around this time, people lives here typically likes to...</div>		
+			       			<div className="h5" style={{marginBottom: 20}} >Around this time, people lives here typically likes to :</div>		
 			       			<div className="header-container">
 			    				<div className="headers">
 									<div className="header0"><strong>Activity</strong></div>  
@@ -225,7 +247,7 @@ export default class YelpRecommendations extends React.Component {
 			      	</div>
 			      	
 			      	<div className="jumbotron">
-			      		<div className="h5"style={{marginBottom: 20}}> Based on your selection, you may want to check out these places...</div>	
+			      		<div className="h5"style={{marginBottom: 20}}> Based on your selection, you may want to check out these places :</div>	
 			    		<div className="header-container">
 			    			<div className="headers">
 								<div className="header1"><strong>Name</strong></div>  

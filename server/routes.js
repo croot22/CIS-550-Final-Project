@@ -126,31 +126,31 @@ function getBestcategory(req, res) {
   var query = `
 
   WITH BUS AS (
-  SELECT business_name, address, business_id, review_count, stars, hours
-  FROM yelp_business 
-  WHERE zipcode = '${zipcode}' AND review_count > 30 AND business_id IN
-    (SELECT business_id
-    FROM yelp_categories
-    WHERE category = '${category}') 
-  ORDER BY stars DESC
-  LIMIT 100
-), op AS (
-  SELECT business_id, weekday, hour, count(*)
+    SELECT business_name, address, business_id, review_count, stars
+    FROM yelp_business 
+    WHERE zipcode = '${zipcode}' AND review_count > 30 AND business_id IN
+      (SELECT business_id
+      FROM yelp_categories
+      WHERE category = '${category}') 
+    ORDER BY stars DESC
+    LIMIT 100
+  ), op AS (
+    SELECT business_id, weekday, hour, count(*)
     FROM yelp_checkin
     WHERE weekday = ('${weekday}'-1) AND hour = '${hour}'
     GROUP by business_id, weekday, hour
     HAVING count(*) > 2
-)
-SELECT business_name AS Name, address AS Address, stars AS Rating, review_content AS Review
-FROM 
-  (SELECT business_name, address, review_content, BUS.stars, hours,
+  )
+  SELECT business_name AS Name, address AS Address, stars AS Rating, review_content AS Review
+  FROM 
+  (SELECT business_name, address, review_content, BUS.stars,
            ROW_NUMBER() OVER (PARTITION BY business_name
                               ORDER BY (useful+funny+cool) DESC
                              ) AS rn
     FROM yelp_review YR JOIN BUS ON YR.business_id = BUS.business_id JOIN op ON YR.business_id = op.business_id
   ) temp
-WHERE rn <= 1
-ORDER BY stars DESC LIMIT 3
+  WHERE rn <= 1
+  ORDER BY stars DESC LIMIT 3
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -174,7 +174,7 @@ function getBestActivity(req, res) {
   var query = 
     `
     WITH BUS AS (
-      SELECT business_name, address, business_id, review_count, stars, hours
+      SELECT business_name, address, business_id, review_count, stars
       FROM yelp_business 
       WHERE zipcode = '${zipcode}'
     ), op AS (
