@@ -120,6 +120,7 @@ export default class Schools extends React.Component {
         <PageNavbar active="Schools" />
         <div className="container school-container" >
           <Jumbotron>
+          <div className="h5" ><img src="schoolratings.png" alt="school"width="100" height="75"></img> School Ratings</div>
             <h3 className="header">School Information by Zip code</h3>
             <hr className="mt-2 mb-3" />
             <h6 className="header">Select Zipcode and Grade Served</h6>
