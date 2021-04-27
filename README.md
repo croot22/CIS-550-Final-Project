@@ -20,7 +20,7 @@
 
 2. In a separate terminal under the project directory, type ```cd client```. Next type ```npm start``` to begin the React app. This will start the client-side code. Your browser should automatically open to http://localhost:3000. If not, enter this link manually. 
 
-3. If your setup was successful, you should see the Dashboard page。 
+3. If your setup was successful, you should see the Home page。 
  
 
 
