@@ -56,24 +56,21 @@ function getTotalCrime(req, res) {
   var crimeZipcode = parseInt(req.query.crimeZipcode);
 
   var query = `
-  WITH crime_breakdown AS(
-    select distinct dc_dist, text_general_code, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist, text_general_code
-    order by dc_dist
+  WITH dist_select AS(
+    select dc_dist, zipcode
+    from districts
+    where zipcode='${crimeZipcode}'
     ),
-crime_breakdown_per_zip AS(
-    select districts.zipcode, text_general_code, crime_count, FORMAT(crime_count/population*1000,'#,###.#') as crimes_per_1000_pop
-    from crime_breakdown
-    join districts on crime_breakdown.dc_dist=districts.dc_dist
-    join population on districts.zipcode=population.zipcode
-    group by districts.zipcode, text_general_code
-    order by districts.zipcode
+crime_breakdown AS(
+    select dist_select.zipcode, text_general_code, count(objectid) as crime_count, population
+    from incidents
+    join dist_select on incidents.dc_dist=dist_select.dc_dist
+    join population on dist_select.zipcode=population.zipcode
+    GROUP BY dist_select.dc_dist, text_general_code
+    order by crime_count desc
     )
-select *
-from crime_breakdown_per_zip
-where zipcode='${crimeZipcode}'
-order by crime_count desc;
+select zipcode, text_general_code, crime_count, FORMAT(crime_count/population*1000,'#,###.#') as crimes_per_1000_pop
+from crime_breakdown;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
