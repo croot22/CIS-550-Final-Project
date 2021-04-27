@@ -395,7 +395,7 @@ safety AS(
     where school_name not like ('%CLOSED%') and int_overall_score < 990
     group by zip_code
     order by 2 desc)
-  SELECT DISTINCT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS Price, IFNULL(ROUND(safety_score,0), 0) AS Safety, IFNULL(ROUND(average_school_score,0), 0) Schools
+  SELECT DISTINCT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS Price, IFNULL(ROUND(safety_score,0), 0) AS Safety, IFNULL(ROUND(average_school_score,0), 0) AS Schools
   FROM avg_purchase_price a
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
