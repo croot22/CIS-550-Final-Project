@@ -6,8 +6,6 @@ import '../style/YelpRecommendations.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-// design thought tbd - only show relevant value 
-
 export default class YelpRecommendations extends React.Component {
 
 	constructor(props) {
@@ -208,8 +206,7 @@ export default class YelpRecommendations extends React.Component {
 			        	<div className="categories-container">
 			          		<div className="dropdown-container" style={{marginBottom: 20}} >
 			          			
-			            		<select			       
-			            			 			            			
+			            		<select			       			            			 			            			
 			            			onChange = {this.handleChangeCategory} 
 			            			className="dropdown" 
 			            			id="categoriesDropdown">{this.state.categories}> 
