@@ -1,20 +1,20 @@
 .home-container {
   display: flex;
   flex-flow: column wrap;
-  margin-top: 5x;
+  margin-top: 5px;
 }
 
 .home-container .home {
   display: flex;
   white-space: nowrap;
   align-items: center;
-  height: 30px;
+  height: 20px;
 
 }
 
 .jumbotron {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .total-container {
@@ -27,7 +27,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 25px;
+  height: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
@@ -44,7 +44,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  height: 25px;
+  height: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-right: 1px;
@@ -58,5 +58,10 @@
 }
 
 .bHeaders .bheader {
-  text-alighn: left;
+  text-align: left;
+}
+
+.img-container {
+  text-align: center;
+  display: block;
 }

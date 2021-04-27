@@ -31,15 +31,6 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestActi
 // the above is tested successfully with 
 // http://localhost:8081/yelp/zipcode/15222/weekday/5/hour/23
 
-//old code
-app.get('/genres', routes.getAllGenres);
-app.get('/genres/:genre', routes.getTopInGenre);
-app.get('/recs/:movie', routes.getRecs);
-app.get('/decades', routes.getDecades);
-app.get('/bestdecade/:decade', routes.getDecades);
-app.get('/bestgenre', routes.bestGenresPerDecade);
-app.get('/movies/random', routes.getRandomMovies);
-
 //school parameters
 //works using http://localhost:8081/schools/19104/
 /*app.get('/schools/:zipcode', routes.getAvgScores);*/

@@ -132,14 +132,16 @@ export default class Schools extends React.Component {
 
               <Col> 
               <h5 className="header">Select Zip Code</h5>
-              <select value={this.state.defaultZip} onChange={this.handleChange} className="dropdown" id="zipCodesDropdown">
+              <select onChange={this.handleChange} className="dropdown" id="zipCodesDropdown">
+                <option value="" selected disabled hidden> -- select zipcode -- </option>
                 {this.state.zip_codes}
                 
               </select>
               </Col>
               <Col>
               <h5 > Select Grade Served </h5>
-              <select value={this.state.selectedGradespan} onChange={this.handleChangeGradespan} className="dropdown" id="zipcodesDropdown">
+              <select onChange={this.handleChangeGradespan} className="dropdown" id="zipcodesDropdown">
+                <option value="" selected disabled hidden> -- select grade served -- </option>
                 {this.state.gradespans}</select>
               
             </Col>

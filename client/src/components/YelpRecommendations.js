@@ -6,8 +6,6 @@ import '../style/YelpRecommendations.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-// design thought tbd - only show relevant value 
-
 export default class YelpRecommendations extends React.Component {
 
 	constructor(props) {
@@ -208,28 +206,31 @@ export default class YelpRecommendations extends React.Component {
 			        	<div className="categories-container">
 			          		<div className="dropdown-container" style={{marginBottom: 20}} >
 			          			
-			            		<select			       
-			            			value ={this.state.selectedCategory} 			            			
+			            		<select			       			            			 			            			
 			            			onChange = {this.handleChangeCategory} 
 			            			className="dropdown" 
 			            			id="categoriesDropdown">{this.state.categories}> 
+									<option value="" selected disabled hidden> -- select category -- </option>
 			            		</select>			
 
 			           			<select 
 			           				onChange={this.handleChangeZipcode}
 			           				className="dropdown"
-			           				id="zipcodesDropdown">{this.state.zipcodes}
+			           				id="zipcodesDropdown">{this.state.zipcodes}>
+									   <option value="" selected disabled hidden> -- select zipcode -- </option>
 			           			</select>
 			           			<select 
 			           				onChange={this.handleChangeWeekday} 
 			           				className="dropdown" 
-			           				id="weekdaysDropdown">{this.state.weekdays}
+			           				id="weekdaysDropdown">{this.state.weekdays}>
+									   <option value="" selected disabled hidden> -- select day -- </option>
 			           			</select>
 			           			<select 
-			           				value={this.state.selectedHour} 
+			           				
 			           				onChange={this.handleChangeHour} 
 			           				className="dropdown" 
-			           				id="hoursDropdown">{this.state.hours}
+			           				id="hoursDropdown">{this.state.hours}>
+									   <option value="" selected disabled hidden> -- select time -- </option>
 			           			</select>			
 			           			<button className="submit-btn" id="categoriesSubmitBtn" onClick={this.submitCategory}>Submit</button>
 			       			</div>
