@@ -24,11 +24,13 @@ export default class YelpRecommendations extends React.Component {
 			hours: []	
 		};
 
-		this.submitCategory = this.submitCategory.bind(this);
 		this.handleChangeCategory= this.handleChangeCategory.bind(this); 
 		this.handleChangeZipcode= this.handleChangeZipcode.bind(this); 
 		this.handleChangeWeekday= this.handleChangeWeekday.bind(this); 
 		this.handleChangeHour= this.handleChangeHour.bind(this); 
+
+		this.submitCategory = this.submitCategory.bind(this);
+
 	}
 
 	componentDidMount() {
@@ -205,26 +207,25 @@ export default class YelpRecommendations extends React.Component {
 			    		<div className="h5" style={{marginBottom: 20}}>Select the cuisine type, zipcode, day of week and hour in the dropdown menu below</div>		
 			        	<div className="categories-container">
 			          		<div className="dropdown-container" style={{marginBottom: 20}} >
-			            		<select> 
-			            			<option value={this.state.selectedCategory}> -Select Cuisine Type- </option>
+			          			
+			            		<select			       
+			            			value ={this.state.selectedCategory} 			            			
 			            			onChange = {this.handleChangeCategory} 
 			            			className="dropdown" 
-			            			id="categoriesDropdown">{this.state.categories}
+			            			id="categoriesDropdown">{this.state.categories}> 
 			            		</select>			
-			           			<select> 
-			           				<option value={this.state.selectedZipcode}> -Select Zipcode- </option>
+
+			           			<select 
 			           				onChange={this.handleChangeZipcode}
 			           				className="dropdown"
 			           				id="zipcodesDropdown">{this.state.zipcodes}
 			           			</select>
-			           			<select> 
-			           				<option value={this.state.selectedWeekday}> -Select Week Day- </option>
+			           			<select 
 			           				onChange={this.handleChangeWeekday} 
 			           				className="dropdown" 
 			           				id="weekdaysDropdown">{this.state.weekdays}
 			           			</select>
-			           			<select> 
-			           				<option value={this.state.selectedHour}> -Select Time- </option>
+			           			<select 
 			           				value={this.state.selectedHour} 
 			           				onChange={this.handleChangeHour} 
 			           				className="dropdown" 
