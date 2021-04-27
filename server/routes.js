@@ -438,7 +438,7 @@ function getAvgScores(req, res) {
   });
 }
 
-// get school zip codes
+// [Schools query  2] get school zip codes
 function getSchoolZipcodes(req, res) {  
   var query = `
   with overall_score as(
@@ -462,7 +462,7 @@ function getSchoolZipcodes(req, res) {
   });
 }
 
-// get school zip codes
+// [Schools query  3] get school zip codes
 function getSchoolGrades(req, res) {  
   var query = `
   with overall_score as(
@@ -496,7 +496,7 @@ select school_name, website, street_address, overall_score,overall_city_rank,
   });
 }
 
-
+// [Schools query  4] get school zip codes
 function getSchoolInformation(req, res) {  
   zip_code = req.params.zip_code; 
   gradespan = req.params.gradespan; 
