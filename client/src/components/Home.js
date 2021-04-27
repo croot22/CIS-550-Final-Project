@@ -109,7 +109,7 @@ export default class Home extends React.Component {
 					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
 						<div className="dropdown-container">
 									<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
-										<option value="" selected disabled hidden>-- select a category --</option>
+										<option value="" selected disabled hidden>-- select category --</option>
 										<option value="Safety">Safety</option>
 										<option value="Price">Price</option>
 										<option value="Schools">Schools</option>										
@@ -134,7 +134,7 @@ export default class Home extends React.Component {
 						<div className="h5"><strong>Select a Zipcode to See the Average Home Price for the Area</strong></div>
 							<div className="dropdown-container">
 								<select onChange={this.handleChange} className="dropdown" id="this.state.homeZipcodes">
-									<option value="" selected disabled hidden> -- select a zip code -- </option>
+									<option value="" selected disabled hidden> -- select zipcode -- </option>
 									{this.state.homeZipcodes}
 								</select>
 								<button className="submit-btn" id="zipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>

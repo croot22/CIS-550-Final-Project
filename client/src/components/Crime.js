@@ -80,8 +80,9 @@ export default class Crime extends React.Component {
 			        <div className="h5">Select a Zipcode for Detailed Crime Analysis</div>
 			        <div className="years-container">
 			          <div className="dropdown-container">
-			            <select value={this.state.selectedZipcode} onChange={this.handleChange} className="dropdown" id="crimeZipcodesDropdown">
-			            	{this.state.crimeZipcodes}
+			            <select onChange={this.handleChange} className="dropdown" id="crimeZipcodesDropdown">
+							<option value="" selected disabled hidden> -- select zipcode -- </option>
+							{this.state.crimeZipcodes}
 			            </select>
 			            <button className="submit-btn" id="crimeZipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
 			          </div>
