@@ -106,6 +106,7 @@ export default class Home extends React.Component {
 				<PageNavbar active="home" />
         		<div className="container header-container">
           			<div className="jumbotron">
+					  <div className="img-container"><img src="phillyLogo.png" alt="philly"width="250" height="125"></img></div>
 					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
 						<div className="dropdown-container">
 									<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">

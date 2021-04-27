@@ -13,8 +13,8 @@
 }
 
 .jumbotron {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .total-container {
@@ -59,4 +59,9 @@
 
 .bHeaders .bheader {
   text-alighn: left;
+}
+
+.img-container {
+  text-align: center;
+  display: block;
 }
