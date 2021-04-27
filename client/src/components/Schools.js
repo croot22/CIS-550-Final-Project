@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import SchoolRow from './SchoolRow';
 import { Button, Jumbotron } from 'react-bootstrap';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 export default class Schools extends React.Component {
   constructor(props) {
@@ -14,7 +14,8 @@ export default class Schools extends React.Component {
       zipCodeSelected: "",
       selectedGradespan: "",
       zip_codes: [],
-      gradespans: []
+      gradespans: [],
+      defaultZip : "Select Zip Code"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeGradespan = this.handleChangeGradespan.bind(this);
@@ -120,19 +121,34 @@ export default class Schools extends React.Component {
         <PageNavbar active="Schools" />
         <div className="container school-container" >
           <Jumbotron>
-          <div className="h5" ><img src="schoolratings.png" alt="school"width="100" height="75"></img> School Ratings</div>
+            
+          <div className="h4" ><img src="schoolratings.png" alt="school"width="100" height="75"></img> School Ratings</div>
             <h3 className="header">School Information by Zip code</h3>
             <hr className="mt-2 mb-3" />
-            <h6 className="header">Select Zipcode and Grade Served</h6>
+            
             <hr className="my-1" />
-            <div className="dropdown-container">
-              <select value={this.state.zipCodeSelected} onChange={this.handleChange} className="dropdown" id="zipCodesDropdown">
+            <Container>
+              <Row>
+
+              <Col> 
+              <h5 className="header">Select Zip Code</h5>
+              <select value={this.state.defaultZip} onChange={this.handleChange} className="dropdown" id="zipCodesDropdown">
                 {this.state.zip_codes}
+                
               </select>
+              </Col>
+              <Col>
+              <h5 > Select Grade Served </h5>
               <select value={this.state.selectedGradespan} onChange={this.handleChangeGradespan} className="dropdown" id="zipcodesDropdown">
                 {this.state.gradespans}</select>
-              <button className="submit-btn" id="zipCodesSubmitBtn" onClick={this.submitZipcode}>Search</button>
-            </div>
+              
+            </Col>
+
+            <Col  xs lg="2">
+            <Button size= "lg" className="submit-btn" id="zipCodesSubmitBtn" onClick={this.submitZipcode}>Search</Button>
+             </Col>
+             </Row>
+            </Container>
           </Jumbotron>
 
           <Jumbotron>
