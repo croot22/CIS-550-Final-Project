@@ -339,22 +339,10 @@ function getAvgPurchasePrice(req, res) {
 function getTopZips(req, res) {   
   var category = req.params.category;
   var query = `
-  WITH yelp AS (
-    SELECT zipcode, AVG(stars) as avg_stars
-    FROM yelp_business 
-    GROUP BY zipcode
-    ORDER BY stars DESC
-    ),
-crime_total AS(
+WITH crime_total AS(
     select distinct dc_dist, count(objectid) as crime_count
     from incidents
     GROUP BY dc_dist
-    ),
-crime_breakdown AS(
-    select distinct dc_dist, text_general_code, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist, text_general_code
-    order by dc_dist
     ),
 covid_per_zip AS(
     select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
@@ -369,7 +357,6 @@ safety AS(
     join population on districts.zipcode=population.zipcode
 	  join covid_per_zip on districts.zipcode=covid_per_zip.zipcode
     group by zipcode
-    order by zipcode
     ),
   avg_purchase_price as(
     SELECT zip_code, AVG(cash_consideration) AS purchase_price
@@ -377,25 +364,25 @@ safety AS(
     GROUP BY zip_code
     ),
   overall_score as(
-      select s.*
-    , case when overall_score = 'Less than 10' 
+      select s.*,
+      case when overall_score = 'Less than 10' 
       then 9
         else convert(overall_score, UNSIGNED INTEGER)
         end as int_overall_score
     FROM new_schema.schools s
     ),
     averageScore AS(
-      select 
-    zip_code
-    , avg(int_overall_score) as average_school_score
-    from overall_score
-    where school_name not like ('%CLOSED%') and int_overall_score < 990
-    group by zip_code
-    order by 2 desc)
+      select zip_code, 
+      avg(int_overall_score) as average_school_score
+      from overall_score
+      where school_name not like ('%CLOSED%') and int_overall_score < 990
+      group by zip_code
+    )
   SELECT DISTINCT a.zip_code AS zipcode, FORMAT(a.purchase_price, 'C2') AS Price, IFNULL(ROUND(safety_score,0), 0) AS Safety, IFNULL(ROUND(average_school_score,0), 0) AS Schools
   FROM avg_purchase_price a
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
+  
   ORDER BY ${category} DESC
   LIMIT 5;
   `;
