@@ -33,7 +33,7 @@ app.get('/yelp/zipcode/:zipcode/weekday/:weekday/hour/:hour', routes.getBestActi
 
 //school parameters
 //works using http://localhost:8081/schools/19104/
-app.get('/schools/:zipcode', routes.getAvgScores);
+/*app.get('/schools/:zipcode', routes.getAvgScores);*/
 app.get('/schoolsZipCodes', routes.getSchoolZipcodes);
 app.get('/schoolsGrades/', routes.getSchoolGrades);
 app.get('/schoolInformation/zip_code/:zip_code/gradespan/:gradespan', routes.getSchoolInformation);
