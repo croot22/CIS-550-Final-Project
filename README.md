@@ -1,6 +1,6 @@
-## CIS-550-Final-Project
+# CIS-550-Final-Project
 
-# Installation 
+## Installation 
 
 1. Make sure you have Node installed : Open a terminal and type ```node -v; npm -v``` to check what version, if any, of node and npm are installed on your machine. If these commands are not recognized, go to https://nodejs.org/en/download/ and download the Node.js for your system. Having multiple versions sometimes causes issues that are hard to debug.
 
@@ -14,7 +14,7 @@
 
 6. Type ```npm install```. This will download all required server-side dependencies.
 
-# Usage 
+## Usage 
 
 1. While in the /server folder, type ```npm start``` in the terminal to begin the back-end app. By default, it’s running on port 8081. You should see a message in the Terminal saying ```Server listening on PORT 8081```.  
 
