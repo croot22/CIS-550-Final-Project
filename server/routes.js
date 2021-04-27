@@ -299,7 +299,7 @@ function getAllTransfers(req, res) {
 function getZipcodes(req, res) {   
   var query = `
   SELECT DISTINCT zip_code AS zipcode
-  FROM RealEstateTransfers
+  FROM RealEstateTransfers USE INDEX(zr)
   ORDER BY zip_code;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -316,7 +316,7 @@ function getAvgPurchasePrice(req, res) {
   var zipcode = req.params.zipcode;    
   var query = `
   SELECT zip_code, FORMAT(AVG(cash_consideration), 'C2') AS purchase_amount
-  FROM RealEstateTransfers
+  FROM RealEstateTransfers USE INDEX(zr)
   WHERE zip_code = '${zipcode}';
   `;
   connection.query(query, function(err, rows, fields) {
@@ -354,7 +354,7 @@ safety AS(
     ),
   avg_purchase_price as(
     SELECT zip_code, AVG(cash_consideration) AS purchase_price
-    FROM RealEstateTransfers r
+    FROM RealEstateTransfers r USE INDEX(zr)
     GROUP BY zip_code
     ),
   overall_score as(
@@ -377,7 +377,9 @@ safety AS(
   JOIN safety ON a.zip_code = safety.zipcode
   JOIN averageScore ON a.zip_code = averageScore.zip_code
   
-  ORDER BY ${category} DESC
+  ORDER BY 
+    (CASE WHEN '${category}' <> 'Price' THEN ${category} END) DESC,
+    (CASE WHEN '${category}' = 'Price' THEN ${category} END) ASC
   LIMIT 5;
   `;
   connection.query(query, function(err, rows, fields) {
