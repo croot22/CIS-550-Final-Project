@@ -226,7 +226,7 @@ function getZipcode(req, res) {
 SELECT DISTINCT zipcode
   FROM restaurantID rID JOIN yelp_business b ON rID.business_id = b.business_id
   GROUP BY zipcode
-  ORDER BY count(rID.business_id) DESC
+  ORDER BY zipcode
   LIMIT 100
     `;
   connection.query(query, function(err, rows, fields) {
@@ -249,7 +249,7 @@ function getWeekday(req, res) {
         WHERE category = 'Restaurants'
    ) 
    GROUP BY weekday
-   ORDER BY count(*) DESC
+   ORDER BY weekday 
    LIMIT 100;
   `;
   connection.query(query, function(err, rows, fields) {
@@ -272,7 +272,7 @@ function getHour(req, res) {
     WHERE category = 'Restaurants'
    ) 
    GROUP BY hour
-   ORDER BY count(*) DESC
+   ORDER BY hour
    LIMIT 100;
   `;
   connection.query(query, function(err, rows, fields) {
