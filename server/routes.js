@@ -15,12 +15,6 @@ function getAllSafety(req, res) {
     from incidents
     GROUP BY dc_dist
     ),
- crime_breakdown AS(
-    select distinct dc_dist, text_general_code, count(objectid) as crime_count
-    from incidents
-    GROUP BY dc_dist, text_general_code
-    order by dc_dist
-    ),
 covid_per_zip AS(
     select covid.zipcode, count as positive_count, (count/population) as covid_positive_rate
     from covid
