@@ -1,0 +1,21 @@
+USE new_schema;
+
+CREATE TABLE RealEstateTransfers (
+    transfer_id INT,
+    transfer_date DATE,
+    street_address VARCHAR(100),
+    zip_code INT,
+    cash_consideration DOUBLE,
+    total_consideration DOUBLE,
+    assessed_value DOUBLE,
+    fair_market_value DOUBLE,
+    street VARCHAR(20),
+    latitude DECIMAL(10 , 8 ),
+    longitude DECIMAL(11 , 8 ),
+    PRIMARY KEY (transfer_id)
+);
+
+LOAD DATA LOCAL INFILE '/Users/Cayde/Documents/GradSchool/CIS550/Group/RealEstateTransfers(input).csv' INTO TABLE RealEstateTransfers
+  FIELDS TERMINATED BY ','  LINES TERMINATED BY '\r\n';
+
+CREATE INDEX zr ON RealEstateTransfers(zip_code ASC);
