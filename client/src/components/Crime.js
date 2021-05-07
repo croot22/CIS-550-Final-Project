@@ -74,7 +74,7 @@ export default class Crime extends React.Component {
 
 		return (
 			<div className="Crime">
-				<PageNavbar active="crime" />
+				<PageNavbar active="Crime" />
 				<div className="container crime-container">
 			      <div className="jumbotron">
 			        <div className="h5">Select a Zipcode for Detailed Crime Analysis</div>

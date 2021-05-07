@@ -104,50 +104,11 @@ export default class Home extends React.Component {
 		return (
 			<div className="Home">
 				<PageNavbar active="home" />
-        		<div className="container header-container">
-          			<div className="jumbotron">
-					  <div className="img-container"><img src="phillyLogo.png" alt="philly"width="250" height="125"></img></div>
-					  <div className="h5"><strong>Top 5 Zipcodes in Philadelphia Based On</strong></div>
-						<div className="dropdown-container">
-									<select value={this.state.selectedCategory} onChange={this.handleCatChange} className="dropdown" id="categoryDropdown">
-										<option value="" selected disabled hidden>-- select category --</option>
-										<option value="Safety">Safety</option>
-										<option value="Price">Price</option>
-										<option value="Schools">Schools</option>										
-									</select>
-									<button className="submit-btn" id="categorySubmitBtn" onClick={this.submitCategory}>Submit</button>
-						</div>					  
-			        	<div className="header-container">
-			          		<div className="headers">
-								<div className="header"><b>Zipcode: </b></div>
-								<div className="header"><b>Average Home Price:</b></div>
-								<div className="header"><b>Safety Score:</b></div>
-								<div className="header"><b>School Rating:</b></div>
-			          		</div>
-						</div>	  
-							<div className="results-container" id="results">
-								<div className="header">{this.state.topZips}</div>
-							</div>
-			    	</div>
+				<div className="column">
+					<p>Santorini</p>
+					<p>Events Center</p>
 				</div>
-				<div className="container header-container">
-					<div className="jumbotron">
-						<div className="h5"><strong>Select a Zipcode to See the Average Home Price for the Area</strong></div>
-							<div className="dropdown-container">
-								<select onChange={this.handleChange} className="dropdown" id="this.state.homeZipcodes">
-									<option value="" selected disabled hidden> -- select zipcode -- </option>
-									{this.state.homeZipcodes}
-								</select>
-								<button className="submit-btn" id="zipcodesSubmitBtn" onClick={this.submitZipcode}>Submit</button>
-							</div>
-							<div className="bHeaders">
-								<div className="bHeader"><strong>Average Price: </strong></div>
-								<div className="selectedZipInfo">{this.state.selectedZipInfo}</div>
-							</div>
-					</div>
-			    </div>
 			</div>
-      
 		);
 	}
 }

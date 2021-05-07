@@ -1,4 +1,5 @@
 import React from 'react';
+import '../style/PageNavbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class PageNavbar extends React.Component {
@@ -11,7 +12,7 @@ export default class PageNavbar extends React.Component {
 	}
 
 	componentDidMount() {
-		const pageList = ['Home', 'Safety', 'Crime', 'Schools', 'Yelp'];
+		const pageList = ['Home', 'Venue', 'Party Rentals', 'Pricing'];
 
 		let navbarDivs = pageList.map((page, i) => {
 			if (this.props.active === page) {
@@ -29,16 +30,26 @@ export default class PageNavbar extends React.Component {
 
 	render() {
 		return (
-			<div className="PageNavbar">
-				<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			      <span className="navbar-brand center">CIS550 Final Project</span>
-			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-			        <div className="navbar-nav">
-			        {this.state.navDivs}
-			        </div>
-			      </div>
-			    </nav>
-			</div>
+/* 			<nav class="topnav navbar-expand-lg navbar-light navbar-custom py-3">
+				<a class="navbar-brand" href="#">Santorini Rentals</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse text-right" id="navbarNavAltMarkup">
+					<div class="navbar-nav text-right">
+						{this.state.navDivs}
+					</div>
+				</div>
+			</nav> */	
+			<div class="topnav">
+				<a class="navbar-brand">Santorini Rentals</a>
+				<div class="topnav-right">
+					<a class="active" href="/home">Home</a>
+					<a href="/venue">Venue</a>
+					<a href="/partyrentals">Party Rentals</a>
+					<a href="/pricing">Pricing</a>
+				</div>
+			</div>		
         );
 	}
 }
