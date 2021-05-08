@@ -19,11 +19,45 @@
 
 
   .safetyResults .zipcode, .safetyResults .population, .safetyResults .crime_count, .safetyResults .crimes_per_1000_pop,  .safetyResults .positive_count, .safetyResults .covid_positive_rate, .headers .header {
-    flex: 1 0 16.66666%;
+    flex: 1 0 100%;
   }
 
   .jumbotron {
     padding-top: 50px;
     padding-bottom: 50px;
+    padding-right: 50px;
+    padding-left: 50px;
+    text-align: center;
+    background-color: whitesmoke;
+    border-style: hidden;
+    font-size: 50px;
+    color: #1269C7;
+  }
+
+  .column {
+
+    width: 33.33%;
+    padding: 5px;
+  }
+
+  div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    
+  }
+  
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+  
+  div.gallery img {
+    width: 33.33%;
+    height: auto;
+  }
+  
+  div.desc {
+    padding: 15px;
+    text-align: center;
   }
   

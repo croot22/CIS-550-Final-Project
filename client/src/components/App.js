@@ -4,12 +4,10 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Home';
-import YelpRecommendations from './YelpRecommendations'; //yelp
-import Safety from './Safety'; 
-import Crime from './Crime'; 
-import Schools from './Schools'; 
-
+import Home from './Home';
+import Venue from './Venue'; 
+import PartyRentals from './PartyRentals'; 
+import Pricing from './Pricing'; 
 
 
 
@@ -24,38 +22,32 @@ export default class App extends React.Component {
 							exact
 							path="/"
 							render={() => (
-								<Dashboard />
+								<Home />
 							)}
 						/>
 						<Route
 							exact
-							path="/home"
+							path="/Home"
 							render={() => (
-								<Dashboard />
+								<Home />
 							)}
 						/>
 						<Route
-							path="/yelp" // from PageNavbar.js
+							path="/Venue"
 							render={() => (
-								<YelpRecommendations /> // this links to ./YelpRecommendations.js as in the import 
+								<Venue />
 							)}
 						/>
 						<Route
-							path="/safety"
+							path="/Party Rentals"
 							render={() => (
-								<Safety />
+								<PartyRentals />
 							)}
 						/>
 						<Route
-							path="/crime"
+							path="/Pricing"
 							render={() => (
-								<Crime />
-							)}
-						/>
-						<Route
-							path="/schools"
-							render={() => (
-								<Schools />
+								<Pricing />
 							)}
 						/>
 					</Switch>
