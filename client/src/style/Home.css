@@ -1,7 +1,67 @@
-.column{
-  text-align: right;
-  color: #FFFFFF;
-  font-size:100px;
-  padding-top: 100px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+.home-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 5px;
+}
+
+.home-container .home {
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  height: 20px;
+
+}
+
+.jumbotron {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.total-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 25px;
+}
+
+.total-container .total {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: space-evenly;
+  line-height:1; 
+}
+
+.header-container, .results-container {
+  margin-top: 10px;
+}
+
+.header-container .headers, .results-container .topZipResults {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 1px;
+  padding-left: 1px;
+  justify-content: space-around;
+  line-height:0; 
+}
+
+.topZipResults .zipcode, .topZipResults .Price, .topZipResults .Safety, .topZipResults .Schools, .headers .header {
+  text-align: center;
+}
+
+.bHeaders .bheader {
+  text-align: left;
+}
+
+.img-container {
+  text-align: center;
+  display: block;
 }

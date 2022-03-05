@@ -1,0 +1,70 @@
+.header-container, .results-container {
+  display: flex;
+  flex-flow: column wrap;
+    text-align: left;
+  /* margin-top: 10px; */
+}
+
+.results-container .restaurantResults {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  text-align: left;
+  height: auto;
+}
+
+.header-container .headers {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  text-align: left;
+  height: auto;
+}
+
+.headers .header0 { height: auto; width: 1000px; font-size: small; text-align: left;}
+.headers .header1 { height: auto; width: 120px; font-size: small; text-align: left;}
+.headers .header2 { height: auto; width: 115px; font-size: small; text-align: left;}
+.headers .header3 { height: auto; width: 100px; font-size: small; text-align: left;}
+.headers .header4 { height: auto; width: 625px; font-size: small; text-align: left;}
+
+.activityResults .Activity {
+   width: 960px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-left: 23px;
+}
+
+.restaurantResults .Name {
+	 width: 133px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:20px;
+   margin-left: 23px;
+}
+
+.restaurantResults .Address {
+   width: 130px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:20px;
+}
+
+.restaurantResults .Rating {
+   width: 113px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:20px;
+}
+
+.restaurantResults .Review{
+	 width: 600px;
+   height: auto;
+   font-size: small;
+   text-align: left;
+   margin-bottom:20px;
+}
+

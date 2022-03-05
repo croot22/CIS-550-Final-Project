@@ -1,5 +1,4 @@
 import React from 'react';
-import '../style/PageNavbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class PageNavbar extends React.Component {
@@ -12,7 +11,7 @@ export default class PageNavbar extends React.Component {
 	}
 
 	componentDidMount() {
-		const pageList = ['Home', 'Venue', 'Party Rentals', 'Pricing'];
+		const pageList = ['Home', 'Safety', 'Crime', 'Schools', 'Yelp'];
 
 		let navbarDivs = pageList.map((page, i) => {
 			if (this.props.active === page) {
@@ -30,12 +29,16 @@ export default class PageNavbar extends React.Component {
 
 	render() {
 		return (
-			<div class="topnav">
-				<a class="navbar-brand">Santorini Rentals</a>
-				<div class="topnav-right">
-					{this.state.navDivs}
-				</div>
-			</div>		
+			<div className="PageNavbar">
+				<nav className="navbar navbar-expand-lg navbar-light bg-light">
+			      <span className="navbar-brand center">CIS550 Final Project</span>
+			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+			        <div className="navbar-nav">
+			        {this.state.navDivs}
+			        </div>
+			      </div>
+			    </nav>
+			</div>
         );
 	}
 }
