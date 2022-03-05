@@ -7824,9 +7824,9 @@
     "object.getownpropertydescriptors" "^2.0.3"
     "semver" "^5.7.0"
 
-"node-forge@^0.10.0":
+"node-forge@^1.0.0":
   "integrity" "sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA=="
-  "resolved" "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz"
+  "resolved" "https://registry.npmjs.org/node-forge/-/node-forge-1.0.0.tgz"
   "version" "0.10.0"
 
 "node-int64@^0.4.0":
@@ -10246,7 +10246,7 @@
   "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-1.10.14.tgz"
   "version" "1.10.14"
   dependencies:
-    "node-forge" "^0.10.0"
+    "node-forge" "^1.0.0"
 
 "semver@^5.4.1":
   "integrity" "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ=="
